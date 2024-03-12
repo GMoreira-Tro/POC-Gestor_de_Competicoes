@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 @CRUDAPI_HostAddress = http://localhost:5041
-=======
-@CRUDAPI_HostAddress = http://localhost:5252
->>>>>>> 17023e4b7177fc04d593ca65dced49f4ceb570d3
 
 GET {{CRUDAPI_HostAddress}}/weatherforecast/
 Accept: application/json
