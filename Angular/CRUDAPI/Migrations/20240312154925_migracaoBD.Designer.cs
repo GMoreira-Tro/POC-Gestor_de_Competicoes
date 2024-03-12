@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240312125128_migracaoBD")]
+    [Migration("20240312154925_migracaoBD")]
     partial class migracaoBD
     {
         /// <inheritdoc />
@@ -96,6 +96,10 @@ namespace CRUDAPI.Migrations
 
                     b.Property<int>("IdUsuario")
                         .HasColumnType("int");
+
+                    b.Property<string>("NomeAtleta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()

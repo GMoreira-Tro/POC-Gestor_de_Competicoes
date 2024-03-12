@@ -1,4 +1,4 @@
-import { Competicao } from "../Competicao";
+import { Competicao } from "./Competicao";
 import { Inscricao } from "./Inscricao";
 
 export interface Categoria {

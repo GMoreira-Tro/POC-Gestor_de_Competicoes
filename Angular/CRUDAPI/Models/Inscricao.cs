@@ -22,6 +22,7 @@ namespace CRUDAPI.Models
 
         [Required]
         public string Status { get; set; } // pendente, aceita, recusada
+        public string NomeAtleta { get; set; }
 
     }
 }

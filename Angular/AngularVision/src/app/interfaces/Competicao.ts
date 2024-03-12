@@ -1,5 +1,5 @@
-import { Categoria } from "./interfaces/Categoria";
-import { Usuario } from "./interfaces/Usuario";
+import { Categoria } from "./Categoria";
+import { Usuario } from "./Usuario";
 
 export interface Competicao {
     id: number;

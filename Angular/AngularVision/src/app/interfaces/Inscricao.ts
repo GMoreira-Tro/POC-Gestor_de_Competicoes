@@ -8,4 +8,5 @@ export interface Inscricao {
     idUsuario: number;
     usuario: Usuario;
     status: string; // pendente, aceita, recusada
+    nomeAtleta: string;
   }
