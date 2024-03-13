@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRUDAPI.Models;
+using System.Net.Mail;
 
 namespace CRUDAPI.Controller
 {
@@ -44,10 +41,54 @@ namespace CRUDAPI.Controller
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
+            Usuario? emailExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email);
+            if (emailExistente != null)
+            {
+                return BadRequest("Email já cadastrado");
+            }
+            Usuario? cpfCnpjExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.CpfCnpj == usuario.CpfCnpj);
+            if (cpfCnpjExistente != null)
+            {
+                return BadRequest("Cpf ou Cnpj já cadastrado");
+            }
+            else if (!ValidarCPFOuCNPJ(usuario.CpfCnpj))
+            {
+                return BadRequest("Cpf ou Cnpj inválido");
+            }
+
             _contexto.Usuarios.Add(usuario);
             await _contexto.SaveChangesAsync();
 
+            // Envio de e-mail de confirmação
+            //await EnviarEmailConfirmacao(usuario.Email);
+
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+        }
+
+        // Função para validar CPF ou CNPJ
+        public bool ValidarCPFOuCNPJ(string documento)
+        {
+            CPFCNPJ.Main main = new();
+            return main.IsValidCPFCNPJ(documento);
+        }
+
+        // Método para enviar e-mail de confirmação
+        private static async Task EnviarEmailConfirmacao(string email)
+        {
+            using (var client = new SmtpClient("smtp.gmail.com", 587))
+            {
+                client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new System.Net.NetworkCredential("guilherme.dsmoreira@gmail.com", "gremio123");
+
+                var message = new MailMessage();
+                message.From = new MailAddress("guilherme.dsmoreira@gmail.com");
+                message.To.Add(email);
+                message.Subject = "Confirmação de Cadastro";
+                message.Body = "Olá, obrigado por se cadastrar! Por favor, confirme seu e-mail para ativar sua conta.";
+
+                await client.SendMailAsync(message);
+            }
         }
 
         // PUT: api/Usuario/5

@@ -8,7 +8,7 @@ import { Usuario } from '../interfaces/Usuario';
 })
 export class UserService {
 
-  private baseUrl = 'http://localhost:5000/api/usuarios'; // Substitua pela URL correta do seu backend
+  private baseUrl = 'http://localhost:5000/api/Usuario'; // Substitua pela URL correta do seu backend
 
   constructor(private http: HttpClient) { }
 
@@ -30,5 +30,10 @@ export class UserService {
 
   deleteUser(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  sendConfirmationEmail(email: string): Observable<any> {
+    const emailData = { email: email };
+    return this.http.post<any>(`${this.baseUrl}/send-email`, emailData); // Substitua pela rota correta no backend para enviar o e-mail de confirmação
   }
 }

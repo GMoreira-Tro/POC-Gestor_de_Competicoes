@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRUDAPI.Models
 {
+    [Table("Competicoes")]
     public class Competicao
     {
         [Key]
@@ -17,6 +14,12 @@ namespace CRUDAPI.Models
 
         [Required]
         public string Descricao { get; set; }
+
+        public string? Pais { get; set; }
+
+        public string? Provincia { get; set; }
+        
+        public string? Cidade { get; set; }
 
         [Required]
         public DateTime DataInicio { get; set; }

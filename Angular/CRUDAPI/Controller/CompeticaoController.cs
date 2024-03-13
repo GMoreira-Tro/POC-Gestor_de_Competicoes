@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CRUDAPI.Models; 
+using CRUDAPI.Models;
 
 namespace CRUDAPI.Controller
 {

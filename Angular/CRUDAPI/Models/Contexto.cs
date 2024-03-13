@@ -35,6 +35,19 @@ namespace CRUDAPI.Models
                 .IsRequired();
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.CpfCnpj)
+                .IsUnique();
+
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.SenhaHash)
+                .IsUnique();
+
+            // Configurar índice único para o campo Email
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
 
     }

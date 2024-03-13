@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CRUDAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class migracaoBD : Migration
+    public partial class migracaoDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,8 +18,12 @@ namespace CRUDAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SenhaHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Sobrenome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SenhaHash = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Pais = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CpfCnpj = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,6 +38,9 @@ namespace CRUDAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Pais = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Provincia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdCriadorUsuario = table.Column<int>(type: "int", nullable: false)
@@ -117,6 +124,24 @@ namespace CRUDAPI.Migrations
                 name: "IX_Inscricoes_IdUsuario",
                 table: "Inscricoes",
                 column: "IdUsuario");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_CpfCnpj",
+                table: "Usuarios",
+                column: "CpfCnpj",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_Email",
+                table: "Usuarios",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_SenhaHash",
+                table: "Usuarios",
+                column: "SenhaHash",
+                unique: true);
         }
 
         /// <inheritdoc />
