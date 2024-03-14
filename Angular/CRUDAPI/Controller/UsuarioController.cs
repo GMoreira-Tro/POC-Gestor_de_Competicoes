@@ -73,7 +73,8 @@ namespace CRUDAPI.Controller
         }
 
         // Método para enviar e-mail de confirmação
-        private static async Task EnviarEmailConfirmacao(string email)
+        [HttpPost("email-confirmation")]
+        public async Task<IActionResult> EnviarEmailConfirmacao(string email)
         {
             using (var client = new SmtpClient("smtp.gmail.com", 587))
             {
@@ -89,6 +90,8 @@ namespace CRUDAPI.Controller
 
                 await client.SendMailAsync(message);
             }
+
+            return Ok();
         }
 
         // PUT: api/Usuario/5

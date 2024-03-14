@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CRUDAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class migracaoDB : Migration
+    public partial class migracaoBD : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,8 +20,11 @@ namespace CRUDAPI.Migrations
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sobrenome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EmailConfirmado = table.Column<bool>(type: "bit", nullable: false),
                     SenhaHash = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Pais = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CpfCnpj = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },

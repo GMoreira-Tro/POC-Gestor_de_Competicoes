@@ -23,6 +23,10 @@ namespace CRUDAPI.Models
         public string SenhaHash { get; set; }
         [Required]
         public string Pais { get; set; }
+        [Required]
+        public string Estado { get; set; }
+        [Required]
+        public string Cidade { get; set; }
 
         [Required]
         public DateTime DataNascimento { get; set; }

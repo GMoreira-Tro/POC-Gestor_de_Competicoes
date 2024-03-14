@@ -128,6 +128,10 @@ namespace CRUDAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Cidade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CpfCnpj")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -141,6 +145,10 @@ namespace CRUDAPI.Migrations
 
                     b.Property<bool>("EmailConfirmado")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()

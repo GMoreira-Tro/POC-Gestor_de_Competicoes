@@ -1,11 +1,18 @@
 /* Estilos para o formulário */
 .beautiful-form {
     max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
+    background-color: #3498db;
+    margin: 0 auto; /* Margem superior e inferior automáticas, centralizando horizontalmente */
+    padding: 50px;
+    width: 50vw;
     border: 1px solid #ccc;
     border-radius: 5px;
+    position: absolute; /* Define a posição absoluta para permitir a centralização vertical */
+    top: 50%; /* Posiciona o topo do formulário no meio da tela */
+    left: 50%; /* Posiciona a esquerda do formulário no meio da tela */
+    transform: translate(-50%, -50%); /* Move o formulário de volta 50% da sua própria altura e largura, centralizando vertical e horizontalmente */
   }
+
   
   /* Estilos para os campos de entrada */
   .beautiful-form .form-group {
@@ -29,7 +36,7 @@
   
   /* Estilos para o botão de cadastro */
   .beautiful-form button[type="submit"] {
-    background-color: #007bff;
+    background-color: #ff7f50;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -43,6 +50,24 @@
   
   /* Estilos para a borda vermelha de erro */
   .error-border {
-    border: 1px solid red;
+    border: 10px solid red;
+    background-color: #0056b3;
   }
+
+  .background-image {
+    background-image: url("../assets/images/background.jpg"); /* Substitua 'background.jpg' pelo nome do seu arquivo de imagem */
+    height: 100vh;
+    width: 100vw;
+    background-repeat: no-repeat;
+    background-size: cover; /* Para garantir que a imagem cubra todo o elemento */
+    /* Adicione outras propriedades de estilo conforme necessário */
+}
+
+.same-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5%
+}
+
   

@@ -16,7 +16,16 @@ namespace CRUDAPI
             string? connectionString = Configuration.GetConnectionString("ConexaoBD");
             services.AddDbContext<Contexto> (opcoes => opcoes.UseSqlServer (connectionString));
 
-            services.AddCors ();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
 
             services.AddControllers ();
 

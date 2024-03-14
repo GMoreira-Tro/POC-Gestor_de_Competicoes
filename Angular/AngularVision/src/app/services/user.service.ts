@@ -34,6 +34,6 @@ export class UserService {
 
   sendConfirmationEmail(email: string): Observable<any> {
     const emailData = { email: email };
-    return this.http.post<any>(`${this.baseUrl}/send-email`, emailData); // Substitua pela rota correta no backend para enviar o e-mail de confirmação
+    return this.http.post<any>(`${this.baseUrl}/email-confirmation`, emailData); // Substitua pela rota correta no backend para enviar o e-mail de confirmação
   }
 }

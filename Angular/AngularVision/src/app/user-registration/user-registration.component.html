@@ -1,39 +1,65 @@
-<form (ngSubmit)="submitForm()" #form="ngForm" class="beautiful-form">
-  <div class="form-group">
-      <label for="nome">Nome:</label>
-      <input type="text" id="nome" name="nome" [(ngModel)]="userData.nome" required 
-             [ngClass]="{ 'error-border': form.controls['nome']?.errors?.['required'] && form.controls['nome'].touched }">
-  </div>
-  <div class="form-group">
-      <label for="sobrenome">Sobrenome:</label>
-      <input type="text" id="sobrenome" name="sobrenome" [(ngModel)]="userData.sobrenome" required 
-             [ngClass]="{ 'error-border': form.controls['sobrenome']?.errors?.['required'] && form.controls['sobrenome'].touched }">
-  </div>
-  <div class="form-group">
-      <label for="pais">País:</label>
-      <input type="text" id="pais" name="pais" [(ngModel)]="userData.pais" required 
-             [ngClass]="{ 'error-border': form.controls['pais']?.errors?.['required'] && form.controls['pais'].touched }">
-  </div>
-  <div class="form-group">
-      <label for="dataNascimento">Data de Nascimento:</label>
-      <input type="date" id="dataNascimento" name="dataNascimento" [(ngModel)]="userData.dataNascimento" required 
-             [ngClass]="{ 'error-border': form.controls['dataNascimento']?.errors?.['required'] && form.controls['dataNascimento'].touched }">
-  </div>
-  <div class="form-group">
-    <label for="cpfCnpj">CPF/CNPJ:</label>
-    <input type="text" id="cpfCnpj" name="cpfCnpj" [(ngModel)]="userData.cpfCnpj" required
-           mask="000.000.000-00|00.000.000/0000-00"
-           [ngClass]="{ 'error-border': form.controls['cpfCnpj']?.errors?.['required'] && form.controls['cpfCnpj'].touched }">
-  </div>  
-  <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" [(ngModel)]="userData.email" required 
-             [ngClass]="{ 'error-border': form.controls['email']?.errors?.['required'] && form.controls['email'].touched }">
-  </div>
-  <div class="form-group">
-      <label for="senha">Senha:</label>
-      <input type="password" id="senha" name="senha" [(ngModel)]="userData.senhaHash" required 
-             [ngClass]="{ 'error-border': form.controls['senha']?.errors?.['required'] && form.controls['senha'].touched }">
-  </div>
-  <button type="submit">Cadastrar</button>
-</form>
+<div class="background-image">
+       <form (ngSubmit)="submitForm()" #form="ngForm" class="beautiful-form">
+              <div class="form-row">
+                     <section class="same-row">
+                            <div class="form-group">
+                                   <label for="nome">Nome:</label>
+                                   <input type="text" id="nome" name="nome" [(ngModel)]="userData.nome" required
+                                          [ngClass]="{ 'error-border': form.controls['nome']?.errors?.['required'] && form.controls['nome'].touched }">
+                            </div>
+                            <div class="form-group">
+                                   <label for="sobrenome">Sobrenome:</label>
+                                   <input type="text" id="sobrenome" name="sobrenome" [(ngModel)]="userData.sobrenome"
+                                          required
+                                          [ngClass]="{ 'error-border': form.controls['sobrenome']?.errors?.['required'] && form.controls['sobrenome'].touched }">
+                            </div>
+                     </section>
+                     <div class="form-group">
+                            <label for="dataNascimento">Data de Nascimento:</label>
+                            <input type="date" id="dataNascimento" name="dataNascimento"
+                                   [(ngModel)]="userData.dataNascimento" required
+                                   [ngClass]="{ 'error-border': form.controls['dataNascimento']?.errors?.['required'] && form.controls['dataNascimento'].touched }">
+                     </div>
+                     <section class="same-row">
+                            <div class="form-group">
+                                   <label for="cpfCnpj">CPF/CNPJ:</label>
+                                   <input type="text" id="cpfCnpj" name="cpfCnpj" [(ngModel)]="userData.cpfCnpj"
+                                          required mask="000.000.000-00|00.000.000/0000-00"
+                                          [ngClass]="{ 'error-border': form.controls['cpfCnpj']?.errors?.['required'] && form.controls['cpfCnpj'].touched }">
+                            </div>
+                            <div class="form-group">
+                                   <label for="pais">País:</label>
+                                   <input type="text" id="pais" name="pais" [(ngModel)]="userData.pais" required
+                                          [ngClass]="{ 'error-border': form.controls['pais']?.errors?.['required'] && form.controls['pais'].touched }">
+                            </div>
+                     </section>
+                     <section class="same-row">
+                            <div class="form-group">
+                                   <label for="estado">Estado:</label>
+                                   <input type="text" id="estado" name="estado" [(ngModel)]="userData.estado" required
+                                          [ngClass]="{ 'error-border': form.controls['estado']?.errors?.['required'] && form.controls['estado'].touched }">
+                            </div>
+                            <div class="form-group">
+                                   <label for="cidade">Cidade:</label>
+                                   <input type="text" id="cidade" name="cidade" [(ngModel)]="userData.cidade" required
+                                          [ngClass]="{ 'error-border': form.controls['cidade']?.errors?.['required'] && form.controls['cidade'].touched }">
+                            </div>
+                     </section>
+              </div>
+              <div class="form-row">
+                     <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" [(ngModel)]="userData.email" required
+                                   [ngClass]="{ 'error-border': form.controls['email']?.errors?.['required'] && form.controls['email'].touched }">
+                     </div>
+              </div>
+              <div class="form-row">
+                     <div class="form-group">
+                            <label for="senha">Senha:</label>
+                            <input type="password" id="senha" name="senha" [(ngModel)]="userData.senhaHash" required
+                                   [ngClass]="{ 'error-border': form.controls['senha']?.errors?.['required'] && form.controls['senha'].touched }">
+                     </div>
+              </div>
+              <button type="submit" (click)="highlightRequiredFields()">Cadastrar</button>
+       </form>
+</div>
