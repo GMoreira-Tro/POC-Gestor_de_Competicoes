@@ -1,66 +1,74 @@
 /* Estilos para o formulário */
 .beautiful-form {
-    max-width: 400px;
-    background-color: #3498db;
-    margin: 0 auto; /* Margem superior e inferior automáticas, centralizando horizontalmente */
-    padding: 50px;
-    width: 50vw;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    position: absolute; /* Define a posição absoluta para permitir a centralização vertical */
-    top: 50%; /* Posiciona o topo do formulário no meio da tela */
-    left: 50%; /* Posiciona a esquerda do formulário no meio da tela */
-    transform: translate(-50%, -50%); /* Move o formulário de volta 50% da sua própria altura e largura, centralizando vertical e horizontalmente */
-  }
+  max-width: 400px;
+  background-color: #3498db;
+  margin: 0 auto;
+  /* Margem superior e inferior automáticas, centralizando horizontalmente */
+  padding: 50px;
+  width: 50vw;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: absolute;
+  /* Define a posição absoluta para permitir a centralização vertical */
+  top: 50%;
+  /* Posiciona o topo do formulário no meio da tela */
+  left: 50%;
+  /* Posiciona a esquerda do formulário no meio da tela */
+  transform: translate(-50%, -50%);
+  /* Move o formulário de volta 50% da sua própria altura e largura, centralizando vertical e horizontalmente */
+}
 
-  
-  /* Estilos para os campos de entrada */
-  .beautiful-form .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .beautiful-form label {
-    display: block;
-    font-weight: bold;
-  }
-  
-  .beautiful-form input[type="text"],
-  .beautiful-form input[type="email"],
-  .beautiful-form input[type="password"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  /* Estilos para o botão de cadastro */
-  .beautiful-form button[type="submit"] {
-    background-color: #ff7f50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .beautiful-form button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Estilos para a borda vermelha de erro */
-  .error-border {
-    border: 10px solid red;
-    background-color: #0056b3;
-  }
 
-  .background-image {
-    background-image: url("../assets/images/background.jpg"); /* Substitua 'background.jpg' pelo nome do seu arquivo de imagem */
-    height: 100vh;
-    width: 100vw;
-    background-repeat: no-repeat;
-    background-size: cover; /* Para garantir que a imagem cubra todo o elemento */
-    /* Adicione outras propriedades de estilo conforme necessário */
+/* Estilos para os campos de entrada */
+.beautiful-form .form-group {
+  margin-bottom: 20px;
+}
+
+.beautiful-form label {
+  display: block;
+  font-weight: bold;
+}
+
+.beautiful-form input[type="text"],
+.beautiful-form input[type="email"],
+.beautiful-form input[type="password"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Estilos para o botão de cadastro */
+.beautiful-form button[type="submit"] {
+  background-color: #ff7f50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.beautiful-form button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.beautiful-form input[type="text"].error-border,
+.beautiful-form input[type="email"].error-border,
+.beautiful-form input[type="password"].error-border {
+  border: 2px solid red;
+  /* Substitui a propriedade border apenas para os inputs com a classe error-border */
+}
+
+.background-image {
+  background-image: url("../assets/images/background.jpg");
+  /* Substitua 'background.jpg' pelo nome do seu arquivo de imagem */
+  height: 100vh;
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* Para garantir que a imagem cubra todo o elemento */
+  /* Adicione outras propriedades de estilo conforme necessário */
 }
 
 .same-row {
@@ -70,4 +78,21 @@
   gap: 5%
 }
 
-  
+.country-input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.country-input:focus {
+  outline: none;
+  border-color: #0056b3;
+  /* Cor da borda quando o input está em foco */
+}
+
+.country-input::placeholder {
+  color: #999;
+  /* Cor do texto de placeholder */
+}

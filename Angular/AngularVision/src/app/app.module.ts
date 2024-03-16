@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxMaskModule } from 'ngx-mask';
+import { NgxCountryFlagModule } from 'ngx-country-flag';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +20,7 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
+    NgxCountryFlagModule,
     ModalModule.forRoot(),
     NgxMaskModule.forRoot(), // Importando NgxMaskModule ao invés de MaskModule
   ],

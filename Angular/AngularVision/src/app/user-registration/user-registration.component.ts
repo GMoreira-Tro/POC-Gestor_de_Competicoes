@@ -3,6 +3,7 @@ import { Usuario } from '../interfaces/Usuario';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { GeoNamesService } from '../services/geonames.service';
 
 @Component({
   selector: 'app-user-registration',
@@ -11,8 +12,7 @@ import { NgForm } from '@angular/forms';
 })
 
 export class UserRegistrationComponent implements AfterViewInit {
-  @ViewChild('form')
-  form!: NgForm;
+  @ViewChild('form') form!: NgForm;
   userData: Usuario = {
     id: 0,
     nome: '',
@@ -26,15 +26,31 @@ export class UserRegistrationComponent implements AfterViewInit {
     cpfCnpj: '',
     inscricoes: []
   };
+  signUpButtonPressed: boolean = false;
+  paisesDoMundo: any;
+  estados: any;
+  cidades: any;
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private geonamesService: GeoNamesService) { }
 
   ngAfterViewInit() {
     // Inicializa o formulário após a exibição da visualização do componente
-    this.form?.control?.markAsTouched();
+    this.form.control.markAsTouched();
+    // Carrega a lista de países do mundo
+    this.geonamesService.getAllCountries().subscribe(
+      paises => {
+        this.paisesDoMundo = paises;
+        console.log(this.paisesDoMundo)
+      },
+      error => {
+        console.error('Erro ao obter a lista de países:', error);
+        // Trate o erro conforme necessário
+      }
+    );
   }
 
   highlightRequiredFields() {
+    this.signUpButtonPressed = true;
     Object.keys(this.form.controls).forEach(field => {
       const control = this.form.controls[field];
       control.markAsTouched();
@@ -42,30 +58,79 @@ export class UserRegistrationComponent implements AfterViewInit {
   }
 
   submitForm() {
-    this.userService.createUser(this.userData).subscribe(
-      response => {
-        console.log('Usuário cadastrado com sucesso:', response);
-        // Envie o e-mail de confirmação
-        // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
-        //   emailResponse => {
-        //     console.log('E-mail de confirmação enviado:', emailResponse);
-        //     this.router.navigate(['/email-confirmation']);
-        //   },
-        //   error => {
-        //     console.error('Erro ao enviar e-mail de confirmação:', error);
-        //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
-        //   }
-        // );
+    this.highlightRequiredFields(); // Certifica-se de que os campos obrigatórios são destacados antes de enviar o formulário
+    if (this.form.valid) { // Verifica se o formulário é válido antes de enviar
+      this.userService.createUser(this.userData).subscribe(
+        response => {
+          console.log('Usuário cadastrado com sucesso:', response);
+          // Envie o e-mail de confirmação
+          // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
+          //   emailResponse => {
+          //     console.log('E-mail de confirmação enviado:', emailResponse);
+          //     this.router.navigate(['/email-confirmation']);
+          //   },
+          //   error => {
+          //     console.error('Erro ao enviar e-mail de confirmação:', error);
+          //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
+          //   }
+          // );
+        },
+        error => {
+          console.error('Erro ao cadastrar usuário:', error);
+          let errorMessage = 'Erro ao cadastrar usuário';
+          if (error.error && typeof error.error === 'string') {
+            errorMessage = error.error;
+            alert(errorMessage);
+          }
+          // Tratar erros de cadastro, exibir mensagens de erro, etc.
+        }
+      );
+    }
+  }
+
+  // Função chamada quando o país selecionado é alterado
+  onCountryChange() {
+    // Limpa a lista de estados
+    this.estados = [];
+    this.cidades = [];
+
+    // Obtém os estados/províncias do país selecionado
+    const pais = this.paisesDoMundo?.geonames.find((country: any) => country.countryName === this.userData.pais);
+    if (!pais) return;
+
+    this.geonamesService.getStatesByCountry(pais.geonameId).subscribe(
+      (estados: any) => {
+        // Extrai os nomes dos estados/províncias da resposta
+        this.estados = estados;
+        console.log(this.estados.geonames)
       },
       error => {
-        console.error('Erro ao cadastrar usuário:', error);
-        let errorMessage = 'Erro ao cadastrar usuário';
-        if (error.error && typeof error.error === 'string') {
-          errorMessage = error.error;
-          alert(errorMessage);
-        }
-        // Tratar erros de cadastro, exibir mensagens de erro, etc.
+        console.error('Erro ao obter os estados/províncias:', error);
+        // Trate o erro conforme necessário
       }
     );
   }
+
+  // Função chamada quando o estado selecionado é alterado
+  onStateChange() {
+    // Limpa a lista de cidades
+    this.cidades = [];
+
+    // Obtém as cidades do estado selecionado
+    const estado = this.estados?.geonames.find((state: any) => state.name === this.userData.estado);
+    if (!estado) return;
+
+    this.geonamesService.getCitiesByState(estado.geonameId).subscribe(
+      (cidades: any) => {
+        // Extrai os nomes das cidades da resposta
+        this.cidades = cidades;
+        console.log(this.cidades.geonames);
+      },
+      error => {
+        console.error('Erro ao obter as cidades:', error);
+        // Trate o erro conforme necessário
+      }
+    );
+  }
+
 }
