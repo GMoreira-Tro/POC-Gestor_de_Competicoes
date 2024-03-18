@@ -17,7 +17,8 @@ export class GeoNamesService {
 
   // Método para obter os estados ou províncias de um país específico
   getStatesByCountry(geonameID: string) {
-    const url = `${this.apiUrl}/childrenJSON?geonameId=${geonameID}&username=${this.username}`;
+    const maxRows = 10000;
+    const url = `${this.apiUrl}/childrenJSON?geonameId=${geonameID}&username=${this.username}&maxRows=${maxRows}`;
     console.log(url)
     return this.http.get(url);
   }

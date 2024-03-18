@@ -7,6 +7,10 @@ import { Usuario } from '../interfaces/Usuario';
   providedIn: 'root'
 })
 export class UserService {
+  login(userData: { email: string, senha: string }): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.baseUrl}/login`, userData);
+  }
+  
 
   private baseUrl = 'http://localhost:5000/api/Usuario'; // Substitua pela URL correta do seu backend
 

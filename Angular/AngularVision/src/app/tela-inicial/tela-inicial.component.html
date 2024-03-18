@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela Inicial</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .banner {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .destaque {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .competicoes {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .competicoes input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <!-- Adicione os atributos (click) para chamar as funções correspondentes -->
+            <button (click)="buscarCompeticao()">Buscar competição</button>
+            <button (click)="cadastrarCompeticao()">Cadastrar competição</button>
+            <button (click)="cadastrar()">Cadastrar-se</button>
+            <button (click)="login()">Login</button>
+        </div>
+        <div>
+            <!-- Banner do projeto -->
+            <img src="app/assets/images/logo.jpg" alt="Banner do projeto" class="logo">
+        </div>
+    </div>
+
+    <div class="banner">
+        <!-- Banner grande centralizado -->
+        <h1>Banner do Projeto</h1>
+    </div>
+
+    <div class="conteudo">
+        <h2 class="destaque">Competições em destaque</h2>
+        <div class="competicoes">
+            <label><input type="checkbox" checked> Municipal</label>
+            <label><input type="checkbox" checked> Regional</label>
+            <label><input type="checkbox"> Nacional</label>
+            <label><input type="checkbox"> Mundial</label>
+        </div>
+
+        <!-- Lista de competições mais acessadas -->
+        <h2>Competições mais acessadas</h2>
+        <ul>
+            <li>Competição 1</li>
+            <li>Competição 2</li>
+            <li>Competição 3</li>
+            <!-- Adicione mais itens conforme necessário -->
+        </ul>
+    </div>
+
+    <div class="footer">
+        <a href="#">Fale Conosco</a>
+        <!-- Logo do projeto -->
+        <img src="app/assets/images/logo.jpg" alt="Logo do Projeto" class="logo">
+    </div>
+</body>
+</html>

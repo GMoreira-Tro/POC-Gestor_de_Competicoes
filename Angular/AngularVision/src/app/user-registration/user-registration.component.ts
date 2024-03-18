@@ -59,7 +59,7 @@ export class UserRegistrationComponent implements AfterViewInit {
 
   submitForm() {
     this.highlightRequiredFields(); // Certifica-se de que os campos obrigatórios são destacados antes de enviar o formulário
-    if (this.form.valid) { // Verifica se o formulário é válido antes de enviar
+ // Verifica se o formulário é válido antes de enviar
       this.userService.createUser(this.userData).subscribe(
         response => {
           console.log('Usuário cadastrado com sucesso:', response);
@@ -85,7 +85,6 @@ export class UserRegistrationComponent implements AfterViewInit {
           // Tratar erros de cadastro, exibir mensagens de erro, etc.
         }
       );
-    }
   }
 
   // Função chamada quando o país selecionado é alterado

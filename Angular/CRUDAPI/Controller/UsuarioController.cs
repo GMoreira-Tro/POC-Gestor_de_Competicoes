@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRUDAPI.Models;
 using System.Net.Mail;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Security.Claims;
 
 namespace CRUDAPI.Controller
 {
@@ -44,16 +48,28 @@ namespace CRUDAPI.Controller
             Usuario? emailExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email);
             if (emailExistente != null)
             {
-                return BadRequest("Email já cadastrado");
+                return BadRequest("Email já cadastrado.");
             }
             Usuario? cpfCnpjExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.CpfCnpj == usuario.CpfCnpj);
             if (cpfCnpjExistente != null)
             {
-                return BadRequest("Cpf ou Cnpj já cadastrado");
+                return BadRequest("Cpf ou Cnpj já cadastrado.");
             }
             else if (!ValidarCPFOuCNPJ(usuario.CpfCnpj))
             {
-                return BadRequest("Cpf ou Cnpj inválido");
+                return BadRequest("Cpf ou Cnpj inválido.");
+            }
+            else if (usuario.Pais.IsNullOrEmpty())
+            {
+                return BadRequest("Selecione seu país.");
+            }
+            else if (usuario.Estado.IsNullOrEmpty())
+            {
+                return BadRequest("Selecione seu estado/província.");
+            }
+            else if (usuario.Cidade.IsNullOrEmpty())
+            {
+                return BadRequest("Selecione sua cidade.");
             }
 
             _contexto.Usuarios.Add(usuario);
@@ -76,14 +92,14 @@ namespace CRUDAPI.Controller
         [HttpPost("email-confirmation")]
         public async Task<IActionResult> EnviarEmailConfirmacao(string email)
         {
-            using (var client = new SmtpClient("smtp.gmail.com", 587))
+            using (var client = new SmtpClient("smtp.webmail.com", 587))
             {
                 client.EnableSsl = true;
                 client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential("guilherme.dsmoreira@gmail.com", "gremio123");
+                client.Credentials = new System.Net.NetworkCredential("guilherme.moreira@rodwin.com.br", "Gm$1403s");
 
                 var message = new MailMessage();
-                message.From = new MailAddress("guilherme.dsmoreira@gmail.com");
+                message.From = new MailAddress("guilherme.moreira@rodwin.com.br");
                 message.To.Add(email);
                 message.Subject = "Confirmação de Cadastro";
                 message.Body = "Olá, obrigado por se cadastrar! Por favor, confirme seu e-mail para ativar sua conta.";
@@ -140,10 +156,45 @@ namespace CRUDAPI.Controller
             return usuario;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == model.Email && u.SenhaHash == model.Senha);
+
+            if (user == null /*|| !user.EmailConfirmado*/)
+            {
+                return Unauthorized();
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("sua-chave-secreta-aqui");
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+            new Claim(ClaimTypes.Name, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7), // Define a expiração do token (opcional)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new { Token = tokenString });
+        }
+
         private bool UsuarioExists(int id)
         {
             return _contexto.Usuarios.Any(e => e.Id == id);
         }
 
+    }
+
+    public class LoginModel
+    {
+        public string Email { get; set; }
+        public string Senha { get; set; }
     }
 }

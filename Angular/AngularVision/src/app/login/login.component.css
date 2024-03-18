@@ -1,0 +1,108 @@
+/* Estilos para o formulário de login */
+.beautiful-form {
+    max-width: 400px;
+    background-color: #3498db;
+    margin: 0 auto;
+    padding: 50px;
+    width: 50vw;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Estilos para os campos de entrada */
+.beautiful-form .form-group {
+    margin-bottom: 20px;
+}
+
+.beautiful-form label {
+    display: block;
+    font-weight: bold;
+}
+
+.beautiful-form input[type="email"],
+.beautiful-form input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilos para o botão de login */
+.beautiful-form button[type="submit"] {
+    background-color: #ff7f50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.beautiful-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para realce de erro nos campos de entrada */
+.beautiful-form input[type="email"].error-border,
+.beautiful-form input[type="password"].error-border {
+    border: 2px solid red;
+}
+
+/* Estilos para a imagem de fundo */
+.background-image {
+    background-image: url("../assets/images/background.jpg");
+    height: 100vh;
+    width: 100vw;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Estilos para alinhamento dos elementos na mesma linha */
+.same-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5%;
+}
+
+/* Estilos para inputs específicos */
+.country-input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.country-input:focus {
+    outline: none;
+    border-color: #0056b3;
+}
+
+.country-input::placeholder {
+    color: #999;
+}
+
+.beautiful-form button[type="submit"],
+.beautiful-form a {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.beautiful-form button[type="submit"] {
+    background-color: #ff7f50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.beautiful-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}

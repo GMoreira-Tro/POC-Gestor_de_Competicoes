@@ -10,9 +10,10 @@ import { NgxCountryFlagModule } from 'ngx-country-flag';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
-  declarations: [AppComponent, UserRegistrationComponent],
+  declarations: [AppComponent, UserRegistrationComponent, LoginComponent],
   imports: [
     BrowserModule,
     FormsModule,

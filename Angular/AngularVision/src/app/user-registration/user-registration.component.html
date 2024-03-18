@@ -72,6 +72,6 @@
           [ngClass]="{ 'error-border': form.controls['senha']?.errors?.['required'] && (form.controls['senha'].touched && signUpButtonPressed) }">
       </div>
     </div>
-    <button type="submit" (click)="highlightRequiredFields()">Cadastrar</button>
+    <button type="submit" (click)="submitForm()">Cadastrar</button>
   </form>
 </div>
