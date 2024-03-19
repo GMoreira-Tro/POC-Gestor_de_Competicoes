@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Formulário de busca */
+.search-form {
+    margin: 20px auto;
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.search-form input[type="text"],
+.search-form select {
+    margin: 5px;
+    padding: 10px;
+    width: calc(25% - 20px);
+}
+
+.search-form button {
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #2980b9;
+}
+
+/* Lista de competições */
+.competition-list {
+    margin: 20px auto;
+    width: 80%;
+}

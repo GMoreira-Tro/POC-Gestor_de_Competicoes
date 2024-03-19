@@ -1,0 +1,33 @@
+<!-- Cabeçalho -->
+<app-cabecalho></app-cabecalho>
+
+<!-- Formulário de Cadastro de Competição -->
+<div class="formulario">
+  <h2>Cadastro de Competição</h2>
+  <div class="campo">
+    <label for="nome">Nome da Competição:</label>
+    <input type="text" id="nome" name="nome" [(ngModel)]="competicao.titulo" required>
+  </div>
+  <div class="campo">
+    <label for="banner">Banner:</label>
+    <input type="file" id="banner" name="banner" (change)="onFileSelected($event)" accept="image/*">
+    <img *ngIf="competicao.bannerImagem" [src]="competicao.bannerImagem" alt="Banner da Competição">
+  </div>
+  <div class="campo">
+    <label for="descricao">Descrição:</label>
+    <textarea id="descricao" name="descricao" [(ngModel)]="competicao.descricao" required></textarea>
+  </div>
+  <div class="campo">
+    <label for="categorias">Categorias:</label>
+    <div class="categorias">
+      <div *ngFor="let categoria of competicao.categorias; let i = index">
+        <input type="text" [(ngModel)]="competicao.categorias[i]" required>
+        <button type="button" (click)="removerCategoria(i)">-</button>
+      </div>
+      <button type="button" (click)="adicionarCategoria()">+</button>
+    </div>
+  </div>
+  <button type="submit" (click)="onSubmit()">Registrar Competição</button>
+</div>
+
+<app-rodape></app-rodape>

@@ -9,4 +9,5 @@ export interface Inscricao {
     usuario: Usuario;
     status: string; // pendente, aceita, recusada
     nomeAtleta: string;
+    equipe: string
   }

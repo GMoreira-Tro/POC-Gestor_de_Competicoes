@@ -44,6 +44,7 @@ namespace CRUDAPI.Migrations
                     Pais = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Provincia = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BannerImagem = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdCriadorUsuario = table.Column<int>(type: "int", nullable: false)
@@ -89,7 +90,8 @@ namespace CRUDAPI.Migrations
                     IdCategoria = table.Column<int>(type: "int", nullable: false),
                     IdUsuario = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NomeAtleta = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NomeAtleta = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Equipe = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

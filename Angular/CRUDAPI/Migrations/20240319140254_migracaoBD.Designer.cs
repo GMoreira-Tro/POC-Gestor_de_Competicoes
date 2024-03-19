@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240314164312_migracaoBD")]
+    [Migration("20240319140254_migracaoBD")]
     partial class migracaoBD
     {
         /// <inheritdoc />
@@ -59,6 +59,9 @@ namespace CRUDAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BannerImagem")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Cidade")
                         .HasColumnType("nvarchar(max)");
 
@@ -99,6 +102,9 @@ namespace CRUDAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Equipe")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdCategoria")
                         .HasColumnType("int");

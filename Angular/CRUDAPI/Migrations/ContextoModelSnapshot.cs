@@ -56,6 +56,9 @@ namespace CRUDAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BannerImagem")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Cidade")
                         .HasColumnType("nvarchar(max)");
 
@@ -96,6 +99,9 @@ namespace CRUDAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Equipe")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdCategoria")
                         .HasColumnType("int");

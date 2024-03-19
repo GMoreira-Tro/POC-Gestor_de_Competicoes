@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Busca de Competições</title>
+    <style>
+        /* Estilos CSS aqui */
+    </style>
+</head>
+
+<body>
+    <!-- Cabeçalho -->
+    <app-cabecalho></app-cabecalho>
+
+    <!-- Formulário de busca -->
+    <div class="search-form">
+        <input type="text" placeholder="Nome da Competição">
+        <input type="text" placeholder="Modalidade">
+        <input type="text" placeholder="Autor">
+        <select>
+            <option value="">País</option>
+            <!-- Opções de país -->
+        </select>
+        <select>
+            <option value="">Estado</option>
+            <!-- Opções de estado -->
+        </select>
+        <select>
+            <option value="">Cidade</option>
+            <!-- Opções de cidade -->
+        </select>
+        <button type="submit">Buscar</button>
+    </div>
+
+    <!-- Lista de competições -->
+    <div class="competition-list">
+        <!-- Competições mais acessadas de acordo com a busca -->
+    </div>
+
+    <!-- Ícone para carregar mais competições -->
+    <div class="load-more">
+        <!-- Ícone de carregamento -->
+    </div>
+
+    <app-rodape></app-rodape>
+</body>
+
+</html>

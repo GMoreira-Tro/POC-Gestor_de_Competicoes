@@ -20,6 +20,7 @@ namespace CRUDAPI.Models
         public string? Provincia { get; set; }
         
         public string? Cidade { get; set; }
+        public string? BannerImagem { get; set; }
 
         [Required]
         public DateTime DataInicio { get; set; }

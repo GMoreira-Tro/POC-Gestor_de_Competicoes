@@ -11,9 +11,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { LoginComponent } from './login/login.component';
+import { CabecalhoComponent } from './cabecalho/cabecalho.component';
+import { TelaInicialComponent } from './tela-inicial/tela-inicial.component';
+import { BuscaCompeticoesComponent } from './busca-competicoes/busca-competicoes.component';
+import { RodapeComponent } from './rodape/rodape.component';
+import { CadastroCompeticoesComponent } from './cadastro-competicoes/cadastro-competicoes.component';
 
 @NgModule({
-  declarations: [AppComponent, UserRegistrationComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    UserRegistrationComponent,
+    LoginComponent,
+    TelaInicialComponent,
+    BuscaCompeticoesComponent,
+    CadastroCompeticoesComponent,
+    CabecalhoComponent,
+    RodapeComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -23,9 +37,9 @@ import { LoginComponent } from './login/login.component';
     ReactiveFormsModule,
     NgxCountryFlagModule,
     ModalModule.forRoot(),
-    NgxMaskModule.forRoot(), // Importando NgxMaskModule ao invés de MaskModule
+    NgxMaskModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
