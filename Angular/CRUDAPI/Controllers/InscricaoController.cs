@@ -1,18 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CRUDAPI.Models; // Importe os modelos necessários
+using CRUDAPI.Models;
+using CRUDAPI.Services; // Importe o serviço de inscrições
 
-namespace CRUDAPI.Controller
+namespace CRUDAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class InscricaoController : ControllerBase
     {
         private readonly Contexto _contexto;
+        private readonly InscricaoService _inscricaoService; // Adicionando o serviço de inscrições
 
-        public InscricaoController(Contexto contexto)
+        public InscricaoController(Contexto contexto, InscricaoService inscricaoService)
         {
             _contexto = contexto;
+            _inscricaoService = inscricaoService;
         }
 
         // GET: api/Inscricao
@@ -24,7 +27,7 @@ namespace CRUDAPI.Controller
 
         // GET: api/Inscricao/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Inscricao>> GetInscricao(int id)
+        public async Task<ActionResult<Inscricao>> GetInscricao(long id)
         {
             var inscricao = await _contexto.Inscricoes.FindAsync(id);
 
@@ -40,6 +43,9 @@ namespace CRUDAPI.Controller
         [HttpPost]
         public async Task<ActionResult<Inscricao>> PostInscricao(Inscricao inscricao)
         {
+            // Valida os campos obrigatórios da inscrição
+            _inscricaoService.ValidarCamposObrigatorios(inscricao);
+
             _contexto.Inscricoes.Add(inscricao);
             await _contexto.SaveChangesAsync();
 
@@ -48,7 +54,7 @@ namespace CRUDAPI.Controller
 
         // PUT: api/Inscricao/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInscricao(int id, Inscricao inscricao)
+        public async Task<IActionResult> PutInscricao(long id, Inscricao inscricao)
         {
             if (id != inscricao.Id)
             {
@@ -63,7 +69,7 @@ namespace CRUDAPI.Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!InscricaoExists(id))
+                if (!_inscricaoService.InscricaoExists(id))
                 {
                     return NotFound();
                 }
@@ -78,7 +84,7 @@ namespace CRUDAPI.Controller
 
         // DELETE: api/Inscricao/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Inscricao>> DeleteInscricao(int id)
+        public async Task<ActionResult<Inscricao>> DeleteInscricao(long id)
         {
             var inscricao = await _contexto.Inscricoes.FindAsync(id);
             if (inscricao == null)
@@ -90,11 +96,6 @@ namespace CRUDAPI.Controller
             await _contexto.SaveChangesAsync();
 
             return inscricao;
-        }
-
-        private bool InscricaoExists(int id)
-        {
-            return _contexto.Inscricoes.Any(e => e.Id == id);
         }
     }
 }

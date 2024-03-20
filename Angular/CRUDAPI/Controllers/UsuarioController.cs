@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
+using CRUDAPI.Services;
 
 namespace CRUDAPI.Controller
 {
@@ -14,10 +15,12 @@ namespace CRUDAPI.Controller
     public class UsuarioController : ControllerBase
     {
         private readonly Contexto _contexto;
+        private readonly UsuarioService _usuarioService;
 
-        public UsuarioController(Contexto contexto)
+        public UsuarioController(Contexto contexto, UsuarioService usuarioService)
         {
             _contexto = contexto;
+            _usuarioService = usuarioService;
         }
 
         // GET: api/Usuario
@@ -29,7 +32,7 @@ namespace CRUDAPI.Controller
 
         // GET: api/Usuario/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public async Task<ActionResult<Usuario>> GetUsuario(long id)
         {
             var usuario = await _contexto.Usuarios.FindAsync(id);
 
@@ -45,47 +48,20 @@ namespace CRUDAPI.Controller
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            Usuario? emailExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email);
-            if (emailExistente != null)
+            try
             {
-                return BadRequest("Email já cadastrado.");
-            }
-            Usuario? cpfCnpjExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.CpfCnpj == usuario.CpfCnpj);
-            if (cpfCnpjExistente != null)
-            {
-                return BadRequest("Cpf ou Cnpj já cadastrado.");
-            }
-            else if (!ValidarCPFOuCNPJ(usuario.CpfCnpj))
-            {
-                return BadRequest("Cpf ou Cnpj inválido.");
-            }
-            else if (usuario.Pais.IsNullOrEmpty())
-            {
-                return BadRequest("Selecione seu país.");
-            }
-            else if (usuario.Estado.IsNullOrEmpty())
-            {
-                return BadRequest("Selecione seu estado/província.");
-            }
-            else if (usuario.Cidade.IsNullOrEmpty())
-            {
-                return BadRequest("Selecione sua cidade.");
-            }
+                await _usuarioService.ValidarUsuario(usuario);
 
-            _contexto.Usuarios.Add(usuario);
-            await _contexto.SaveChangesAsync();
+                // Se todas as validações passaram, salva o usuário no banco de dados
+                _contexto.Usuarios.Add(usuario);
+                await _contexto.SaveChangesAsync();
 
-            // Envio de e-mail de confirmação
-            //await EnviarEmailConfirmacao(usuario.Email);
-
-            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
-        }
-
-        // Função para validar CPF ou CNPJ
-        public bool ValidarCPFOuCNPJ(string documento)
-        {
-            CPFCNPJ.Main main = new();
-            return main.IsValidCPFCNPJ(documento);
+                return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // Método para enviar e-mail de confirmação
@@ -112,7 +88,7 @@ namespace CRUDAPI.Controller
 
         // PUT: api/Usuario/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        public async Task<IActionResult> PutUsuario(long id, Usuario usuario)
         {
             if (id != usuario.Id)
             {
@@ -127,7 +103,7 @@ namespace CRUDAPI.Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UsuarioExists(id))
+                if (!_usuarioService.UsuarioExists(id))
                 {
                     return NotFound();
                 }
@@ -142,7 +118,7 @@ namespace CRUDAPI.Controller
 
         // DELETE: api/Usuario/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Usuario>> DeleteUsuario(int id)
+        public async Task<ActionResult<Usuario>> DeleteUsuario(long id)
         {
             var usuario = await _contexto.Usuarios.FindAsync(id);
             if (usuario == null)
@@ -183,11 +159,6 @@ namespace CRUDAPI.Controller
             var tokenString = tokenHandler.WriteToken(token);
 
             return Ok(new { Token = tokenString });
-        }
-
-        private bool UsuarioExists(int id)
-        {
-            return _contexto.Usuarios.Any(e => e.Id == id);
         }
 
     }

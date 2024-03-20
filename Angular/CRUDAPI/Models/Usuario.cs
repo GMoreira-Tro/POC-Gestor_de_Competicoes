@@ -7,7 +7,7 @@ namespace CRUDAPI.Models
     public class Usuario
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public string Nome { get; set; }

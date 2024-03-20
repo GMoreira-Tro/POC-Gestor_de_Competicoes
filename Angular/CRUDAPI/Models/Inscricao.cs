@@ -7,14 +7,14 @@ namespace CRUDAPI.Models
     public class Inscricao
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        [ForeignKey("Categoria")]
-        public int IdCategoria { get; set; }
+        [ForeignKey("Categorias")]
+        public long IdCategoria { get; set; }
         public virtual Categoria Categoria { get; set; }
 
-        [ForeignKey("Usuario")]
-        public int IdUsuario { get; set; }
+        [ForeignKey("Usuarios")]
+        public long IdUsuario { get; set; }
         public virtual Usuario Usuario { get; set; }
 
         [Required]
