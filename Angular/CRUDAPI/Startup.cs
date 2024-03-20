@@ -1,20 +1,31 @@
 using CRUDAPI.Models;
+using CRUDAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 namespace CRUDAPI
 {
-    public class Startup {
-        public Startup (IConfiguration configuration) {
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices (IServiceCollection services) {
+        public void ConfigureServices(IServiceCollection services)
+        {
             string? connectionString = Configuration.GetConnectionString("ConexaoBD");
-            services.AddDbContext<Contexto> (opcoes => opcoes.UseSqlServer (connectionString));
+            services.AddDbContext<Contexto>(opcoes => opcoes.UseSqlServer(connectionString));
+
+            services.AddHttpClient();
+            services.AddScoped<GeoNamesService>();
+            services.AddScoped<UsuarioService>();
+            services.AddScoped<InscricaoService>();
+            services.AddScoped<CompeticaoService>();
+            services.AddScoped<CategoriaService>();
 
             services.AddCors(options =>
             {
@@ -27,7 +38,7 @@ namespace CRUDAPI
                     });
             });
 
-            services.AddControllers ();
+            services.AddControllers();
 
             services.AddSwaggerGen(c =>
             {
@@ -36,21 +47,24 @@ namespace CRUDAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
-            if (env.IsDevelopment ()) {
-                app.UseDeveloperExceptionPage ();
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection ();
+            app.UseHttpsRedirection();
 
-            app.UseRouting ();
+            app.UseRouting();
 
             app.UseCors(opcoes => opcoes.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-            app.UseAuthorization ();
+            app.UseAuthorization();
 
-            app.UseEndpoints (endpoints => {
-                endpoints.MapControllers ();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
             });
 
             app.UseSwagger();

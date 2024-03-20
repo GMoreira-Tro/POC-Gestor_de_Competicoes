@@ -9,32 +9,25 @@ namespace CRUDAPI.Models
         public DbSet<Inscricao> Inscricoes { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
 
-        public Contexto(DbContextOptions<Contexto> opcoes) : base(opcoes)
+        public Contexto(DbContextOptions<Contexto> options) : base(options)
         {
-            
         }
-
-        // Modifique suas restrições FOREIGN KEY na classe Contexto onde você configura o modelo do banco de dados
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configuração das chaves estrangeiras e índices únicos
+
             modelBuilder.Entity<Inscricao>()
                 .HasOne(i => i.Usuario)
                 .WithMany(u => u.Inscricoes)
                 .HasForeignKey(i => i.IdUsuario)
-                .OnDelete(DeleteBehavior.Restrict); // Defina a ação de exclusão como NO ACTION
-
-            // Repita o processo para outras chaves estrangeiras, se necessário
-
-            base.OnModelCreating(modelBuilder);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Categoria>()
                 .HasOne(c => c.Competicao)
                 .WithMany(c => c.Categorias)
                 .HasForeignKey(c => c.CompeticaoId)
                 .IsRequired();
-
-            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.CpfCnpj)
@@ -44,11 +37,11 @@ namespace CRUDAPI.Models
                 .HasIndex(u => u.SenhaHash)
                 .IsUnique();
 
-            // Configurar índice único para o campo Email
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
-        }
 
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

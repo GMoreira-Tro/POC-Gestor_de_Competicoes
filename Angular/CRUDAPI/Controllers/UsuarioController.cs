@@ -10,8 +10,8 @@ using CRUDAPI.Services;
 
 namespace CRUDAPI.Controller
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
         private readonly Contexto _contexto;
