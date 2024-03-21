@@ -48,7 +48,7 @@ namespace CRUDAPI.Services
             if(!competicao.Cidade.IsNullOrEmpty())
             {
                 // Valida se a cidade pertence ao estado
-                var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoEstado(competicao.Estado, competicao.Cidade);
+                var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoPaisEEstado(competicao.Pais, competicao.Estado, competicao.Cidade);
                 if (!cidadePertenceAoEstado)
                 {
                     throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado

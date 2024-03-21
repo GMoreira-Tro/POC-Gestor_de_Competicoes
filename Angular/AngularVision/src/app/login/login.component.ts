@@ -53,7 +53,6 @@ export class LoginComponent implements AfterViewInit {
 
   onKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
-      alert("ENTER")
       this.submitForm();
     }
   }

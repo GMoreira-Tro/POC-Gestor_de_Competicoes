@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Usuario } from '../interfaces/Usuario';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,6 @@ import { GeoNamesService } from '../services/geonames.service';
   templateUrl: './user-registration.component.html',
   styleUrls: ['./user-registration.component.css']
 })
-
 export class UserRegistrationComponent implements AfterViewInit {
   @ViewChild('form') form!: NgForm;
   userData: Usuario = {
@@ -22,7 +21,7 @@ export class UserRegistrationComponent implements AfterViewInit {
     pais: '',
     estado: '',
     cidade: '',
-    dataNascimento: new Date(),
+    dataNascimento: new Date(1900, 0, 1),
     cpfCnpj: '',
     inscricoes: []
   };
@@ -31,16 +30,22 @@ export class UserRegistrationComponent implements AfterViewInit {
   estados: any;
   cidades: any;
 
-  constructor(private userService: UserService, private router: Router, private geonamesService: GeoNamesService) { }
+  constructor(public userService: UserService, private router: Router, private geonamesService: GeoNamesService, private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     // Inicializa o formulário após a exibição da visualização do componente
-    this.form.control.markAsTouched();
+    setTimeout(() => {
+      this.form.control.markAsTouched();
+      this.cdr.detectChanges(); // Detecta as alterações manualmente após a inicialização do formulário
+    });
+
+
     // Carrega a lista de países do mundo
     this.geonamesService.getAllCountries().subscribe(
       paises => {
         this.paisesDoMundo = paises;
-        console.log(this.paisesDoMundo)
+        console.log(this.paisesDoMundo);
+        this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos países
       },
       error => {
         console.error('Erro ao obter a lista de países:', error);
@@ -59,32 +64,32 @@ export class UserRegistrationComponent implements AfterViewInit {
 
   submitForm() {
     this.highlightRequiredFields(); // Certifica-se de que os campos obrigatórios são destacados antes de enviar o formulário
- // Verifica se o formulário é válido antes de enviar
-      this.userService.createUser(this.userData).subscribe(
-        response => {
-          console.log('Usuário cadastrado com sucesso:', response);
-          // Envie o e-mail de confirmação
-          // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
-          //   emailResponse => {
-          //     console.log('E-mail de confirmação enviado:', emailResponse);
-          //     this.router.navigate(['/email-confirmation']);
-          //   },
-          //   error => {
-          //     console.error('Erro ao enviar e-mail de confirmação:', error);
-          //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
-          //   }
-          // );
-        },
-        error => {
-          console.error('Erro ao cadastrar usuário:', error);
-          let errorMessage = 'Erro ao cadastrar usuário';
-          if (error.error && typeof error.error === 'string') {
-            errorMessage = error.error;
-            alert(errorMessage);
-          }
-          // Tratar erros de cadastro, exibir mensagens de erro, etc.
+    // Verifica se o formulário é válido antes de enviar
+    this.userService.createUser(this.userData).subscribe(
+      response => {
+        console.log('Usuário cadastrado com sucesso:', response);
+        // Envie o e-mail de confirmação
+        // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
+        //   emailResponse => {
+        //     console.log('E-mail de confirmação enviado:', emailResponse);
+        //     this.router.navigate(['/email-confirmation']);
+        //   },
+        //   error => {
+        //     console.error('Erro ao enviar e-mail de confirmação:', error);
+        //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
+        //   }
+        // );
+      },
+      error => {
+        console.error('Erro ao cadastrar usuário:', error);
+        let errorMessage = 'Erro ao cadastrar usuário';
+        if (error.error && typeof error.error === 'string') {
+          errorMessage = error.error;
+          alert(errorMessage);
         }
-      );
+        // Tratar erros de cadastro, exibir mensagens de erro, etc.
+      }
+    );
   }
 
   // Função chamada quando o país selecionado é alterado
@@ -101,7 +106,8 @@ export class UserRegistrationComponent implements AfterViewInit {
       (estados: any) => {
         // Extrai os nomes dos estados/províncias da resposta
         this.estados = estados;
-        console.log(this.estados.geonames)
+        console.log(this.estados.geonames);
+        this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos estados
       },
       error => {
         console.error('Erro ao obter os estados/províncias:', error);
@@ -124,6 +130,7 @@ export class UserRegistrationComponent implements AfterViewInit {
         // Extrai os nomes das cidades da resposta
         this.cidades = cidades;
         console.log(this.cidades.geonames);
+        this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção das cidades
       },
       error => {
         console.error('Erro ao obter as cidades:', error);
@@ -131,5 +138,4 @@ export class UserRegistrationComponent implements AfterViewInit {
       }
     );
   }
-
 }

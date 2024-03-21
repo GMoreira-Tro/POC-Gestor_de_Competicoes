@@ -22,6 +22,41 @@ namespace CRUDAPI.Services
 
         public async Task ValidarUsuario(Usuario usuario)
         {
+            if (string.IsNullOrWhiteSpace(usuario.Nome))
+            {
+                throw new CampoObrigatorioException("Nome");
+            }
+
+            if (string.IsNullOrEmpty(usuario.Sobrenome))
+            {
+                throw new CampoObrigatorioException("Sobrenome");
+            }
+
+            if (string.IsNullOrEmpty(usuario.Pais))
+            {
+                throw new CampoObrigatorioException("País");
+            }
+
+            if (string.IsNullOrEmpty(usuario.Estado))
+            {
+                throw new CampoObrigatorioException("Estado");
+            }
+
+            if (string.IsNullOrEmpty(usuario.Cidade))
+            {
+                throw new CampoObrigatorioException("Cidade");
+            }
+
+            if (string.IsNullOrEmpty(usuario.CpfCnpj))
+            {
+                throw new CampoObrigatorioException("Cpf/Cnpf");
+            }
+
+            if (string.IsNullOrEmpty(usuario.Email))
+            {
+                throw new CampoObrigatorioException("Email");
+            }
+
             // Verifica se o e-mail já está cadastrado
             var emailExistente = await _contexto.Usuarios.AnyAsync(u => u.Email == usuario.Email);
             if (emailExistente)
@@ -42,31 +77,6 @@ namespace CRUDAPI.Services
                 throw new CpfCnpjInvalidoException(); // Indica que o CPF/CNPJ é inválido
             }
 
-            if (string.IsNullOrWhiteSpace(usuario.Nome))
-            {
-                throw new CampoObrigatorioException(usuario.Nome);
-            }
-
-            if (string.IsNullOrEmpty(usuario.Sobrenome))
-            {
-                throw new CampoObrigatorioException(usuario.Sobrenome);
-            }
-
-            if (string.IsNullOrEmpty(usuario.Pais))
-            {
-                throw new CampoObrigatorioException(usuario.Pais);
-            }
-
-            if (string.IsNullOrEmpty(usuario.Estado))
-            {
-                throw new CampoObrigatorioException(usuario.Estado);
-            }
-
-            if (string.IsNullOrEmpty(usuario.Cidade))
-            {
-                throw new CampoObrigatorioException(usuario.Cidade);
-            }
-
             // Valida se o estado pertence ao país
             var estadoPertenceAoPais = await _geonamesService.EstadoPertenceAoPais(usuario.Pais, usuario.Estado);
             if (!estadoPertenceAoPais)
@@ -75,11 +85,11 @@ namespace CRUDAPI.Services
             }
 
             // Valida se a cidade pertence ao estado
-            var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoEstado(usuario.Estado, usuario.Cidade);
-            if (!cidadePertenceAoEstado)
-            {
-                throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado
-            }
+            // var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoPaisEEstado(usuario.Pais, usuario.Estado, usuario.Cidade);
+            // if (!cidadePertenceAoEstado)
+            // {
+            //     throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado
+            // }
         }
 
         // Função para validar CPF ou CNPJ
