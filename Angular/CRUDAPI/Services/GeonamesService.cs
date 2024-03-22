@@ -43,7 +43,7 @@ namespace CRUDAPI.Services
         public async Task<bool> CidadePertenceAoPaisEEstado(string pais, string estado, string cidade)
         {
             int estadoId = await GetGeonameIdByCountryAndStateName(pais, estado);
-            var url = $"{GeoNamesBaseUrl}/childrenJSON?geonameId={estadoId}&username=Guiru";
+            var url = $"{GeoNamesBaseUrl}/childrenJSON?geonameId={estadoId}&username=Guiru&maxRows=10000";
 
             // Faz a chamada GET para a API GeoNames
             var response = await _httpClient.GetAsync(url);

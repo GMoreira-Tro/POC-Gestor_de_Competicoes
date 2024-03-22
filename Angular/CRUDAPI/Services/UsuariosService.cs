@@ -85,11 +85,11 @@ namespace CRUDAPI.Services
             }
 
             // Valida se a cidade pertence ao estado
-            // var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoPaisEEstado(usuario.Pais, usuario.Estado, usuario.Cidade);
-            // if (!cidadePertenceAoEstado)
-            // {
-            //     throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado
-            // }
+            var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoPaisEEstado(usuario.Pais, usuario.Estado, usuario.Cidade);
+            if (!cidadePertenceAoEstado)
+            {
+                throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado
+            }
         }
 
         // Função para validar CPF ou CNPJ
