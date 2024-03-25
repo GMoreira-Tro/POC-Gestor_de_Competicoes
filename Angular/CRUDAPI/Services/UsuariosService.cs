@@ -90,6 +90,8 @@ namespace CRUDAPI.Services
             {
                 throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado
             }
+
+            usuario.Inscricoes ??= [];
         }
 
         // Função para validar CPF ou CNPJ

@@ -25,6 +25,8 @@ namespace CRUDAPI.Services
             {
                 throw new CampoObrigatorioException("O ID da competição é obrigatório.");
             }
+
+            categoria.Competicao = await _contexto.FindAsync<Competicao>(categoria.CompeticaoId);
         }
 
          public bool CategoriaExists(long id)

@@ -14,10 +14,12 @@ namespace CRUDAPI.Controllers
     public class ConfrontoController : ControllerBase
     {
         private readonly Contexto _contexto;
+        private readonly ConfrontoService _confrontoService;
 
-        public ConfrontoController(Contexto contexto)
+        public ConfrontoController(Contexto contexto, ConfrontoService confrontoService)
         {
             _contexto = contexto;
+            _confrontoService = confrontoService;
         }
 
         // GET: api/Confronto
@@ -47,6 +49,7 @@ namespace CRUDAPI.Controllers
         {
             try
             {
+                await _confrontoService.ValidarConfronto(confronto);
                 _contexto.Confrontos.Add(confronto);
                 await _contexto.SaveChangesAsync();
 
@@ -71,6 +74,7 @@ namespace CRUDAPI.Controllers
 
             try
             {
+                await _confrontoService.ValidarConfronto(confronto);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

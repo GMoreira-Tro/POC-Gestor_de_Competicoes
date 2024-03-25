@@ -16,10 +16,14 @@ namespace CRUDAPI.Services
                 throw new CampoObrigatorioException("Categoria");
             }
 
+            inscricao.Categoria = await _contexto.FindAsync<Categoria>(inscricao.IdCategoria);
+
             if (inscricao.IdUsuario <= 0)
             {
                 throw new CampoObrigatorioException("Usuário");
             }
+
+            inscricao.Usuario = await _contexto.FindAsync<Usuario>(inscricao.IdUsuario);
 
             if (string.IsNullOrWhiteSpace(inscricao.Status))
             {
@@ -30,6 +34,9 @@ namespace CRUDAPI.Services
             {
                 throw new CampoObrigatorioException("Nome do Atleta");
             }
+
+            inscricao.ConfrontoInscricoes ??= [];
+            
         }
 
         public bool InscricaoExists(long id)

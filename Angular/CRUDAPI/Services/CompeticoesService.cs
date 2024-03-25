@@ -54,6 +54,9 @@ namespace CRUDAPI.Services
                     throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado
                 }
             }
+
+            competicao.Usuario = await _contexto.Usuarios.FindAsync(competicao.IdCriadorUsuario);
+            competicao.Categorias ??= [];
         }
 
         public bool CompeticaoExists(long id)

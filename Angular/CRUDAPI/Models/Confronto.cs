@@ -10,10 +10,6 @@ namespace CRUDAPI.Models
         [Key]
         public long Id { get; set; }
 
-        [ForeignKey("Inscricoes")]
-        public long TimeOuAtleta1Id { get; set; }
-        public virtual Inscricao? TimeOuAtleta1 { get; set; }
-
         [Required]
         public DateTime DataInicio { get; set; }
 
