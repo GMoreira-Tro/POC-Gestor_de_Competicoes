@@ -8,6 +8,8 @@ namespace CRUDAPI.Models
         public DbSet<Competicao> Competicoes { get; set; }
         public DbSet<Inscricao> Inscricoes { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Confronto> Confrontos { get; set; }
+        public DbSet<ConfrontoInscricao> ConfrontoInscricoes { get; set; }
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {
@@ -29,6 +31,11 @@ namespace CRUDAPI.Models
                 .HasForeignKey(c => c.CompeticaoId)
                 .IsRequired();
 
+            modelBuilder.Entity<Competicao>()
+               .HasOne(c => c.Usuario)
+               .WithMany()
+               .HasForeignKey(c => c.IdCriadorUsuario);
+
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.CpfCnpj)
                 .IsUnique();
@@ -40,6 +47,23 @@ namespace CRUDAPI.Models
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasKey(ci => new { ci.ConfrontoId, ci.InscricaoId });
+
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasOne(ci => ci.Confronto)
+                .WithMany(c => c.ConfrontoInscricoes)
+                .HasForeignKey(ci => ci.ConfrontoId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasOne(ci => ci.Inscricao)
+                .WithMany(i => i.ConfrontoInscricoes)
+                .HasForeignKey(ci => ci.InscricaoId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             base.OnModelCreating(modelBuilder);
         }

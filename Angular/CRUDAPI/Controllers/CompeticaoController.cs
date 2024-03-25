@@ -54,7 +54,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"Erro ao salvar a competição: {ex.InnerException?.Message}");
             }
         }
 
@@ -71,6 +71,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
 
             try
             {
+                await _competicaoService.ValidarCompeticao(competicao);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -83,6 +84,10 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
                 {
                     throw;
                 }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
             return NoContent();

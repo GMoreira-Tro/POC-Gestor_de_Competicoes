@@ -14,7 +14,7 @@ const mockCidade = "São Leopoldo";
 const mockDataNascimento = new Date(2000, 4, 25)
 const mockCpf = "046.239.580-43"
 const mockInvalidCpf = "111.111.111-11";
-const existingEmail = 'existing@example.com';
+const existingEmail = 'user@example.com';
 
 const mockedUser: Usuario = {
   id: 0,
@@ -87,19 +87,22 @@ describe('UserRegistrationComponent', () => {
     expect(emailControl?.errors?.['required']).toBeTruthy();
   });
 
-  it('should require email to be unique', () => {
-
+  it('should require email to be unique', async () => {
     component.userData = mockedUser;
+    component.userData.email = existingEmail;
 
-    // Faz uma requisição mockada para simular a verificação de e-mail único
-    component.userService.createUser(component.userData).subscribe(
-      () => fail('should have failed with the existing email error'),
-      (error) => {
-        expect(error).toBeTruthy();
-        expect(error).toEqual('Email already registered');
-      }
-    );
+    try {
+      // Faz uma chamada mockada para simular a verificação de e-mail único
+       component.userService.createUser(component.userData);
+      // Se a criação do usuário for bem-sucedida, falha no teste
+      fail('Expected an error to be thrown');
+    } catch (error) {
+      // Verifica se o erro corresponde ao esperado
+      expect(error).toBeTruthy();
+      expect(error).toEqual('Email already registered');
+    }
   });
+
 
   it('should require password field', () => {
     // Corrigido para usar o nome correto dos campos do formulário

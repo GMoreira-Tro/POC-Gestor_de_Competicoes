@@ -30,9 +30,9 @@ namespace CRUDAPI.Models
 
         [ForeignKey("Usuarios")]
         public long IdCriadorUsuario { get; set; }
-        public virtual Usuario Usuario { get; set; }
+        public virtual Usuario? Usuario { get; set; }
 
         // Propriedade de navegação para as categorias associadas
-        public ICollection<Categoria> Categorias { get; set; }
+        public ICollection<Categoria>? Categorias { get; set; }
     }
 }

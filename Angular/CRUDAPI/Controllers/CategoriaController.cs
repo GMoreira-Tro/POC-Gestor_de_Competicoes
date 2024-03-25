@@ -54,6 +54,7 @@ namespace CRUDAPI.Controller
 
             try
             {
+                await _categoriaService.ValidarCategoria(categoria);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -66,6 +67,10 @@ namespace CRUDAPI.Controller
                 {
                     throw;
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
             return NoContent();

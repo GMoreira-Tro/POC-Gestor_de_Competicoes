@@ -14,8 +14,8 @@ namespace CRUDAPI.Models
         // Relacionamento com a competição
         [ForeignKey("Competicoes")]
         public long CompeticaoId { get; set; }
-        public virtual Competicao Competicao { get; set; }
+        public virtual Competicao? Competicao { get; set; }
         // Propriedade de navegação para as inscrições na categoria
-        public ICollection<Inscricao> Inscricoes { get; set; }
+        public ICollection<Inscricao>? Inscricoes { get; set; }
     }
 }

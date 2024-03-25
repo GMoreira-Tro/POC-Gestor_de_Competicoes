@@ -43,13 +43,21 @@ namespace CRUDAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Inscricao>> PostInscricao(Inscricao inscricao)
         {
-            // Valida os campos obrigatórios da inscrição
-            _inscricaoService.ValidarCamposObrigatorios(inscricao);
+            try
+            {
+                // Valida os campos obrigatórios da inscrição
+                await _inscricaoService.ValidarInscricao(inscricao);
 
-            _contexto.Inscricoes.Add(inscricao);
-            await _contexto.SaveChangesAsync();
+                _contexto.Inscricoes.Add(inscricao);
+                await _contexto.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetInscricao), new { id = inscricao.Id }, inscricao);
+                return CreatedAtAction(nameof(GetInscricao), new { id = inscricao.Id }, inscricao);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT: api/Inscricao/5
@@ -65,6 +73,7 @@ namespace CRUDAPI.Controllers
 
             try
             {
+                await _inscricaoService.ValidarInscricao(inscricao);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -77,6 +86,10 @@ namespace CRUDAPI.Controllers
                 {
                     throw;
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
             return NoContent();

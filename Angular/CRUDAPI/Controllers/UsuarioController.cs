@@ -99,6 +99,7 @@ namespace CRUDAPI.Controller
 
             try
             {
+                await _usuarioService.ValidarUsuario(usuario);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -111,6 +112,10 @@ namespace CRUDAPI.Controller
                 {
                     throw;
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
             return NoContent();

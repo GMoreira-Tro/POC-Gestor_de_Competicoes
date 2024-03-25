@@ -9,7 +9,7 @@ namespace CRUDAPI.Services
         {
             _contexto = contexto;
         }
-        public void ValidarCamposObrigatorios(Inscricao inscricao)
+        public async Task ValidarInscricao(Inscricao inscricao)
         {
             if (inscricao.IdCategoria <= 0)
             {
