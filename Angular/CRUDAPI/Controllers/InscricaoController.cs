@@ -46,7 +46,7 @@ namespace CRUDAPI.Controllers
             try
             {
                 // Valida os campos obrigatórios da inscrição
-                await _inscricaoService.ValidarInscricao(inscricao);
+                inscricao = await _inscricaoService.ValidarInscricao(inscricao);
 
                 _contexto.Inscricoes.Add(inscricao);
                 await _contexto.SaveChangesAsync();
@@ -73,7 +73,7 @@ namespace CRUDAPI.Controllers
 
             try
             {
-                await _inscricaoService.ValidarInscricao(inscricao);
+                inscricao = await _inscricaoService.ValidarInscricao(inscricao);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

@@ -20,7 +20,7 @@ namespace CRUDAPI.Services
             _geonamesService = geonamesService;
         }
 
-        public async Task ValidarUsuario(Usuario usuario)
+        public async Task<Usuario> ValidarUsuario(Usuario usuario)
         {
             if (string.IsNullOrWhiteSpace(usuario.Nome))
             {
@@ -92,6 +92,7 @@ namespace CRUDAPI.Services
             }
 
             usuario.Inscricoes ??= [];
+            return usuario;
         }
 
         // Função para validar CPF ou CNPJ

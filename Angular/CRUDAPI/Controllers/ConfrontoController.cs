@@ -49,7 +49,7 @@ namespace CRUDAPI.Controllers
         {
             try
             {
-                await _confrontoService.ValidarConfronto(confronto);
+                confronto = await _confrontoService.ValidarConfronto(confronto);
                 _contexto.Confrontos.Add(confronto);
                 await _contexto.SaveChangesAsync();
 
@@ -74,7 +74,7 @@ namespace CRUDAPI.Controllers
 
             try
             {
-                await _confrontoService.ValidarConfronto(confronto);
+                confronto = await _confrontoService.ValidarConfronto(confronto);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

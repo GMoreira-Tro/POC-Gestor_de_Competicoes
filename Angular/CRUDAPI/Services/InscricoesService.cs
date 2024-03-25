@@ -9,7 +9,7 @@ namespace CRUDAPI.Services
         {
             _contexto = contexto;
         }
-        public async Task ValidarInscricao(Inscricao inscricao)
+        public async Task<Inscricao> ValidarInscricao(Inscricao inscricao)
         {
             if (inscricao.IdCategoria <= 0)
             {
@@ -36,7 +36,7 @@ namespace CRUDAPI.Services
             }
 
             inscricao.ConfrontoInscricoes ??= [];
-            
+            return inscricao;
         }
 
         public bool InscricaoExists(long id)

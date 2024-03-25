@@ -17,7 +17,7 @@ namespace CRUDAPI.Services
             _geonamesService = geoNamesService;
         }
 
-        public async Task ValidarCompeticao(Competicao competicao)
+        public async Task<Competicao> ValidarCompeticao(Competicao competicao)
         {
             if (string.IsNullOrWhiteSpace(competicao.Titulo))
             {
@@ -57,6 +57,8 @@ namespace CRUDAPI.Services
 
             competicao.Usuario = await _contexto.Usuarios.FindAsync(competicao.IdCriadorUsuario);
             competicao.Categorias ??= [];
+
+            return competicao;
         }
 
         public bool CompeticaoExists(long id)

@@ -13,7 +13,7 @@ namespace CRUDAPI.Services
             _contexto = contexto;
         }
 
-        public async Task ValidarConfrontoInscricao(ConfrontoInscricao confrontoInscricao)
+        public async Task<ConfrontoInscricao> ValidarConfrontoInscricao(ConfrontoInscricao confrontoInscricao)
         {
             var confronto = await _contexto.Confrontos.FindAsync(confrontoInscricao.ConfrontoId);
             var inscricao = await _contexto.Inscricoes.FindAsync(confrontoInscricao.InscricaoId);
@@ -30,7 +30,7 @@ namespace CRUDAPI.Services
             }
             confrontoInscricao.Inscricao = inscricao;
             
-
+            return confrontoInscricao;
         }
 
         public bool ConfrontoInscricaoExists(long confrontoId, long inscricaoId)

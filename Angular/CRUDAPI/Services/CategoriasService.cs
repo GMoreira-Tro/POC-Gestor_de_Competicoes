@@ -14,7 +14,7 @@ namespace CRUDAPI.Services
         {
             _contexto = contexto;
         }
-        public async Task ValidarCategoria(Categoria categoria)
+        public async Task<Categoria> ValidarCategoria(Categoria categoria)
         {
             if (string.IsNullOrWhiteSpace(categoria.Nome))
             {
@@ -27,6 +27,7 @@ namespace CRUDAPI.Services
             }
 
             categoria.Competicao = await _contexto.FindAsync<Competicao>(categoria.CompeticaoId);
+            return categoria;
         }
 
          public bool CategoriaExists(long id)

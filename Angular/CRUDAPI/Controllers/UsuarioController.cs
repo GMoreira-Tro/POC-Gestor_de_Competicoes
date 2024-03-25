@@ -50,7 +50,7 @@ namespace CRUDAPI.Controller
         {
             try
             {
-                await _usuarioService.ValidarUsuario(usuario);
+                usuario = await _usuarioService.ValidarUsuario(usuario);
 
                 // Se todas as validações passaram, salva o usuário no banco de dados
                 _contexto.Usuarios.Add(usuario);
@@ -99,7 +99,7 @@ namespace CRUDAPI.Controller
 
             try
             {
-                await _usuarioService.ValidarUsuario(usuario);
+                usuario = await _usuarioService.ValidarUsuario(usuario);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

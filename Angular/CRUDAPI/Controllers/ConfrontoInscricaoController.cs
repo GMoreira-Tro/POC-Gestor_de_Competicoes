@@ -47,7 +47,7 @@ namespace CRUDAPI.Controllers
         {
             try
             {
-                await _confrontoInscricaoService.ValidarConfrontoInscricao(confrontoInscricao);
+                confrontoInscricao = await _confrontoInscricaoService.ValidarConfrontoInscricao(confrontoInscricao);
 
                 _contexto.ConfrontoInscricoes.Add(confrontoInscricao);
                 await _contexto.SaveChangesAsync();
@@ -73,7 +73,7 @@ namespace CRUDAPI.Controllers
 
             try
             {
-                await _confrontoInscricaoService.ValidarConfrontoInscricao(confrontoInscricao);
+                confrontoInscricao = await _confrontoInscricaoService.ValidarConfrontoInscricao(confrontoInscricao);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

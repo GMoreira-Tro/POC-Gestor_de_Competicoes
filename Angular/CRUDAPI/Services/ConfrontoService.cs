@@ -14,13 +14,14 @@ namespace CRUDAPI.Services
             _contexto = contexto;
         }
 
-        public async Task ValidarConfronto(Confronto confronto)
+        public async Task<Confronto> ValidarConfronto(Confronto confronto)
         {
             if (confronto.DataInicio >= confronto.DataTermino)
             {
                 throw new Exception("A data de início do confronto deve ser anterior à data de término.");
             }
             confronto.ConfrontoInscricoes ??= [];
+            return confronto;
         }
 
         public bool ConfrontoExists(long id)
