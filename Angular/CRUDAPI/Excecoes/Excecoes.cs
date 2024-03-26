@@ -20,6 +20,12 @@ public class CampoObrigatorioException : Exception
     public CampoObrigatorioException(string campo) : base($"O campo '{campo}' é obrigatório.") { }
 }
 
+public class StatusInscricaoInvalidoException : Exception
+{
+    public StatusInscricaoInvalidoException() 
+        : base("O status da inscrição deve ser 'pendente', 'paga', 'aceita' ou 'recusada'.") { }
+}
+
 public class EstadoNaoPertenceAoPaisException : Exception
 {
     public EstadoNaoPertenceAoPaisException() : base("Estado não pertence ao país") { }

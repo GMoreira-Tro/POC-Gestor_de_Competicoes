@@ -71,7 +71,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
 
             try
             {
-                await _competicaoService.ValidarCompeticao(competicao);
+                competicao = await _competicaoService.ValidarCompeticao(competicao);
                 await _contexto.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

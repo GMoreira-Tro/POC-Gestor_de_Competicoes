@@ -25,10 +25,11 @@ namespace CRUDAPI.Services
 
             inscricao.Usuario = await _contexto.FindAsync<Usuario>(inscricao.IdUsuario);
 
-            if (string.IsNullOrWhiteSpace(inscricao.Status))
+            if (!Enum.IsDefined(typeof(StatusInscricao), inscricao.Status))
             {
-                throw new CampoObrigatorioException("Status");
+                throw new StatusInscricaoInvalidoException();
             }
+
 
             if (string.IsNullOrWhiteSpace(inscricao.NomeAtleta))
             {

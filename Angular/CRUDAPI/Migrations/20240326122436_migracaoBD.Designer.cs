@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240325160624_migracaoBD")]
+    [Migration("20240326122436_migracaoBD")]
     partial class migracaoBD
     {
         /// <inheritdoc />
@@ -111,12 +111,7 @@ namespace CRUDAPI.Migrations
                     b.Property<DateTime>("DataTermino")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("TimeOuAtleta1Id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TimeOuAtleta1Id");
 
                     b.ToTable("Confrontos");
                 });
@@ -159,9 +154,8 @@ namespace CRUDAPI.Migrations
                     b.Property<string>("NomeAtleta")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -252,17 +246,6 @@ namespace CRUDAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.Confronto", b =>
-                {
-                    b.HasOne("CRUDAPI.Models.Inscricao", "TimeOuAtleta1")
-                        .WithMany()
-                        .HasForeignKey("TimeOuAtleta1Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TimeOuAtleta1");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.ConfrontoInscricao", b =>

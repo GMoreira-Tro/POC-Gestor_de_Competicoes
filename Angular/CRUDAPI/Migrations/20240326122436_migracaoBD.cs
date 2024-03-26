@@ -12,6 +12,20 @@ namespace CRUDAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Confrontos",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataTermino = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Confrontos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
@@ -91,7 +105,7 @@ namespace CRUDAPI.Migrations
                     IdCategoria = table.Column<long>(type: "bigint", nullable: false),
                     CategoriaId = table.Column<long>(type: "bigint", nullable: true),
                     IdUsuario = table.Column<long>(type: "bigint", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     NomeAtleta = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Equipe = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -109,27 +123,6 @@ namespace CRUDAPI.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Confrontos",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeOuAtleta1Id = table.Column<long>(type: "bigint", nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataTermino = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Confrontos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Confrontos_Inscricoes_TimeOuAtleta1Id",
-                        column: x => x.TimeOuAtleta1Id,
-                        principalTable: "Inscricoes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -168,11 +161,6 @@ namespace CRUDAPI.Migrations
                 name: "IX_ConfrontoInscricao_InscricaoId",
                 table: "ConfrontoInscricao",
                 column: "InscricaoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Confrontos_TimeOuAtleta1Id",
-                table: "Confrontos",
-                column: "TimeOuAtleta1Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inscricoes_CategoriaId",

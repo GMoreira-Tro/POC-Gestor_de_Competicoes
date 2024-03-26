@@ -1,8 +1,25 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace CRUDAPI.Models
 {
+    public enum StatusInscricao
+    {
+        [EnumMember(Value = "pendente")]
+        PENDENTE,
+
+        [EnumMember(Value = "paga")]
+        PAGA,
+
+        [EnumMember(Value = "aceita")]
+        ACEITA,
+
+        [EnumMember(Value = "recusada")]
+        RECUSADA
+    }
+
     [Table("Inscricoes")]
     public class Inscricao
     {
@@ -18,7 +35,9 @@ namespace CRUDAPI.Models
         public virtual Usuario? Usuario { get; set; }
 
         [Required]
-        public string Status { get; set; } // pendente, aceita, recusada
+        [EnumDataType(typeof(StatusInscricao))]
+        public StatusInscricao Status { get; set; }
+
         public string? NomeAtleta { get; set; }
         public string? Equipe { get; set; }
         public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
