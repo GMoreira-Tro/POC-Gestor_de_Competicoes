@@ -28,10 +28,10 @@ namespace CRUDAPI.Controllers
         }
 
         // GET: api/ConfrontoInscricao/5
-        [HttpGet("{confrontoId}/{inscricaoId}")]
-        public async Task<ActionResult<ConfrontoInscricao>> GetConfrontoInscricao(long confrontoId, long inscricaoId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ConfrontoInscricao>> GetConfrontoInscricao(long id)
         {
-            var confrontoInscricao = await _contexto.ConfrontoInscricoes.FindAsync(confrontoId, inscricaoId);
+            var confrontoInscricao = await _contexto.ConfrontoInscricoes.FindAsync(id);
 
             if (confrontoInscricao == null)
             {
@@ -52,7 +52,7 @@ namespace CRUDAPI.Controllers
                 _contexto.ConfrontoInscricoes.Add(confrontoInscricao);
                 await _contexto.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetConfrontoInscricao), new { confrontoId = confrontoInscricao.ConfrontoId, inscricaoId = confrontoInscricao.InscricaoId }, confrontoInscricao);
+                return CreatedAtAction(nameof(GetConfrontoInscricao), new { id = confrontoInscricao }, confrontoInscricao);
             }
              catch (Exception ex)
             {
@@ -62,9 +62,9 @@ namespace CRUDAPI.Controllers
 
         // PUT: api/ConfrontoInscricao/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInscricao (long confrontoId, long inscricaoId, ConfrontoInscricao confrontoInscricao)
+        public async Task<IActionResult> PutInscricao (long id, ConfrontoInscricao confrontoInscricao)
         {
-            if (confrontoId != confrontoInscricao.ConfrontoId || inscricaoId != confrontoInscricao.InscricaoId)
+            if (id != confrontoInscricao.Id)
             {
                 return BadRequest();
             }
@@ -78,7 +78,7 @@ namespace CRUDAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_confrontoInscricaoService.ConfrontoInscricaoExists(confrontoId, inscricaoId))
+                if (!_confrontoInscricaoService.ConfrontoInscricaoExists(id))
                 {
                     return NotFound();
                 }
@@ -96,10 +96,10 @@ namespace CRUDAPI.Controllers
         }
 
         // DELETE: api/ConfrontoInscricao/5
-        [HttpDelete("{confrontoId}/{inscricaoId}")]
-        public async Task<IActionResult> DeleteConfrontoInscricao(long confrontoId, long inscricaoId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteConfrontoInscricao(long id)
         {
-            var confrontoInscricao = await _contexto.ConfrontoInscricoes.FindAsync(confrontoId, inscricaoId);
+            var confrontoInscricao = await _contexto.ConfrontoInscricoes.FindAsync(id);
             if (confrontoInscricao == null)
             {
                 return NotFound();

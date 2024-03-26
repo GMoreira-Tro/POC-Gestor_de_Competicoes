@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace CRUDAPI.Models
 {
-    public enum StatusInscricao
+    public enum StatusPagamento
     {
         [EnumMember(Value = "pendente")]
         PENDENTE,
@@ -35,8 +35,8 @@ namespace CRUDAPI.Models
         public virtual Usuario? Usuario { get; set; }
 
         [Required]
-        [EnumDataType(typeof(StatusInscricao))]
-        public StatusInscricao Status { get; set; }
+        [EnumDataType(typeof(StatusPagamento))]
+        public StatusPagamento StatusPagamento { get; set; }
 
         public string? NomeAtleta { get; set; }
         public string? Equipe { get; set; }

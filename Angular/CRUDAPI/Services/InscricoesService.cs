@@ -25,7 +25,7 @@ namespace CRUDAPI.Services
 
             inscricao.Usuario = await _contexto.FindAsync<Usuario>(inscricao.IdUsuario);
 
-            if (!Enum.IsDefined(typeof(StatusInscricao), inscricao.Status))
+            if (!Enum.IsDefined(typeof(StatusPagamento), inscricao.StatusPagamento))
             {
                 throw new StatusInscricaoInvalidoException();
             }

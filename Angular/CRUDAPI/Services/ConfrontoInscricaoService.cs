@@ -33,9 +33,9 @@ namespace CRUDAPI.Services
             return confrontoInscricao;
         }
 
-        public bool ConfrontoInscricaoExists(long confrontoId, long inscricaoId)
+        public bool ConfrontoInscricaoExists(long id)
         {
-            return _contexto.ConfrontoInscricoes.Any(ci => ci.ConfrontoId == confrontoId && ci.InscricaoId == inscricaoId);
+            return _contexto.ConfrontoInscricoes.Any(ci => ci.Id == id);
         }
     }
 }

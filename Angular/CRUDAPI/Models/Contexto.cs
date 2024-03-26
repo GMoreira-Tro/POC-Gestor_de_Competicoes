@@ -10,6 +10,7 @@ namespace CRUDAPI.Models
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Confronto> Confrontos { get; set; }
         public DbSet<ConfrontoInscricao> ConfrontoInscricoes { get; set; }
+        public DbSet<PagamentoInscricao> PagamentoInscricoes { get; set; }
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {

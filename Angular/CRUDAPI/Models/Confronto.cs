@@ -10,11 +10,11 @@ namespace CRUDAPI.Models
         [Key]
         public long Id { get; set; }
 
-        [Required]
-        public DateTime DataInicio { get; set; }
+        public DateTime? DataInicio { get; set; }
 
+        public DateTime? DataTermino { get; set; }
         [Required]
-        public DateTime DataTermino { get; set; }
+        public string Local { get; set; }
         public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
     }
 }
