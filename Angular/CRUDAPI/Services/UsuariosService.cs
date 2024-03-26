@@ -1,18 +1,22 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CRUDAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using BCrypt.Net;
 
 namespace CRUDAPI.Services
 {
-    public class UsuarioService
+    public partial class UsuarioService
     {
         private readonly Contexto _contexto;
         private readonly GeoNamesService _geonamesService;
         private const string GeoNamesBaseUrl = "http://api.geonames.org";
+        // Propriedade estática para armazenar a expressão regular
+        private static readonly Regex regex = MyRegex();
 
         public UsuarioService(Contexto contexto, GeoNamesService geonamesService)
         {
@@ -64,6 +68,14 @@ namespace CRUDAPI.Services
                 throw new EmailJaCadastradoException(); // Indica que o e-mail já está cadastrado
             }
 
+            if (ValidarSenha(usuario.SenhaHash))
+            {
+                string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+
+                // Hash da senha com o salt
+                usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash, salt);
+            }
+
             // Verifica se o CPF/CNPJ já está cadastrado
             var cpfCnpjExistente = await _contexto.Usuarios.AnyAsync(u => u.CpfCnpj == usuario.CpfCnpj);
             if (cpfCnpjExistente)
@@ -107,5 +119,24 @@ namespace CRUDAPI.Services
             return _contexto.Usuarios.Any(e => e.Id == id);
         }
 
+        public static bool ValidarSenha(string senha)
+        {
+            // Verificar o comprimento mínimo da senha
+            if (senha.Length < 8)
+            {
+                throw new SenhaDeveConterNoMinimo8CaracteresException();
+            }
+
+            // Verificar se a senha contém letras maiúsculas, minúsculas, números e caracteres especiais
+            if (!regex.IsMatch(senha))
+            {
+                throw new SenhaDeveConterRegexMatchException();
+            }
+
+            return true;
+        }
+
+        [GeneratedRegex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*!?\-_()])[A-Za-z\d@#$%&*!?\-_()]+$")]
+        private static partial Regex MyRegex();
     }
 }

@@ -29,3 +29,13 @@ public class CidadeNaoPertenceAoEstadoException : Exception
 {
     public CidadeNaoPertenceAoEstadoException() : base("Cidade não pertence ao estado") { }
 }
+
+public class SenhaDeveConterNoMinimo8CaracteresException : Exception
+{
+    public SenhaDeveConterNoMinimo8CaracteresException() : base("A senha deve conter no mínimo 8 caracteres") { }
+}
+
+public class SenhaDeveConterRegexMatchException : Exception
+{
+    public SenhaDeveConterRegexMatchException() : base("A senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial") { }
+}
