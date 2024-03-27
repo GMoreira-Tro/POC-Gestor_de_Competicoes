@@ -22,13 +22,11 @@ namespace CRUDAPI.Services
             {
                 throw new KeyNotFoundException($"Confronto com ID {confrontoInscricao.ConfrontoId} não encontrado.");
             }
-            confrontoInscricao.Confronto = confronto;
 
             if (inscricao == null)
             {
                 throw new KeyNotFoundException($"Inscrição com ID {confrontoInscricao.InscricaoId} não encontrada.");
             }
-            confrontoInscricao.Inscricao = inscricao;
             
             return confrontoInscricao;
         }

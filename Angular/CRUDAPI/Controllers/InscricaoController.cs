@@ -47,6 +47,7 @@ namespace CRUDAPI.Controllers
             {
                 // Valida os campos obrigatórios da inscrição
                 inscricao.StatusPagamento = StatusPagamento.PENDENTE;
+                inscricao.Posição = 0;
                 inscricao = await _inscricaoService.ValidarInscricao(inscricao);
 
                 _contexto.Inscricoes.Add(inscricao);

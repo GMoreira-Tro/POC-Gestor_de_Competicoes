@@ -55,7 +55,6 @@ namespace CRUDAPI.Services
                 }
             }
 
-            competicao.Usuario = await _contexto.Usuarios.FindAsync(competicao.IdCriadorUsuario);
             competicao.Categorias ??= [];
 
             return competicao;

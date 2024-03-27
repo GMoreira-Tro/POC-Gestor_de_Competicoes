@@ -10,11 +10,11 @@ namespace CRUDAPI.Models
         public long Id { get; set; }
 
         [Required]
-        public string Titulo { get; set; }
+        public string Titulo { get; set; } = "";
 
         public string? Descricao { get; set; }
         [Required]
-        public string Modalidade { get; set; }
+        public string Modalidade { get; set; } = "";
 
         public string? Pais { get; set; }
 
@@ -31,6 +31,8 @@ namespace CRUDAPI.Models
         [ForeignKey("Usuarios")]
         public long IdCriadorUsuario { get; set; }
         public virtual Usuario? Usuario { get; set; }
+        public long? EtapaAnteriorId { get; set; }
+        public virtual Competicao? EtapaAnterior  { get; set; }
 
         // Propriedade de navegação para as categorias associadas
         public ICollection<Categoria>? Categorias { get; set; }

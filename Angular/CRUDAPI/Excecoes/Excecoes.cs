@@ -28,20 +28,25 @@ public class StatusInscricaoInvalidoException : Exception
 
 public class EstadoNaoPertenceAoPaisException : Exception
 {
-    public EstadoNaoPertenceAoPaisException() : base("Estado não pertence ao país") { }
+    public EstadoNaoPertenceAoPaisException() : base("Estado não pertence ao país.") { }
 }
 
 public class CidadeNaoPertenceAoEstadoException : Exception
 {
-    public CidadeNaoPertenceAoEstadoException() : base("Cidade não pertence ao estado") { }
+    public CidadeNaoPertenceAoEstadoException() : base("Cidade não pertence ao estado.") { }
 }
 
 public class SenhaDeveConterNoMinimo8CaracteresException : Exception
 {
-    public SenhaDeveConterNoMinimo8CaracteresException() : base("A senha deve conter no mínimo 8 caracteres") { }
+    public SenhaDeveConterNoMinimo8CaracteresException() : base("A senha deve conter no mínimo 8 caracteres.") { }
 }
 
 public class SenhaDeveConterRegexMatchException : Exception
 {
-    public SenhaDeveConterRegexMatchException() : base("A senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial") { }
+    public SenhaDeveConterRegexMatchException() : base("A senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial.") { }
+}
+
+public class InscricaoDaEtapaAnteriorDeveSerReferenteACompeticaoDaEtapaAnteriorException : Exception
+{
+    public InscricaoDaEtapaAnteriorDeveSerReferenteACompeticaoDaEtapaAnteriorException() : base("A inscrição da etapa anterior deve ser referente a etapa anterior desta competição.") { }
 }

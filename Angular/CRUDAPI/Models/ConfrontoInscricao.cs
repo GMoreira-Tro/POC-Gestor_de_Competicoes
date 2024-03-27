@@ -17,7 +17,6 @@ namespace CRUDAPI.Models
         [ForeignKey("ConfrontoInscricao")]
         public long? ConfrontoInscricaoPaiId { get; set; }
         public virtual ConfrontoInscricao? ConfrontoInscricaoPai { get; set; }
-        public int? Posição { get; set; } // 1º lugar, 2º lugar, etc
         public bool WO { get; set; }
     }
 }

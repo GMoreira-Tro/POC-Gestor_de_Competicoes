@@ -40,6 +40,9 @@ namespace CRUDAPI.Models
 
         public string? NomeAtleta { get; set; }
         public string? Equipe { get; set; }
+        public int? Posição { get; set; } // 1º lugar, 2º lugar, etc
+        public long? InscricaoEtapaAnteriorId { get; set; }
+        public virtual Inscricao? InscricaoEtapaAnterior { get; set; }
         public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
     }
 }
