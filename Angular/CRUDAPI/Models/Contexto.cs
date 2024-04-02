@@ -6,6 +6,7 @@ namespace CRUDAPI.Models
     {
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Competicao> Competicoes { get; set; }
+        public DbSet<Competidor> Competidores { get; set; }
         public DbSet<Inscricao> Inscricoes { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Confronto> Confrontos { get; set; }

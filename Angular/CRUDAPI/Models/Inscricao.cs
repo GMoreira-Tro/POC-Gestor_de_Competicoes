@@ -37,9 +37,10 @@ namespace CRUDAPI.Models
         [EnumDataType(typeof(StatusPagamento))]
         public StatusPagamento StatusPagamento { get; set; }
 
-        //TODO: Trocar para Objeto Competidor
         //TODO: Pensar em tela pro front-end de cadastrar Competidores de um Usuário
-        public string? NomeAtleta { get; set; }
+        [ForeignKey("Competidores")]
+        public long CompetidorId { get; set; }
+        public virtual Competidor? Competidor { get; set; }
         public int? Posição { get; set; } // 1º lugar, 2º lugar, etc
         public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
     }
