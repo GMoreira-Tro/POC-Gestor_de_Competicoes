@@ -33,9 +33,9 @@ namespace CRUDAPI.Models
                 .IsRequired();
 
             modelBuilder.Entity<Competicao>()
-               .HasOne(c => c.Usuario)
+               .HasOne(c => c.CriadorUsuario)
                .WithMany()
-               .HasForeignKey(c => c.IdCriadorUsuario);
+               .HasForeignKey(c => c.CriadorUsuarioId);
 
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.CpfCnpj)

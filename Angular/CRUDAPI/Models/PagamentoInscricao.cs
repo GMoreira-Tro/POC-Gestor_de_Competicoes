@@ -8,7 +8,7 @@ namespace CRUDAPI.Models
     {
         [Key]
         public long Id { get; set; }
-        [ForeignKey("Inscricao")]
+        [ForeignKey("Inscricoes")]
         public long InscricaoId { get; set; }
         public decimal ValorPago { get; set; }
         public string Moeda { get; set; } = "";

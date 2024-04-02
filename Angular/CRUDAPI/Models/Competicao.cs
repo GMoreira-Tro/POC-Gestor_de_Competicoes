@@ -29,8 +29,9 @@ namespace CRUDAPI.Models
         public DateTime? DataFim { get; set; }
 
         [ForeignKey("Usuarios")]
-        public long IdCriadorUsuario { get; set; }
-        public virtual Usuario? Usuario { get; set; }
+        public long CriadorUsuarioId { get; set; }
+        public virtual Usuario? CriadorUsuario { get; set; }
+        [ForeignKey("Competicoes")]
         public long? EtapaAnteriorId { get; set; }
         public virtual Competicao? EtapaAnterior  { get; set; }
 

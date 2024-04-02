@@ -26,9 +26,11 @@ namespace CRUDAPI.Models
         [Key]
         public long Id { get; set; }
 
+        [ForeignKey("Categorias")]
         public long CategoriaId { get; set; }
         public virtual Categoria? Categoria { get; set; }
 
+        [ForeignKey("Usuarios")]
         public long UsuarioId { get; set; }
         public virtual Usuario? Usuario { get; set; }
 
