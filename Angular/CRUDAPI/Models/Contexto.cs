@@ -23,7 +23,7 @@ namespace CRUDAPI.Models
             modelBuilder.Entity<Inscricao>()
                 .HasOne(i => i.Usuario)
                 .WithMany(u => u.Inscricoes)
-                .HasForeignKey(i => i.IdUsuario)
+                .HasForeignKey(i => i.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Categoria>()

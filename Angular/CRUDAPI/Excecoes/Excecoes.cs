@@ -45,8 +45,3 @@ public class SenhaDeveConterRegexMatchException : Exception
 {
     public SenhaDeveConterRegexMatchException() : base("A senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial.") { }
 }
-
-public class InscricaoDaEtapaAnteriorDeveSerReferenteACompeticaoDaEtapaAnteriorException : Exception
-{
-    public InscricaoDaEtapaAnteriorDeveSerReferenteACompeticaoDaEtapaAnteriorException() : base("A inscrição da etapa anterior deve ser referente a etapa anterior desta competição.") { }
-}
