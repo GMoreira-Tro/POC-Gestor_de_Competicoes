@@ -27,6 +27,12 @@ namespace CRUDAPI.Models
                 .HasForeignKey(i => i.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Competidor>()
+                .HasOne(i => i.Criador)
+                .WithMany(u => u.Competidores)
+                .HasForeignKey(i => i.CriadorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Categoria>()
                 .HasOne(c => c.Competicao)
                 .WithMany(c => c.Categorias)
@@ -36,7 +42,8 @@ namespace CRUDAPI.Models
             modelBuilder.Entity<Competicao>()
                .HasOne(c => c.CriadorUsuario)
                .WithMany()
-               .HasForeignKey(c => c.CriadorUsuarioId);
+               .HasForeignKey(c => c.CriadorUsuarioId)
+               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.CpfCnpj)

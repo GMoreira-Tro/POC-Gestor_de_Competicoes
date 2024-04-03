@@ -45,3 +45,13 @@ public class SenhaDeveConterRegexMatchException : Exception
 {
     public SenhaDeveConterRegexMatchException() : base("A senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial.") { }
 }
+
+public class EmailJaCadastradoEntreCompetidoresException : Exception
+{
+    public EmailJaCadastradoEntreCompetidoresException() : base("Você já cadastrou um competidor com este email.") { }
+}
+
+public class EmailInvalidoException : Exception
+{
+    public EmailInvalidoException() : base("O email fornecido não é válido.") { }
+}

@@ -35,5 +35,6 @@ namespace CRUDAPI.Models
         public string CpfCnpj { get; set; }
 
         public ICollection<Inscricao>? Inscricoes { get; set; }
+        public ICollection<Competidor>? Competidores { get; set; }
     }
 }

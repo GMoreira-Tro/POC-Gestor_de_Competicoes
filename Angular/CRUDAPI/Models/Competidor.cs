@@ -18,7 +18,10 @@ namespace CRUDAPI.Models
         public long Id { get; set; }
 
         [Required]
+        [EmailAddress]
         public string Nome { get; set; } = "";
+        [Required]
+        public string Email { get; set; } = "";
 
         [EnumDataType(typeof(TipoCompetidor))]
         public TipoCompetidor Tipo { get; set; }

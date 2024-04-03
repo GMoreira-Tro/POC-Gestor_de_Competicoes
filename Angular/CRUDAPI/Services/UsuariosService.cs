@@ -15,8 +15,6 @@ namespace CRUDAPI.Services
         private readonly Contexto _contexto;
         private readonly GeoNamesService _geonamesService;
         private const string GeoNamesBaseUrl = "http://api.geonames.org";
-        // Propriedade estática para armazenar a expressão regular
-        private static readonly Regex regex = MyRegex();
 
         public UsuarioService(Contexto contexto, GeoNamesService geonamesService)
         {
@@ -61,14 +59,18 @@ namespace CRUDAPI.Services
                 throw new CampoObrigatorioException("Email");
             }
 
-            // Verifica se o e-mail já está cadastrado
+            if(!Validators.IsValidEmail(usuario.Email))
+            {
+                throw new EmailInvalidoException();
+            }
+
             var emailExistente = await _contexto.Usuarios.AnyAsync(u => u.Email == usuario.Email);
             if (emailExistente)
             {
                 throw new EmailJaCadastradoException(); // Indica que o e-mail já está cadastrado
             }
 
-            if (ValidarSenha(usuario.SenhaHash))
+            if (Validators.ValidarSenha(usuario.SenhaHash))
             {
                 string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
 
@@ -118,25 +120,5 @@ namespace CRUDAPI.Services
         {
             return _contexto.Usuarios.Any(e => e.Id == id);
         }
-
-        public static bool ValidarSenha(string senha)
-        {
-            // Verificar o comprimento mínimo da senha
-            if (senha.Length < 8)
-            {
-                throw new SenhaDeveConterNoMinimo8CaracteresException();
-            }
-
-            // Verificar se a senha contém letras maiúsculas, minúsculas, números e caracteres especiais
-            if (!regex.IsMatch(senha))
-            {
-                throw new SenhaDeveConterRegexMatchException();
-            }
-
-            return true;
-        }
-
-        [GeneratedRegex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*!?\-_()])[A-Za-z\d@#$%&*!?\-_()]+$")]
-        private static partial Regex MyRegex();
     }
 }
