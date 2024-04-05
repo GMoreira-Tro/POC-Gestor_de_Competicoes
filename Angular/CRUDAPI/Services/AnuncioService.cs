@@ -14,7 +14,7 @@ namespace CRUDAPI.Services
             _contexto = contexto;
         }
 
-        public async Task<Anuncio> ValidarAnuncio(Anuncio anuncio)
+        public async Task<Notificacao> ValidarAnuncio(Notificacao anuncio)
         {
             //TODO: Implemente a lógica de validação do Anuncio de inscrição aqui, se necessário
 
@@ -23,7 +23,7 @@ namespace CRUDAPI.Services
 
         public bool AnuncioExists(long id)
         {
-            return _contexto.Anuncios.Any(pi => pi.Id == id);
+            return _contexto.Notificacoes.Any(pi => pi.Id == id);
         }
     }
 }

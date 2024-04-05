@@ -33,6 +33,9 @@ namespace CRUDAPI.Models
         [ForeignKey("Usuarios")]
         public long UsuarioId { get; set; }
         public virtual Usuario? Usuario { get; set; }
+        [ForeignKey("Pagamentos")]
+        public long PagamentoId { get; set; }
+        public Pagamento? Pagamento { get; set; }
 
         [EnumDataType(typeof(StatusPagamento))]
         public StatusPagamento StatusPagamento { get; set; }
@@ -43,6 +46,5 @@ namespace CRUDAPI.Models
         public virtual Competidor? Competidor { get; set; }
         public int? Posição { get; set; } // 1º lugar, 2º lugar, etc
         public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
-        public ICollection<Pagamento>? PagamentoInscricoes { get; set; }
     }
 }

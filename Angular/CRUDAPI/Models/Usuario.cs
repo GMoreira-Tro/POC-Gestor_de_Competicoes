@@ -36,6 +36,6 @@ namespace CRUDAPI.Models
 
         public ICollection<Inscricao>? Inscricoes { get; set; }
         public ICollection<Competidor>? Competidores { get; set; }
-        public ICollection<UsuarioAnuncio>? AnunciosRecebidos { get; set; }
+        public ICollection<UsuarioNotificacao>? AnunciosRecebidos { get; set; }
     }
 }

@@ -14,8 +14,8 @@ namespace CRUDAPI.Models
         public DbSet<Pagamento> Pagamentos { get; set; }
         public DbSet<Estorno> Estornos { get; set; }
         public DbSet<HistoricoFinanceiro> HistoricosFinanceiros { get; set; }
-        public DbSet<Anuncio> Anuncios { get; set; }
-        public DbSet<UsuarioAnuncio> UsuarioAnuncios { get; set; }
+        public DbSet<Notificacao> Notificacoes { get; set; }
+        public DbSet<UsuarioNotificacao> UsuarioNotificacoes { get; set; }
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {

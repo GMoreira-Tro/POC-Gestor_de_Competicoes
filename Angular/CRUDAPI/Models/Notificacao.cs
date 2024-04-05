@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRUDAPI.Models
 {
-    [Table("Anuncios")]
-    public class Anuncio
+    [Table("Notificacoes")]
+    public class Notificacao
     {
         [Key]
         public long Id { get; set; }
@@ -17,6 +17,7 @@ namespace CRUDAPI.Models
 
         [Required]
         public DateTime DataPublicacao { get; set; }
+        public DateTime? DataExpiracao { get; set; }
 
         [ForeignKey("Usuarios")]
         public long AnuncianteId { get; set; }
@@ -25,6 +26,6 @@ namespace CRUDAPI.Models
         public string? BannerImagem { get; set; }
 
         public string? TipoAnuncio { get; set; }
-        public ICollection<UsuarioAnuncio>? UsuariosAlvo { get; set; }
+        public ICollection<UsuarioNotificacao>? UsuariosAlvo { get; set; }
     }
 }

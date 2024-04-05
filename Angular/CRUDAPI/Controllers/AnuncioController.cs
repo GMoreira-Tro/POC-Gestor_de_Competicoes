@@ -22,16 +22,16 @@ namespace CRUDAPI.Controllers
 
         // GET: api/Anuncio
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Anuncio>>> GetAnuncios()
+        public async Task<ActionResult<IEnumerable<Notificacao>>> GetAnuncios()
         {
-            return await _contexto.Anuncios.ToListAsync();
+            return await _contexto.Notificacoes.ToListAsync();
         }
 
         // GET: api/Anuncio/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Anuncio>> GetAnuncio(long id)
+        public async Task<ActionResult<Notificacao>> GetAnuncio(long id)
         {
-            var Anuncio = await _contexto.Anuncios.FindAsync(id);
+            var Anuncio = await _contexto.Notificacoes.FindAsync(id);
 
             if (Anuncio == null)
             {
@@ -43,13 +43,13 @@ namespace CRUDAPI.Controllers
 
         // POST: api/Anuncio
         [HttpPost]
-        public async Task<ActionResult<Anuncio>> PostAnuncio(Anuncio Anuncio)
+        public async Task<ActionResult<Notificacao>> PostAnuncio(Notificacao Anuncio)
         {
             try
             {
                 Anuncio = await _AnuncioService.ValidarAnuncio(Anuncio);
 
-                _contexto.Anuncios.Add(Anuncio);
+                _contexto.Notificacoes.Add(Anuncio);
                 await _contexto.SaveChangesAsync();
 
                 return CreatedAtAction(nameof(GetAnuncio), new { id = Anuncio.Id }, Anuncio);
@@ -62,7 +62,7 @@ namespace CRUDAPI.Controllers
 
         // PUT: api/Anuncio/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAnuncio(long id, Anuncio Anuncio)
+        public async Task<IActionResult> PutAnuncio(long id, Notificacao Anuncio)
         {
             if (id != Anuncio.Id)
             {
@@ -99,13 +99,13 @@ namespace CRUDAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAnuncio(long id)
         {
-            var Anuncio = await _contexto.Anuncios.FindAsync(id);
+            var Anuncio = await _contexto.Notificacoes.FindAsync(id);
             if (Anuncio == null)
             {
                 return NotFound();
             }
 
-            _contexto.Anuncios.Remove(Anuncio);
+            _contexto.Notificacoes.Remove(Anuncio);
             await _contexto.SaveChangesAsync();
 
             return NoContent();

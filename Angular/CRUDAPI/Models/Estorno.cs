@@ -10,15 +10,18 @@ namespace CRUDAPI.Models
         [Key]
         public long Id { get; set; }
 
-        [ForeignKey("Inscricao")]
-        public long InscricaoId { get; set; }
-        public virtual Inscricao? Inscricao { get; set; }
-
         public decimal ValorEstornado { get; set; }
         public string Moeda { get; set; } = "";
+        public DateTime DataRequisicao { get; set; }
+        public DateTime? DataRecebimento { get; set; }
+        [ForeignKey("Usuarios")]
+        public long SolicitanteId { get; set; }
+        public Usuario? Solicitante { get; set; }
+        [ForeignKey("Usuarios")]
+        public long PagadorId { get; set; }
+        public Usuario? Pagador { get; set; }
         public string Motivo { get; set; } = "";
-        public DateTime DataEstorno { get; set; }
-        public bool EstornoAutomatico { get; set; }
-        public string Observacao { get; set; } = "";
+        public string ObservacaoSolicitante { get; set; } = "";
+        public string ObservacaoPagador { get; set; } = "";
     }
 }

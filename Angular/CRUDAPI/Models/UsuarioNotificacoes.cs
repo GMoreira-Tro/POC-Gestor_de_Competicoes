@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRUDAPI.Models
 {
-    [Table("UsuarioAnuncios")]
-    public class UsuarioAnuncio
+    [Table("UsuarioNotificacoes")]
+    public class UsuarioNotificacao
     {
         [Key]
         public long Id { get; set; }
@@ -13,8 +13,10 @@ namespace CRUDAPI.Models
         public long UsuarioId { get; set; }
         public virtual Usuario? Usuario { get; set; }
 
-        [ForeignKey("Anuncio")]
-        public long AnuncioId { get; set; }
-        public virtual Anuncio? Anuncio { get; set; }
+        [ForeignKey("Notificacoes")]
+        public long NotificacaoId { get; set; }
+        public virtual Notificacao? Notificacao { get; set; }
+        public bool Lido { get; set; }
+        public DateTime? DataLeitura { get; set; }
     }
 }

@@ -10,11 +10,11 @@ namespace CRUDAPI.Models
         [Key]
         public long Id { get; set; }
 
-        [ForeignKey("Usuario")]
+        [ForeignKey("Usuarios")]
         public long UsuarioId { get; set; }
         public virtual Usuario? Usuario { get; set; }
 
-        public virtual ICollection<Pagamento>? PagamentosInscricao { get; set; }
+        public virtual ICollection<Pagamento>? Pagamentos { get; set; }
 
         public virtual ICollection<Estorno>? Estornos { get; set; }
 
