@@ -11,7 +11,11 @@ namespace CRUDAPI.Models
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Confronto> Confrontos { get; set; }
         public DbSet<ConfrontoInscricao> ConfrontoInscricoes { get; set; }
-        public DbSet<PagamentoInscricao> PagamentoInscricoes { get; set; }
+        public DbSet<Pagamento> Pagamentos { get; set; }
+        public DbSet<Estorno> Estornos { get; set; }
+        public DbSet<HistoricoFinanceiro> HistoricosFinanceiros { get; set; }
+        public DbSet<Anuncio> Anuncios { get; set; }
+        public DbSet<UsuarioAnuncio> UsuarioAnuncios { get; set; }
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {
@@ -73,6 +77,10 @@ namespace CRUDAPI.Models
                 .HasForeignKey(ci => ci.InscricaoId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Pagamento>()
+                .Property(p => p.ValorPago)
+                .HasPrecision(18, 2);
 
             base.OnModelCreating(modelBuilder);
         }

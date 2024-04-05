@@ -43,5 +43,6 @@ namespace CRUDAPI.Models
         public virtual Competidor? Competidor { get; set; }
         public int? Posição { get; set; } // 1º lugar, 2º lugar, etc
         public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
+        public ICollection<Pagamento>? PagamentoInscricoes { get; set; }
     }
 }

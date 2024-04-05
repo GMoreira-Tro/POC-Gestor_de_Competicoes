@@ -28,10 +28,10 @@ namespace CRUDAPI.Services
                 throw new StatusInscricaoInvalidoException();
             }
 
-
-            if (string.IsNullOrWhiteSpace(inscricao.NomeAtleta))
+            var competidor = await _contexto.Competidores.FindAsync(inscricao.CompetidorId);
+            if (competidor == null)
             {
-                throw new CampoObrigatorioException("Nome do Atleta");
+                throw new KeyNotFoundException($"Competidor com ID {inscricao.CompetidorId} não encontrado.");
             }
 
             inscricao.ConfrontoInscricoes ??= [];

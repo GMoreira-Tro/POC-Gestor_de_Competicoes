@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRUDAPI.Models
 {
-    [Table("PagamentoInscricao")]
-    public class PagamentoInscricao
+    [Table("Pagamentos")]
+    public class Pagamento
     {
         [Key]
         public long Id { get; set; }

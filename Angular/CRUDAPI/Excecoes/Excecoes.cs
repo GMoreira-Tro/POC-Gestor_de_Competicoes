@@ -55,3 +55,8 @@ public class EmailInvalidoException : Exception
 {
     public EmailInvalidoException() : base("O email fornecido não é válido.") { }
 }
+
+public class HistoricoFinanceiroJaPossuiUsuarioException : Exception
+{
+    public HistoricoFinanceiroJaPossuiUsuarioException() : base("Já existe um histórico financeiro para o usuário fornecido.") { }
+}
