@@ -12,8 +12,6 @@ namespace CRUDAPI.Models
         public DbSet<Confronto> Confrontos { get; set; }
         public DbSet<ConfrontoInscricao> ConfrontoInscricoes { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
-        public DbSet<Estorno> Estornos { get; set; }
-        public DbSet<HistoricoFinanceiro> HistoricosFinanceiros { get; set; }
         public DbSet<Notificacao> Notificacoes { get; set; }
         public DbSet<UsuarioNotificacao> UsuarioNotificacoes { get; set; }
 
