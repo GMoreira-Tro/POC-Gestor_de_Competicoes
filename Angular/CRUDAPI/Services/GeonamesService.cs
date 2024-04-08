@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace CRUDAPI.Services
 {
+    /// <summary>
+    /// Serviço referente a API geonames, que faz a busca e validações de Países, Estados e Cidades.
+    /// </summary>
     public class GeoNamesService
     {
         private const string GeoNamesBaseUrl = "http://api.geonames.org";
@@ -18,6 +21,12 @@ namespace CRUDAPI.Services
             _httpClient = httpClient;
         }
 
+        /// <summary>
+        /// Verifica se um Estado pertence ao País fornecido.
+        /// </summary>
+        /// <param name="pais">Sigla do País em uppercase.</param>
+        /// <param name="estado">Nome do Estado a ser verificado.</param>
+        /// <returns></returns>
         public async Task<bool> EstadoPertenceAoPais(string pais, string estado)
         {
             int paisId = await GetGeonameIdByCountryName(pais);
@@ -40,6 +49,13 @@ namespace CRUDAPI.Services
             return estados.Contains(estado);
         }
 
+        /// <summary>
+        /// Verifica se a Cidade pertence ao País e Estado fornecidos.
+        /// </summary>
+        /// <param name="pais">Sigla do País em uppercase.</param>
+        /// <param name="estado">Nome do Estado.</param>
+        /// <param name="cidade">Nome da Cidade a ser verificada.</param>
+        /// <returns></returns>
         public async Task<bool> CidadePertenceAoPaisEEstado(string pais, string estado, string cidade)
         {
             int estadoId = await GetGeonameIdByCountryAndStateName(pais, estado);
@@ -62,6 +78,12 @@ namespace CRUDAPI.Services
             return cidades.Contains(cidade);
         }
 
+        /// <summary>
+        /// Pega o Id do País pela sua sigla.
+        /// </summary>
+        /// <param name="countryName">Sigla do País.</param>
+        /// <returns>Id do País.</returns>
+        /// <exception cref="Exception"></exception>
         private async Task<int> GetGeonameIdByCountryName(string countryName)
         {
             // Construa a URL para consultar informações sobre o país pelo nome
@@ -90,6 +112,13 @@ namespace CRUDAPI.Services
             }
         }
 
+        /// <summary>
+        /// Pega o Id do Estado pela sigla do País e nome do Estado.
+        /// </summary>
+        /// <param name="countryName">Sigla do País.</param>
+        /// <param name="stateName">Nome do Estado.</param>
+        /// <returns>Id do Estado.</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<int> GetGeonameIdByCountryAndStateName(string countryName, string stateName)
         {
             // Construa a URL para consultar informações sobre o estado pelo nome

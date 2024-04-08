@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRUDAPI.Models
 {
+    /// <summary>
+    /// Informações da logística de um duelo entre Competidores.
+    /// </summary>
     [Table("Confrontos")]
     public class Confronto
     {

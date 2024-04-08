@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRUDAPI.Models
 {
+    /// <summary>
+    /// Clase que contém todas as referências as tabelas do Banco de Dados bem como as definições dos relacionamentos.
+    /// </summary>
     public class Contexto : DbContext
     {
         public DbSet<Usuario> Usuarios { get; set; }
@@ -19,6 +22,10 @@ namespace CRUDAPI.Models
         {
         }
 
+        /// <summary>
+        /// Função que define o relacionamento entre as tabelas do Banco de Dados.
+        /// </summary>
+        /// <param name="modelBuilder">Construtor do modelo de relacionamento entre tabelas.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuração das chaves estrangeiras e índices únicos
