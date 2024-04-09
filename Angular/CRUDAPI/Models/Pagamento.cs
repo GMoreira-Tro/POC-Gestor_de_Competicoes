@@ -29,7 +29,7 @@ namespace CRUDAPI.Models
         public long Id { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal ValorPago { get; set; }
+        public decimal Valor { get; set; }
         public string Moeda { get; set; } = "";
         public DateTime DataRequisicao { get; set; }
         public DateTime? DataRecebimento { get; set; }
@@ -64,6 +64,11 @@ namespace CRUDAPI.Models
         public string ObservacaoSolicitante { get; set; } = "";
         public string ObservacaoPagador { get; set; } = "";
 
+        /// <summary>
+        /// Lista de Notificações pagas com este Pagamento.
+        /// </summary>
+        public ICollection<Notificacao>? Notificacoes { get; set; }
+        
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }
     }

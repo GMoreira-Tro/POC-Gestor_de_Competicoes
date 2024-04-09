@@ -29,7 +29,7 @@ namespace CRUDAPI.Models
         public virtual Usuario? Usuario { get; set; }
         [ForeignKey("Pagamentos")]
         public long PagamentoId { get; set; }
-        public Pagamento? Pagamento { get; set; }
+        public virtual Pagamento? Pagamento { get; set; }
 
         //TODO: Pensar em tela pro front-end de cadastrar Competidores de um Usuário
         /// <summary>

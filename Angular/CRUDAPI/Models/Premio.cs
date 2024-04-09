@@ -18,10 +18,16 @@ namespace CRUDAPI.Models
 
         public string Descricao { get; set; }
 
-        public long? PagamentoResgatavelId { get; set; }
-        public virtual Pagamento? PagamentoResgatavel { get; set; }
-
         public DateTime DataEntrega { get; set; }
 
+        /// <summary>
+        /// Id do possível Pagamento resgatável com este prêmio.
+        /// </summary>
+        [ForeignKey("Pagamentos")]
+        public long? PagamentoId { get; set; }
+        /// <summary>
+        /// Possível pagamento resgatável com este prêmio.
+        /// </summary>
+        public virtual Pagamento? Pagamento { get; set; }
     }
 }
