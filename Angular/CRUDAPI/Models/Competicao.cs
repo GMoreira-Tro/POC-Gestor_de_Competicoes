@@ -9,6 +9,8 @@ namespace CRUDAPI.Models
     [Table("Competicoes")]
     public class Competicao
     {
+        //TODO Pensar sobre conceito de Competição Fechada ou Aberta
+        //TODO Amarrar de forma mais sólida o Pagamento para a Competição
         [Key]
         public long Id { get; set; }
 
@@ -54,15 +56,14 @@ namespace CRUDAPI.Models
         /// </summary>
         public virtual Usuario? CriadorUsuario { get; set; }
         /// <summary>
-        /// Id da fase anterior da Competição necessária para chegar na Competição atual.
-        /// TODO: rever com o Marcelo. Acho melhor ter uma lista de Etapas Anteriores ou ter um Id da Etapa Seguinte.
+        /// Id do Convite necessário para uma Inscrição entrar nessa Competição.
         /// </summary>
-        [ForeignKey("Competicoes")]
-        public long? EtapaAnteriorId { get; set; }
+        [ForeignKey("Convites")]
+        public long? ConviteNecessarioId { get; set; }
         /// <summary>
-        /// Fase anterior da Competição necessária para chegar na Competição atual.
+        /// Convite necessário para uma Inscrição entrar nessa Competição.
         /// </summary>
-        public virtual Competicao? EtapaAnterior  { get; set; }
+        public virtual Convite? ConviteNecessario  { get; set; }
 
         public ICollection<Categoria>? Categorias { get; set; }
     }

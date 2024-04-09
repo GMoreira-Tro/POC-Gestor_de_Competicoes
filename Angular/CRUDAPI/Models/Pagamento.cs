@@ -28,6 +28,7 @@ namespace CRUDAPI.Models
         [Key]
         public long Id { get; set; }
 
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal ValorPago { get; set; }
         public string Moeda { get; set; } = "";
         public DateTime DataRequisicao { get; set; }

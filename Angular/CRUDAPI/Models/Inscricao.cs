@@ -41,11 +41,23 @@ namespace CRUDAPI.Models
         /// Atleta ou Clube que efetivamente irá competir.
         /// </summary>
         public virtual Competidor? Competidor { get; set; }
-        public int? Posição { get; set; } // 1º lugar, 2º lugar, etc
+        /// <summary>
+        /// Número da Posição após o término da participação da Inscrição. 
+        /// 1º lugar, 2º lugar, etc...
+        /// </summary>
+        public int? Posição { get; set; }
         /// <summary>
         /// Indica se o inscrito deu WO.
         /// </summary>
         public bool WO { get; set; }
+        /// <summary>
+        /// Id do prêmio que essa Inscrição poderá resgatar ao final da sua participação na Competição.
+        /// </summary>
+        public long? PremioResgatavelId { get; set; }
+        /// <summary>
+        /// Prêmio que essa Inscrição poderá resgatar ao final da sua participação na Competição.
+        /// </summary>
+        public virtual Premio? PremioResgatavel { get; set; }
         public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
     }
 }
