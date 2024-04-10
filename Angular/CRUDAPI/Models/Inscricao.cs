@@ -58,6 +58,6 @@ namespace CRUDAPI.Models
         /// Prêmio que essa Inscrição poderá resgatar ao final da sua participação na Competição.
         /// </summary>
         public virtual Premio? PremioResgatavel { get; set; }
-        public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
+        public ICollection<ConfrontoInscricao> ConfrontoInscricoes { get; set; } = new List<ConfrontoInscricao>();
     }
 }

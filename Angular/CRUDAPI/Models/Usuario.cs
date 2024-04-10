@@ -6,8 +6,8 @@ namespace CRUDAPI.Models
 {
     public enum Role
     {
-        ADMIN,
-        CLIENTE
+        ADMIN = "Admin",
+        CLIENTE = "Cliente"
     }
     /// <summary>
     /// Usuário do Sistema. Pode ser tanto uma pessoa física quanto jurídica. Os Usuários serão responsáveis por cadastrar os Competidores e as Competições.
@@ -67,8 +67,8 @@ namespace CRUDAPI.Models
         /// </summary>
         public Role Role { get; set; }
 
-        public ICollection<Inscricao>? Inscricoes { get; set; }
-        public ICollection<Competidor>? Competidores { get; set; }
-        public ICollection<UsuarioNotificacao>? AnunciosRecebidos { get; set; }
+        public ICollection<Inscricao> Inscricoes { get; set; } = new List<Inscricao>();
+        public ICollection<Competidor> Competidores { get; set; } = new List<ComCompetidor>();
+        public ICollection<UsuarioNotificacao> AnunciosRecebidos { get; set; } = new List<UsuarioNotificacao>();
     }
 }

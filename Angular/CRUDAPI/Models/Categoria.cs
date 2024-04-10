@@ -22,6 +22,6 @@ namespace CRUDAPI.Models
         [ForeignKey("Competicoes")]
         public long CompeticaoId { get; set; }
         public virtual Competicao? Competicao { get; set; }
-        public ICollection<Inscricao>? Inscricoes { get; set; }
+        public ICollection<Inscricao> Inscricoes { get; set; } = new List<Inscricao>();
     }
 }

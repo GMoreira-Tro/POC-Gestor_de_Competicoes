@@ -9,8 +9,6 @@ namespace CRUDAPI.Models
     [Table("Competicoes")]
     public class Competicao
     {
-        //TODO Pensar sobre conceito de Competição Fechada ou Aberta
-        //TODO Amarrar de forma mais sólida o Pagamento para a Competição
         [Key]
         public long Id { get; set; }
 
@@ -40,6 +38,14 @@ namespace CRUDAPI.Models
         /// Imagem "rosto" da competição.
         /// </summary>
         public string? BannerImagem { get; set; }
+        /// <summary>
+        /// Indica se as Inscrições da Competição cobrarão ou não Pagamento.
+        /// </summary>
+        public bool CompeticaoGratuita { get; set; }
+        /// <summary>
+        /// Indica se a Competição depende de um Convite para suas Inscrições.
+        /// </summary>
+        public bool CompeticaoAberta { get; set; }
 
         [Required]
         public DateTime DataInicio { get; set; }
@@ -65,6 +71,15 @@ namespace CRUDAPI.Models
         /// </summary>
         public virtual Convite? ConviteNecessario  { get; set; }
 
-        public ICollection<Categoria>? Categorias { get; set; }
+        public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
+
+        /// <summary>
+        /// Lista de etapas diretamente anteriores desta Competição. Exemplo: Se estamos na Competição
+        /// "Campeonato Brasileiro", podemos popular esta lista com as Competições "Campeonato Gaúcho",
+        /// "Campeonato Paulista", "Campeonato Mineiro"...
+        /// </summary>
+        public <Competicao> EtapasAnteriores { get; set; } = new List<Competicao>();
+        //Vai ser útil para filtrarmos resultados de etapas anteriores e gerarmos Convites de acordo 
+        //com os classificados.
     }
 }

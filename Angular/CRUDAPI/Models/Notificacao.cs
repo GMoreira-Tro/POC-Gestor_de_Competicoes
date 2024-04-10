@@ -45,6 +45,6 @@ namespace CRUDAPI.Models
         /// <summary>
         /// Usuários aos quais esta Notificação será direcionada.
         /// </summary>
-        public ICollection<UsuarioNotificacao>? UsuariosAlvo { get; set; }
+        public ICollection<UsuarioNotificacao> UsuariosAlvo { get; set; } = new List<UsuarioNotificacao>();
     }
 }

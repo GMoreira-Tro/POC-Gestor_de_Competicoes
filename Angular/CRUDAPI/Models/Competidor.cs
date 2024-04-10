@@ -44,7 +44,6 @@ namespace CRUDAPI.Models
         /// Usuário responsável por criar este Competidor.
         /// </summary>
         public virtual Usuario? Criador { get; set; }
-        // Relacionamento muitos-para-muitos com a classe Competidor
-        public virtual ICollection<ConviteCompetidor> ConvitesCompetidor { get; set; }
+        public virtual ICollection<ConviteCompetidor> ConvitesCompetidor { get; set; } = new List<ConviteCompetidor>();
     }
 }

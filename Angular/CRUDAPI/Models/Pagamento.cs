@@ -67,7 +67,7 @@ namespace CRUDAPI.Models
         /// <summary>
         /// Lista de Notificações pagas com este Pagamento.
         /// </summary>
-        public ICollection<Notificacao>? Notificacoes { get; set; }
+        public ICollection<Notificacao> Notificacoes { get; set; } = new List<Notificacao>();
         
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }

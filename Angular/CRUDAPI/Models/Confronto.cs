@@ -17,6 +17,6 @@ namespace CRUDAPI.Models
 
         public DateTime? DataTermino { get; set; }
         public string Local { get; set; } = "";
-        public ICollection<ConfrontoInscricao>? ConfrontoInscricoes { get; set; }
+        public ICollection<ConfrontoInscricao> ConfrontoInscricoes { get; set; } = new List<ConfrontoInscricao>();
     }
 }
