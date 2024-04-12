@@ -39,10 +39,6 @@ namespace CRUDAPI.Models
         /// </summary>
         public string? BannerImagem { get; set; }
         /// <summary>
-        /// Indica se as Inscrições da Competição cobrarão ou não Pagamento.
-        /// </summary>
-        public bool CompeticaoGratuita { get; set; }
-        /// <summary>
         /// Indica se a Competição depende de um Convite para suas Inscrições.
         /// </summary>
         public bool CompeticaoAberta { get; set; }
