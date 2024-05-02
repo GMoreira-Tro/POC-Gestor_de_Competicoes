@@ -3,6 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRUDAPI.Models
 {
+    public enum StatusCompeticao
+    {
+        Rascunho = "Rascunho",
+        Publicada = "Publicada",
+        EmAndamento = "Em andamento",
+        Concluida = "Concluída",
+        Cancelada = "Cancelada"
+    }
     /// <summary>
     /// Evento competitivo de alguma Modalidade divulgado por um Usuário. Pode ser dividido em múltiplas etapas.
     /// </summary>
@@ -77,5 +85,9 @@ namespace CRUDAPI.Models
         public <Competicao> EtapasAnteriores { get; set; } = new List<Competicao>();
         //Vai ser útil para filtrarmos resultados de etapas anteriores e gerarmos Convites de acordo 
         //com os classificados.
+
+        public long? PagamentoId { get; set; }
+        public virtual Pagamento? Pagamento { get; set; }
+        public StatusCompeticao Status { get; set; }
     }
 }

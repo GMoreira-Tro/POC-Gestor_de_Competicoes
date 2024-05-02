@@ -6,8 +6,8 @@ namespace CRUDAPI.Models
 {
     public enum Role
     {
-        ADMIN = "Admin",
-        CLIENTE = "Cliente"
+        Admin = "Admin",
+        Cliente = "Cliente"
     }
     /// <summary>
     /// Usuário do Sistema. Pode ser tanto uma pessoa física quanto jurídica. Os Usuários serão responsáveis por cadastrar os Competidores e as Competições.

@@ -9,10 +9,8 @@ namespace CRUDAPI.Models
     /// </summary>
     public enum TipoCompetidor
     {
-        [EnumMember(Value = "Atleta")]
-        ATLETA,
-        [EnumMember(Value = "Clube")]
-        CLUBE
+        Atleta = "Atleta",
+        Clube = "Clube"
     }
     /// <summary>
     /// Atleta ou Clube que irá competir em Competições. Cadastrado via algum Usuário.

@@ -5,19 +5,34 @@ using System.Runtime.Serialization;
 
 namespace CRUDAPI.Models
 {
+    public enum TipoPagamento
+    {
+        CartaoDeCredito = 1,
+        Boleto = 2,
+        /// <summary>
+        /// (TEF): O comprador optou por pagar a transação com débito online de algum dos bancos conveniados.
+        /// </summary>
+        DebitoOnLineTEF = 3,
+        /// <summary>
+        /// O comprador optou por pagar a transação utilizando o saldo de sua conta PagSeguro.
+        /// </summary>
+        SaldoPagSeguro = 4,
+        /// <summary>
+        /// O comprador escolheu pagar sua transação através de seu celular Oi. 
+        /// </summary>
+        OiPago = 5,
+        DepositoEmConta = 6,
+        Dinheiro = 7
+    },
     public enum Status
     {
-        [EnumMember(Value = "pendente")]
-        PENDENTE,
+        Pendente = "Pendente",
 
-        [EnumMember(Value = "paga")]
-        PAGA,
+        Paga = "Paga",
 
-        [EnumMember(Value = "aceita")]
-        ACEITA,
+        Aceita = "Aceita",
 
-        [EnumMember(Value = "recusada")]
-        RECUSADA
+        Recusada = "Recusada"
     }
     /// <summary>
     /// Tabela responsável por gerir transações financeiras.
@@ -36,21 +51,21 @@ namespace CRUDAPI.Models
         /// <summary>
         /// Id de quem solicitou uma transação financeira.
         /// </summary>
-        [ForeignKey("Usuarios")]
+        [ForeignKey("ContasCorrente")]
         public long SolicitanteId { get; set; }
         /// <summary>
         /// Quem solicitou uma transação financeira.
         /// </summary>
-        public Usuario? Solicitante { get; set; }
+        public ContaCorrente? Solicitante { get; set; }
         /// <summary>
         /// Id de quem irá pagar uma requisição ou receber de volta o dinheiro de algum estorno.
         /// </summary>
-        [ForeignKey("Usuarios")]
+        [ForeignKey("ContasCorrente")]
         public long PagadorRecebedorId { get; set; }
         /// <summary>
         /// Quem irá pagar uma requisição ou receber de volta o dinheiro de algum estorno.
         /// </summary>
-        public Usuario? PagadorRecebedor { get; set; }
+        public ContaCorrente? PagadorRecebedor { get; set; }
         /// <summary>
         /// Id do Admin que irá aprovar a transação financeira.
         /// </summary>
@@ -62,14 +77,17 @@ namespace CRUDAPI.Models
         public Usuario? Aprovador { get; set; }
         public string Motivo { get; set; } = "";
         public string ObservacaoSolicitante { get; set; } = "";
-        public string ObservacaoPagador { get; set; } = "";
-
-        /// <summary>
-        /// Lista de Notificações pagas com este Pagamento.
-        /// </summary>
-        public ICollection<Notificacao> Notificacoes { get; set; } = new List<Notificacao>();
+        public string ObservacaoPagadorRecebedor { get; set; } = "";
         
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }
+        [EnumDataType(typeof(TipoPagamento))]
+        public TipoPagamento TipoPagamento { get; set; } = "";
+        /// <summary>
+        /// Token de acesso para a API do PagSeguro.
+        /// </summary>
+        public string TokenPagSeguro { get; set; } = "";
+        //TODO: Pensar como seria o registro de pagamentos em dinheiro.
+        //TODO: Ao confirmar um Pagamento, disparar um e-mail para as partes envolvidas.
     }
 }

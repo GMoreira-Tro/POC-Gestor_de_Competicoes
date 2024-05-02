@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PagSeguro Checkout</title>
+</head>
+<body>
+    <h1>PagSeguro Checkout</h1>
+    <div>
+        <label for="email">E-mail PagSeguro:</label>
+        <input type="text" id="email" placeholder="Seu e-mail PagSeguro">
+    </div>
+    <div>
+        <label for="token">Token PagSeguro:</label>
+        <input type="text" id="token" placeholder="Seu token PagSeguro">
+    </div>
+    <div>
+        <button onclick="realizarCheckout()">Realizar Checkout</button>
+    </div>
+    <div id="resultado"></div>
+
+    <script>
+        function realizarCheckout() {
+            var emailUsuario = document.getElementById("email").value;
+            var token = document.getElementById("token").value;
+            var urlCheckout = "URL_DO_SEU_CHECKOUT"; // Substitua pela URL de checkout real
+            var itens = []; // Preencha com os itens a serem comprados
+            var comprador = null; // Preencha com os dados do comprador, se necessário
+            var reference = "REFERENCIA_DA_TRANSACAO"; // Substitua pela referência da transação real
+
+            // Instancia a classe PagSeguroAPI
+            var pagSeguroAPI = new PagSeguroAPI();
+
+            // Chama o método Checkout
+            var codigoTransacao = pagSeguroAPI.Checkout(emailUsuario, token, urlCheckout, itens, comprador, reference);
+
+            // Exibe o resultado na página
+            var resultadoElement = document.getElementById("resultado");
+            resultadoElement.innerHTML = "Código de transação: " + codigoTransacao;
+        }
+    </script>
+</body>
+</html>

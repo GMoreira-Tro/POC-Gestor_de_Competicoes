@@ -14,12 +14,12 @@ namespace CRUDAPI.Models
         public long Id { get; set; }
 
         /// <summary>
-        /// Id do Pagamento necessário para receber esta Notificação.
+        /// Id do Pagamento necessário para criar esta Notificação.
         /// </summary>
         [ForeignKey("Pagamentos")]
         public long? PagamentoId { get; set; }
         /// <summary>
-        /// Pagamento necessário para receber esta Notificação.
+        /// Pagamento necessário para criar esta Notificação.
         /// </summary>
         public Pagamento Pagamento { get; set; }
 
