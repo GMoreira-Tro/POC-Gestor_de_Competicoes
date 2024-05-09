@@ -23,11 +23,6 @@ namespace CRUDAPI.Services
 
             inscricao.Usuario = await _contexto.FindAsync<Usuario>(inscricao.UsuarioId);
 
-            if (!Enum.IsDefined(typeof(Status), inscricao.StatusPagamento))
-            {
-                throw new StatusInscricaoInvalidoException();
-            }
-
             var competidor = await _contexto.Competidores.FindAsync(inscricao.CompetidorId);
             if (competidor == null)
             {

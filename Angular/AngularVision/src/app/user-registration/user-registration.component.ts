@@ -87,6 +87,7 @@ export class UserRegistrationComponent implements AfterViewInit {
           errorMessage = error.error;
           alert(errorMessage);
         }
+        alert(errorMessage);
         // Tratar erros de cadastro, exibir mensagens de erro, etc.
       }
     );

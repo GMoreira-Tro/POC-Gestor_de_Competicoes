@@ -23,16 +23,16 @@ namespace CRUDAPI.Models
         OiPago = 5,
         DepositoEmConta = 6,
         Dinheiro = 7
-    },
+    };
     public enum Status
     {
-        Pendente = "Pendente",
+        Pendente,
 
-        Paga = "Paga",
+        Paga,
 
-        Aceita = "Aceita",
+        Aceita,
 
-        Recusada = "Recusada"
+        Recusada
     }
     /// <summary>
     /// Tabela responsável por gerir transações financeiras.
@@ -82,7 +82,7 @@ namespace CRUDAPI.Models
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }
         [EnumDataType(typeof(TipoPagamento))]
-        public TipoPagamento TipoPagamento { get; set; } = "";
+        public TipoPagamento TipoPagamento { get; set; }
         /// <summary>
         /// Token de acesso para a API do PagSeguro.
         /// </summary>

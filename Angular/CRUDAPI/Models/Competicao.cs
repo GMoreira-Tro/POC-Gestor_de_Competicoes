@@ -5,12 +5,12 @@ namespace CRUDAPI.Models
 {
     public enum StatusCompeticao
     {
-        Rascunho = "Rascunho",
-        Publicada = "Publicada",
-        EmAndamento = "Em andamento",
-        Concluida = "Concluída",
-        Cancelada = "Cancelada"
-    }
+        Rascunho,
+        Publicada,
+        EmAndamento,
+        Concluida,
+        Cancelada
+    };
     /// <summary>
     /// Evento competitivo de alguma Modalidade divulgado por um Usuário. Pode ser dividido em múltiplas etapas.
     /// </summary>
@@ -82,12 +82,13 @@ namespace CRUDAPI.Models
         /// "Campeonato Brasileiro", podemos popular esta lista com as Competições "Campeonato Gaúcho",
         /// "Campeonato Paulista", "Campeonato Mineiro"...
         /// </summary>
-        public <Competicao> EtapasAnteriores { get; set; } = new List<Competicao>();
+        public ICollection<Competicao> EtapasAnteriores { get; set; } = new List<Competicao>();
         //Vai ser útil para filtrarmos resultados de etapas anteriores e gerarmos Convites de acordo 
         //com os classificados.
 
         public long? PagamentoId { get; set; }
         public virtual Pagamento? Pagamento { get; set; }
+        [EnumDataType(typeof(Status))]
         public StatusCompeticao Status { get; set; }
     }
 }
