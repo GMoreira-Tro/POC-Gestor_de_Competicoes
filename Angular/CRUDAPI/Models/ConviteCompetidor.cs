@@ -9,13 +9,13 @@ namespace CRUDAPI.Models
         [Key]
         public long Id { get; set; }
 
-        [ForeignKey("Convite")]
+        [ForeignKey("Convites")]
         public long ConviteId { get; set; }
-        public virtual Convite Convite { get; set; }
+        public virtual Convite? Convite { get; set; }
 
-        [ForeignKey("Competidor")]
+        [ForeignKey("Competidores")]
         public long CompetidorId { get; set; }
-        public virtual Competidor Competidor { get; set; }
+        public virtual Competidor? Competidor { get; set; }
 
         // Outros campos se necessário
     }

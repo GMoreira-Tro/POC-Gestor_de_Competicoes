@@ -16,6 +16,6 @@ namespace CRUDAPI.Models
         public long UsuarioId { get; set; }
         public virtual Usuario? Usuario { get; set; }
 
-        public ICollection<Pagamento> Pagamentos { get; set; } = new List<Pagamento>();
+        public virtual ICollection<PagamentoContaCorrente> PagamentoContasCorrente { get; set; } = new List<PagamentoContaCorrente>();
     }
 }

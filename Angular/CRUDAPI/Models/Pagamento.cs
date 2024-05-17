@@ -48,24 +48,7 @@ namespace CRUDAPI.Models
         public string Moeda { get; set; } = "";
         public DateTime DataRequisicao { get; set; }
         public DateTime? DataRecebimento { get; set; }
-        /// <summary>
-        /// Id de quem solicitou uma transação financeira.
-        /// </summary>
-        [ForeignKey("ContasCorrente")]
-        public long SolicitanteId { get; set; }
-        /// <summary>
-        /// Quem solicitou uma transação financeira.
-        /// </summary>
-        public ContaCorrente? Solicitante { get; set; }
-        /// <summary>
-        /// Id de quem irá pagar uma requisição ou receber de volta o dinheiro de algum estorno.
-        /// </summary>
-        [ForeignKey("ContasCorrente")]
-        public long PagadorRecebedorId { get; set; }
-        /// <summary>
-        /// Quem irá pagar uma requisição ou receber de volta o dinheiro de algum estorno.
-        /// </summary>
-        public ContaCorrente? PagadorRecebedor { get; set; }
+
         /// <summary>
         /// Id do Admin que irá aprovar a transação financeira.
         /// </summary>
@@ -74,11 +57,9 @@ namespace CRUDAPI.Models
         /// <summary>
         /// Admin que irá aprovar a transação financeira.
         /// </summary>
-        public Usuario? Aprovador { get; set; }
+        public virtual Usuario? Aprovador { get; set; }
         public string Motivo { get; set; } = "";
-        public string ObservacaoSolicitante { get; set; } = "";
-        public string ObservacaoPagadorRecebedor { get; set; } = "";
-        
+                
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }
         [EnumDataType(typeof(TipoPagamento))]
@@ -89,5 +70,7 @@ namespace CRUDAPI.Models
         public string TokenPagSeguro { get; set; } = "";
         //TODO: Pensar como seria o registro de pagamentos em dinheiro.
         //TODO: Ao confirmar um Pagamento, disparar um e-mail para as partes envolvidas.
+
+        public virtual ICollection<PagamentoContaCorrente> PagamentoContasCorrente { get; set; } = new List<PagamentoContaCorrente>();
     }
 }

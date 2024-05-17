@@ -20,6 +20,8 @@ namespace CRUDAPI.Models
         public DbSet<Premio> Premios { get; set; }
         public DbSet<Convite> Convites { get; set; }
         public DbSet<ConviteCompetidor> ConvitesCompetidores { get; set; }
+        public DbSet<ContaCorrente> ContasCorrentes { get; set; }
+        public DbSet<PagamentoContaCorrente> PagamentoContaCorrentes { get; set; }
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {
@@ -91,6 +93,14 @@ namespace CRUDAPI.Models
             //     .HasPrecision(18, 2);
 
             // base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<PagamentoContaCorrente>()
+            .HasOne(ci => ci.Pagamento)
+                .WithMany(i => i.PagamentoContasCorrente)
+                .HasForeignKey(ci => ci.PagamentoId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
