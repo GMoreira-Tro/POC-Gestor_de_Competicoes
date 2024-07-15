@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Usuario } from '../interfaces/Usuario';
 
 @Injectable({
@@ -18,10 +18,23 @@ export class UserService {
     );
   }
 
-  login(userData: { email: string, senha: string }): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.baseUrl}/login`, userData).pipe(
+  login(userData: { email: string, senha: string }): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/login`, userData).pipe(
+      tap(response => {
+        if (response.token) {
+          localStorage.setItem('authToken', response.token);
+        }
+      }),
       catchError(this.handleError)
     );
+  }
+
+  logout() {
+    localStorage.removeItem('authToken');
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('authToken');
   }
 
   getUser(id: number): Observable<Usuario> {

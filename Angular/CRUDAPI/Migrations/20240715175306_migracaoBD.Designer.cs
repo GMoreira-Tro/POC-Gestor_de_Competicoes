@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240517182540_migracaoBD")]
+    [Migration("20240715175306_migracaoBD")]
     partial class migracaoBD
     {
         /// <inheritdoc />
@@ -172,28 +172,29 @@ namespace CRUDAPI.Migrations
 
             modelBuilder.Entity("CRUDAPI.Models.ConfrontoInscricao", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
                     b.Property<long>("ConfrontoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ConfrontoInscricaoPaiId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("InscricaoId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("Id");
+                    b.Property<long?>("ConfrontoInscricaoPaiConfrontoId")
+                        .HasColumnType("bigint");
 
-                    b.HasIndex("ConfrontoId");
+                    b.Property<long?>("ConfrontoInscricaoPaiId")
+                        .HasColumnType("bigint");
 
-                    b.HasIndex("ConfrontoInscricaoPaiId");
+                    b.Property<long?>("ConfrontoInscricaoPaiInscricaoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ConfrontoId", "InscricaoId");
 
                     b.HasIndex("InscricaoId");
+
+                    b.HasIndex("ConfrontoInscricaoPaiConfrontoId", "ConfrontoInscricaoPaiInscricaoId");
 
                     b.ToTable("ConfrontoInscricao");
                 });
@@ -207,6 +208,7 @@ namespace CRUDAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<decimal>("Saldo")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<long>("UsuarioId")
@@ -391,6 +393,7 @@ namespace CRUDAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Valor")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
@@ -473,14 +476,14 @@ namespace CRUDAPI.Migrations
 
                     b.Property<string>("CpfCnpj")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("EmailConfirmado")
                         .HasColumnType("bit");
@@ -502,13 +505,22 @@ namespace CRUDAPI.Migrations
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Sobrenome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CpfCnpj")
+                        .IsUnique();
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("SenhaHash")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });
@@ -566,7 +578,7 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Usuario", "CriadorUsuario")
                         .WithMany()
                         .HasForeignKey("CriadorUsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CRUDAPI.Models.Pagamento", "Pagamento")
@@ -585,7 +597,7 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Usuario", "Criador")
                         .WithMany("Competidores")
                         .HasForeignKey("CriadorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Criador");
@@ -596,18 +608,16 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Confronto", "Confronto")
                         .WithMany("ConfrontoInscricoes")
                         .HasForeignKey("ConfrontoId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("CRUDAPI.Models.ConfrontoInscricao", "ConfrontoInscricaoPai")
-                        .WithMany()
-                        .HasForeignKey("ConfrontoInscricaoPaiId");
 
                     b.HasOne("CRUDAPI.Models.Inscricao", "Inscricao")
                         .WithMany("ConfrontoInscricoes")
                         .HasForeignKey("InscricaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("CRUDAPI.Models.ConfrontoInscricao", "ConfrontoInscricaoPai")
+                        .WithMany()
+                        .HasForeignKey("ConfrontoInscricaoPaiConfrontoId", "ConfrontoInscricaoPaiInscricaoId");
 
                     b.Navigation("Confronto");
 
@@ -673,7 +683,7 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Usuario", "Usuario")
                         .WithMany("Inscricoes")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Categoria");
@@ -720,7 +730,7 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.ContaCorrente", "ContaCorrente")
                         .WithMany("PagamentoContasCorrente")
                         .HasForeignKey("ContaCorrenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CRUDAPI.Models.Pagamento", "Pagamento")
@@ -748,13 +758,13 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Notificacao", "Notificacao")
                         .WithMany("UsuariosAlvo")
                         .HasForeignKey("NotificacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CRUDAPI.Models.Usuario", "Usuario")
                         .WithMany("AnunciosRecebidos")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Notificacao");

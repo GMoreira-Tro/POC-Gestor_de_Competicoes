@@ -17,6 +17,8 @@ import { BuscaCompeticoesComponent } from './busca-competicoes/busca-competicoes
 import { RodapeComponent } from './rodape/rodape.component';
 import { CadastroCompeticoesComponent } from './cadastro-competicoes/cadastro-competicoes.component';
 
+import { UserService } from './services/user.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +41,7 @@ import { CadastroCompeticoesComponent } from './cadastro-competicoes/cadastro-co
     ModalModule.forRoot(),
     NgxMaskModule.forRoot(),
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

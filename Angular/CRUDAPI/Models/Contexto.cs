@@ -35,72 +35,94 @@ namespace CRUDAPI.Models
         {
             // Configuração das chaves estrangeiras e índices únicos
 
-            // modelBuilder.Entity<Inscricao>()
-            //     .HasOne(i => i.Usuario)
-            //     .WithMany(u => u.Inscricoes)
-            //     .HasForeignKey(i => i.UsuarioId)
-            //     .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Inscricao>()
+                .HasOne(i => i.Usuario)
+                .WithMany(u => u.Inscricoes)
+                .HasForeignKey(i => i.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // modelBuilder.Entity<Competidor>()
-            //     .HasOne(i => i.Criador)
-            //     .WithMany(u => u.Competidores)
-            //     .HasForeignKey(i => i.CriadorId)
-            //     .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Competidor>()
+                .HasOne(i => i.Criador)
+                .WithMany(u => u.Competidores)
+                .HasForeignKey(i => i.CriadorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // modelBuilder.Entity<Categoria>()
-            //     .HasOne(c => c.Competicao)
-            //     .WithMany(c => c.Categorias)
-            //     .HasForeignKey(c => c.CompeticaoId)
-            //     .IsRequired();
+            modelBuilder.Entity<Categoria>()
+                .HasOne(c => c.Competicao)
+                .WithMany(c => c.Categorias)
+                .HasForeignKey(c => c.CompeticaoId)
+                .IsRequired();
 
-            // modelBuilder.Entity<Competicao>()
-            //    .HasOne(c => c.CriadorUsuario)
-            //    .WithMany()
-            //    .HasForeignKey(c => c.CriadorUsuarioId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Competicao>()
+                .HasOne(c => c.CriadorUsuario)
+                .WithMany()
+                .HasForeignKey(c => c.CriadorUsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // modelBuilder.Entity<Usuario>()
-            //     .HasIndex(u => u.CpfCnpj)
-            //     .IsUnique();
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.CpfCnpj)
+                .IsUnique();
 
-            // modelBuilder.Entity<Usuario>()
-            //     .HasIndex(u => u.SenhaHash)
-            //     .IsUnique();
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.SenhaHash)
+                .IsUnique();
 
-            // modelBuilder.Entity<Usuario>()
-            //     .HasIndex(u => u.Email)
-            //     .IsUnique();
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
-            // modelBuilder.Entity<ConfrontoInscricao>()
-            //     .HasKey(ci => new { ci.ConfrontoId, ci.InscricaoId });
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasKey(ci => new { ci.ConfrontoId, ci.InscricaoId });
 
-            // modelBuilder.Entity<ConfrontoInscricao>()
-            //     .HasOne(ci => ci.Confronto)
-            //     .WithMany(c => c.ConfrontoInscricoes)
-            //     .HasForeignKey(ci => ci.ConfrontoId)
-            //     .IsRequired()
-            //     .OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasOne(ci => ci.Confronto)
+                .WithMany(c => c.ConfrontoInscricoes)
+                .HasForeignKey(ci => ci.ConfrontoId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            // modelBuilder.Entity<ConfrontoInscricao>()
-            //     .HasOne(ci => ci.Inscricao)
-            //     .WithMany(i => i.ConfrontoInscricoes)
-            //     .HasForeignKey(ci => ci.InscricaoId)
-            //     .IsRequired()
-            //     .OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasOne(ci => ci.Inscricao)
+                .WithMany(i => i.ConfrontoInscricoes)
+                .HasForeignKey(ci => ci.InscricaoId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            // modelBuilder.Entity<Pagamento>()
-            //     .Property(p => p.ValorPago)
-            //     .HasPrecision(18, 2);
-
-            // base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Pagamento>()
+                .Property(p => p.Valor)
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<PagamentoContaCorrente>()
-            .HasOne(ci => ci.Pagamento)
+                .HasOne(ci => ci.Pagamento)
                 .WithMany(i => i.PagamentoContasCorrente)
                 .HasForeignKey(ci => ci.PagamentoId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<PagamentoContaCorrente>()
+                .HasOne(ci => ci.ContaCorrente)
+                .WithMany(i => i.PagamentoContasCorrente)
+                .HasForeignKey(ci => ci.ContaCorrenteId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ContaCorrente>()
+                .Property(c => c.Saldo)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<UsuarioNotificacao>()
+                .HasOne(un => un.Usuario)
+                .WithMany(u => u.AnunciosRecebidos)
+                .HasForeignKey(un => un.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UsuarioNotificacao>()
+                .HasOne(un => un.Notificacao)
+                .WithMany(n => n.UsuariosAlvo)
+                .HasForeignKey(un => un.NotificacaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

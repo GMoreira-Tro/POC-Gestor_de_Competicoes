@@ -1,21 +1,20 @@
 <div class="background-image">
-    <form (ngSubmit)="submitForm()" #form="ngForm" class="beautiful-form" (keypress)="onKeyPress($event)">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" [(ngModel)]="userData.email" required
-            [ngClass]="{ 'error-border': form.controls['email']?.errors?.['required'] && form.controls['email'].touched }">
-        </div>
+  <form (ngSubmit)="submitForm()" #form="ngForm" class="beautiful-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" [(ngModel)]="userData.email" required
+          [ngClass]="{ 'error-border': form.controls['email']?.errors?.['required'] && form.controls['email'].touched }">
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="senha">Senha:</label>
-          <input type="password" id="senha" name="senha" [(ngModel)]="userData.senha" required
-            [ngClass]="{ 'error-border': form.controls['senha']?.errors?.['required'] && form.controls['senha'].touched }">
-        </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" [(ngModel)]="userData.senha" required
+          [ngClass]="{ 'error-border': form.controls['senha']?.errors?.['required'] && form.controls['senha'].touched }">
       </div>
-      <button type="submit" (click)="submitForm()">Login</button>
-      <a href="#">Esqueci minha senha</a>
-    </form>
-  </div>
-  
+    </div>
+    <button type="submit">Login</button>
+    <a href="#">Esqueci minha senha</a>
+  </form>
+</div>

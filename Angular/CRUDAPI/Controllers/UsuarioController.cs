@@ -140,30 +140,48 @@ namespace CRUDAPI.Controller
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == model.Email && u.SenhaHash == model.Senha);
+            // Buscar o usuário pelo e-mail no banco de dados
+            var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == model.Email);
 
-            if (user == null /*|| !user.EmailConfirmado*/)
+            if (user == null)
             {
-                return Unauthorized();
+                return Unauthorized(); // Usuário não encontrado
             }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("sua-chave-secreta-aqui");
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+            // Verificar se a senha fornecida corresponde ao hash no banco de dados
+            if (BCrypt.Net.BCrypt.Verify(model.Senha, user.SenhaHash))
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                try
                 {
-            new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7), // Define a expiração do token (opcional)
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes("k3ZvM4v9BpS+UdW7Y4XeFtHj2NsJ8bRa");
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim(ClaimTypes.Name, user.Id.ToString())
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(7), // Token expira em 7 dias
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
 
-            return Ok(new { Token = tokenString });
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+
+                    return Ok(new { Token = tokenString });
+                }
+                catch (Exception ex)
+                {
+                    // Log do erro
+                    Console.WriteLine($"Erro ao gerar token JWT: {ex.Message}");
+                    return StatusCode(500, "Erro interno no servidor ao gerar token JWT");
+                }
+            }
+            else
+            {
+                return Unauthorized(); // Senha incorreta
+            }
         }
 
     }

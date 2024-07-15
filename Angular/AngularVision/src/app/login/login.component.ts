@@ -12,7 +12,7 @@ export class LoginComponent implements AfterViewInit {
   @ViewChild('form') form!: NgForm;
   userData: any = {
     email: '',
-    senhaHash: ''
+    senha: ''
   };
   loginButtonPressed: boolean = false;
 
@@ -33,21 +33,21 @@ export class LoginComponent implements AfterViewInit {
   submitForm() {
     this.highlightRequiredFields();
     if (this.form.valid) {
-      // Aqui você pode adicionar a lógica para enviar os dados de login para o servidor
       console.log('Dados do formulário de login:', this.userData);
 
-      // Exemplo de chamada do serviço de login
       this.userService.login(this.userData).subscribe(
         (response: any) => {
           console.log('Usuário autenticado com sucesso:', response);
-          // Navegar para a página inicial ou outra página desejada após o login
           this.router.navigate(['']);
         },
-        (error: any) => {
-          console.error('Erro ao autenticar usuário:', error);
+        () => {
+          alert("Erro ao autenticar usuário.")
           // Tratar erros de autenticação, como exibir mensagens de erro
         }
       );
+    }
+    else {
+      alert("Erro ao autenticar usuário. Formulário inválido!");
     }
   }
 
