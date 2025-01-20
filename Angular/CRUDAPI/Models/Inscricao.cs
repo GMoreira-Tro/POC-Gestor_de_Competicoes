@@ -27,9 +27,9 @@ namespace CRUDAPI.Models
         /// Usuário que requisitou a Inscrição de um de seus Competidores.
         /// </summary>
         public virtual Usuario? Usuario { get; set; }
-        [ForeignKey("Pagamentos")]
-        public long PagamentoId { get; set; }
-        public virtual Pagamento? Pagamento { get; set; }
+        [ForeignKey("PagamentoContasCorrente")]
+        public long PagamentoContaCorrenteId { get; set; }
+        public virtual PagamentoContaCorrente? PagamentoContaCorrente { get; set; }
 
         //TODO: Pensar em tela pro front-end de cadastrar Competidores de um Usuário
         /// <summary>
