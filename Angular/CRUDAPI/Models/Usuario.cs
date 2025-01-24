@@ -37,6 +37,7 @@ namespace CRUDAPI.Models
         /// </summary>
         [Required]
         public string SenhaHash { get; set; } = "";
+        public bool SenhaValidada { get; set; } = false;
         /// <summary>
         /// Sigla do País de acordo com a API geonames (BR, US, AR...).
         /// </summary>

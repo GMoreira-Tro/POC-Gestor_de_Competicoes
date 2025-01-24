@@ -282,7 +282,7 @@ namespace CRUDAPI.Migrations
                     b.Property<long>("CompetidorId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PagamentoId")
+                    b.Property<long>("PagamentoContaCorrenteId")
                         .HasColumnType("bigint");
 
                     b.Property<int?>("Posição")
@@ -303,7 +303,7 @@ namespace CRUDAPI.Migrations
 
                     b.HasIndex("CompetidorId");
 
-                    b.HasIndex("PagamentoId");
+                    b.HasIndex("PagamentoContaCorrenteId");
 
                     b.HasIndex("PremioResgatavelId");
 
@@ -504,6 +504,9 @@ namespace CRUDAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("SenhaValidada")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Sobrenome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -667,9 +670,9 @@ namespace CRUDAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRUDAPI.Models.Pagamento", "Pagamento")
+                    b.HasOne("CRUDAPI.Models.PagamentoContaCorrente", "PagamentoContaCorrente")
                         .WithMany()
-                        .HasForeignKey("PagamentoId")
+                        .HasForeignKey("PagamentoContaCorrenteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -687,7 +690,7 @@ namespace CRUDAPI.Migrations
 
                     b.Navigation("Competidor");
 
-                    b.Navigation("Pagamento");
+                    b.Navigation("PagamentoContaCorrente");
 
                     b.Navigation("PremioResgatavel");
 

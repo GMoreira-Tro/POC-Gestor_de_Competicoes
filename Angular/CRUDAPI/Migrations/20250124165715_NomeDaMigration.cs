@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CRUDAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class criacaoBD : Migration
+    public partial class NomeDaMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,6 +53,7 @@ namespace CRUDAPI.Migrations
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     EmailConfirmado = table.Column<bool>(type: "bit", nullable: false),
                     SenhaHash = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SenhaValidada = table.Column<bool>(type: "bit", nullable: false),
                     Pais = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -345,7 +346,7 @@ namespace CRUDAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoriaId = table.Column<long>(type: "bigint", nullable: false),
                     UsuarioId = table.Column<long>(type: "bigint", nullable: false),
-                    PagamentoId = table.Column<long>(type: "bigint", nullable: false),
+                    PagamentoContaCorrenteId = table.Column<long>(type: "bigint", nullable: false),
                     CompetidorId = table.Column<long>(type: "bigint", nullable: false),
                     Posição = table.Column<int>(type: "int", nullable: true),
                     WO = table.Column<bool>(type: "bit", nullable: false),
@@ -367,9 +368,9 @@ namespace CRUDAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Inscricoes_Pagamentos_PagamentoId",
-                        column: x => x.PagamentoId,
-                        principalTable: "Pagamentos",
+                        name: "FK_Inscricoes_PagamentoContasCorrente_PagamentoContaCorrenteId",
+                        column: x => x.PagamentoContaCorrenteId,
+                        principalTable: "PagamentoContasCorrente",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -482,9 +483,9 @@ namespace CRUDAPI.Migrations
                 column: "CompetidorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inscricoes_PagamentoId",
+                name: "IX_Inscricoes_PagamentoContaCorrenteId",
                 table: "Inscricoes",
-                column: "PagamentoId");
+                column: "PagamentoContaCorrenteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inscricoes_PremioResgatavelId",
@@ -565,9 +566,6 @@ namespace CRUDAPI.Migrations
                 name: "ConvitesCompetidores");
 
             migrationBuilder.DropTable(
-                name: "PagamentoContasCorrente");
-
-            migrationBuilder.DropTable(
                 name: "UsuarioNotificacoes");
 
             migrationBuilder.DropTable(
@@ -575,9 +573,6 @@ namespace CRUDAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Inscricoes");
-
-            migrationBuilder.DropTable(
-                name: "ContasCorrente");
 
             migrationBuilder.DropTable(
                 name: "Notificacoes");
@@ -589,10 +584,16 @@ namespace CRUDAPI.Migrations
                 name: "Competidores");
 
             migrationBuilder.DropTable(
+                name: "PagamentoContasCorrente");
+
+            migrationBuilder.DropTable(
                 name: "Premios");
 
             migrationBuilder.DropTable(
                 name: "Competicoes");
+
+            migrationBuilder.DropTable(
+                name: "ContasCorrente");
 
             migrationBuilder.DropTable(
                 name: "Convites");
