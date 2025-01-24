@@ -17,13 +17,18 @@ export class UserRegistrationComponent implements AfterViewInit {
     nome: '',
     sobrenome: '',
     email: '',
+    emailConfirmado: false,
     senhaHash: '',
+    senhaValidada: false,
     pais: '',
     estado: '',
     cidade: '',
     dataNascimento: new Date(1900, 0, 1),
     cpfCnpj: '',
-    inscricoes: []
+    role: 0,
+    inscricoes: [],
+    competidores: [],
+    anunciosRecebidos: []
   };
   signUpButtonPressed: boolean = false;
   paisesDoMundo: any;
@@ -64,33 +69,39 @@ export class UserRegistrationComponent implements AfterViewInit {
 
   submitForm() {
     this.highlightRequiredFields(); // Certifica-se de que os campos obrigatórios são destacados antes de enviar o formulário
+
     // Verifica se o formulário é válido antes de enviar
-    this.userService.createUser(this.userData).subscribe(
-      response => {
-        console.log('Usuário cadastrado com sucesso:', response);
-        // Envie o e-mail de confirmação
-        // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
-        //   emailResponse => {
-        //     console.log('E-mail de confirmação enviado:', emailResponse);
-        //     this.router.navigate(['/email-confirmation']);
-        //   },
-        //   error => {
-        //     console.error('Erro ao enviar e-mail de confirmação:', error);
-        //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
-        //   }
-        // );
-      },
-      error => {
-        console.error('Erro ao cadastrar usuário:', error);
-        let errorMessage = 'Erro ao cadastrar usuário';
-        if (error.error && typeof error.error === 'string') {
-          errorMessage = error.error;
-          alert(errorMessage);
+    console.log('Form data:', this.userData); // Log para verificar os dados do formulário
+    if (this.form.valid) {
+
+      this.userService.createUser(this.userData).subscribe(
+        response => {
+          console.log('Usuário cadastrado com sucesso:', response);
+          // Envie o e-mail de confirmação
+          // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
+          //   emailResponse => {
+          //     console.log('E-mail de confirmação enviado:', emailResponse);
+          //     this.router.navigate(['/email-confirmation']);
+          //   },
+          //   error => {
+          //     console.error('Erro ao enviar e-mail de confirmação:', error);
+          //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
+          //   }
+          // );
+        },
+        error => {
+          console.error('Erro ao cadastrar usuário:', error);
+          if (error.error && typeof error.error === 'string') {
+            alert(error.error);
+          } else {
+            alert('Erro ao cadastrar usuário');
+            // Tratar erros de cadastro, exibir mensagens de erro, etc.
+          }
         }
-        alert(errorMessage);
-        // Tratar erros de cadastro, exibir mensagens de erro, etc.
-      }
-    );
+      );
+    } else {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+    }
   }
 
   // Função chamada quando o país selecionado é alterado
