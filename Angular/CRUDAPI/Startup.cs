@@ -29,6 +29,7 @@ namespace CRUDAPI
             services.AddScoped<ConviteCompetidorService>();
             services.AddScoped<ConviteService>();
             services.AddScoped<GeoNamesService>();
+            services.AddScoped<GerencianetService>();
             services.AddScoped<InscricaoService>();
             services.AddScoped<NotificacaoService>();
             services.AddScoped<PagamentoService>();

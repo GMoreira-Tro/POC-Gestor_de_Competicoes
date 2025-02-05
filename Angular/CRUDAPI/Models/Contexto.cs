@@ -22,6 +22,7 @@ namespace CRUDAPI.Models
         public DbSet<ConviteCompetidor> ConvitesCompetidores { get; set; }
         public DbSet<ContaCorrente> ContasCorrentes { get; set; }
         public DbSet<PagamentoContaCorrente> PagamentoContaCorrentes { get; set; }
+        public DbSet<PixPayment> PixPayments { get; set; }
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {
