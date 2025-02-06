@@ -18,15 +18,6 @@ namespace CRUDAPI.Models
         public long CategoriaId { get; set; }
         public virtual Categoria? Categoria { get; set; }
 
-        /// <summary>
-        /// Id do Usuário que requisitou a Inscrição de um de seus Competidores.
-        /// </summary>
-        [ForeignKey("Usuarios")]
-        public long UsuarioId { get; set; }
-        /// <summary>
-        /// Usuário que requisitou a Inscrição de um de seus Competidores.
-        /// </summary>
-        public virtual Usuario? Usuario { get; set; }
         [ForeignKey("Pagamentos")]
         public long PagamentoId { get; set; }
         public virtual Pagamento? Pagamento { get; set; }
@@ -50,6 +41,7 @@ namespace CRUDAPI.Models
         /// Indica se o inscrito deu WO.
         /// </summary>
         public bool WO { get; set; }
+        [ForeignKey("Premios")]
         /// <summary>
         /// Id do prêmio que essa Inscrição poderá resgatar ao final da sua participação na Competição.
         /// </summary>

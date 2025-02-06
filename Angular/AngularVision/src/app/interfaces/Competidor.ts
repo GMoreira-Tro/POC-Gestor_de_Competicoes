@@ -1,4 +1,3 @@
-import { ConviteCompetidor } from "./ConviteCompetidor";
 import { Usuario } from "./Usuario";
 
 /**
@@ -35,9 +34,4 @@ export interface Competidor {
      * User responsible for creating this competitor.
      */
     criador?: Usuario;
-
-    /**
-     * Collection of invitations associated with the competitor.
-     */
-    convitesCompetidor: ConviteCompetidor[];
 }

@@ -12,6 +12,10 @@ namespace CRUDAPI.Models
         [ForeignKey("Usuario")]
         public long UsuarioId { get; set; }
         public virtual Usuario? Usuario { get; set; }
+        /// <summary>
+        /// Indica se o usuario é o anunciante da notificação.
+        /// </summary>
+        public bool UsuarioAnunciante { get; set; }
 
         [ForeignKey("Notificacoes")]
         public long NotificacaoId { get; set; }

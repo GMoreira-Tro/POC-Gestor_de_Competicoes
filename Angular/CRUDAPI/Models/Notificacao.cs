@@ -32,10 +32,6 @@ namespace CRUDAPI.Models
         public DateTime DataPublicacao { get; set; }
         public DateTime? DataExpiracao { get; set; }
 
-        [ForeignKey("Usuarios")]
-        public long AnuncianteId { get; set; }
-        public virtual Usuario? Anunciante { get; set; }
-
         /// <summary>
         /// Imagem "rosto" da Notificação.
         /// </summary>

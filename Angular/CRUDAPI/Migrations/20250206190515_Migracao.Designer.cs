@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20250206173431_Migracao")]
+    [Migration("20250206190515_Migracao")]
     partial class Migracao
     {
         /// <inheritdoc />
@@ -154,103 +154,30 @@ namespace CRUDAPI.Migrations
 
             modelBuilder.Entity("CRUDAPI.Models.ConfrontoInscricao", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<long>("ConfrontoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("InscricaoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ConfrontoInscricaoPaiConfrontoId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ConfrontoInscricaoPaiId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ConfrontoInscricaoPaiInscricaoId")
+                    b.Property<long>("InscricaoId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.HasKey("Id");
 
-                    b.HasKey("ConfrontoId", "InscricaoId");
+                    b.HasIndex("ConfrontoId");
+
+                    b.HasIndex("ConfrontoInscricaoPaiId");
 
                     b.HasIndex("InscricaoId");
 
-                    b.HasIndex("ConfrontoInscricaoPaiConfrontoId", "ConfrontoInscricaoPaiInscricaoId");
-
                     b.ToTable("ConfrontoInscricao");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.ContaCorrente", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<decimal>("Saldo")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<long>("UsuarioId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("ContasCorrente");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.Convite", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("DataEnvio")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DataResposta")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Convites");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.ConviteCompetidor", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("CompetidorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ConviteId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompetidorId");
-
-                    b.HasIndex("ConviteId");
-
-                    b.ToTable("ConvitesCompetidores");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Inscricao", b =>
@@ -267,16 +194,13 @@ namespace CRUDAPI.Migrations
                     b.Property<long>("CompetidorId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PagamentoContaCorrenteId")
+                    b.Property<long>("PagamentoId")
                         .HasColumnType("bigint");
 
                     b.Property<int?>("Posição")
                         .HasColumnType("int");
 
                     b.Property<long?>("PremioResgatavelId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UsuarioId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("WO")
@@ -288,11 +212,9 @@ namespace CRUDAPI.Migrations
 
                     b.HasIndex("CompetidorId");
 
-                    b.HasIndex("PagamentoContaCorrenteId");
+                    b.HasIndex("PagamentoId");
 
                     b.HasIndex("PremioResgatavelId");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Inscricoes");
                 });
@@ -304,9 +226,6 @@ namespace CRUDAPI.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("AnuncianteId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("BannerImagem")
                         .HasColumnType("nvarchar(max)");
@@ -332,87 +251,9 @@ namespace CRUDAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnuncianteId");
-
                     b.HasIndex("PagamentoId");
 
                     b.ToTable("Notificacoes");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.Pagamento", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("AprovadorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DataRecebimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataRequisicao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Moeda")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Motivo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TipoPagamento")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TokenPagSeguro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Valor")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AprovadorId");
-
-                    b.ToTable("Pagamentos");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.PagamentoContaCorrente", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("ContaCorrenteId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("ContaCorrenteSolicitante")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Observacao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("PagamentoId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContaCorrenteId");
-
-                    b.HasIndex("PagamentoId");
-
-                    b.ToTable("PagamentoContasCorrente");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Premio", b =>
@@ -458,14 +299,14 @@ namespace CRUDAPI.Migrations
 
                     b.Property<string>("CpfCnpj")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmado")
                         .HasColumnType("bit");
@@ -487,7 +328,7 @@ namespace CRUDAPI.Migrations
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SenhaValidada")
                         .HasColumnType("bit");
@@ -497,15 +338,6 @@ namespace CRUDAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CpfCnpj")
-                        .IsUnique();
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("SenhaHash")
-                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });
@@ -527,6 +359,9 @@ namespace CRUDAPI.Migrations
                     b.Property<long>("NotificacaoId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("UsuarioAnunciante")
+                        .HasColumnType("bit");
+
                     b.Property<long>("UsuarioId")
                         .HasColumnType("bigint");
 
@@ -539,7 +374,7 @@ namespace CRUDAPI.Migrations
                     b.ToTable("UsuarioNotificacoes");
                 });
 
-            modelBuilder.Entity("PixPayment", b =>
+            modelBuilder.Entity("Pagamento", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -560,7 +395,7 @@ namespace CRUDAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PixPayments");
+                    b.ToTable("Pagamentos");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Categoria", b =>
@@ -579,7 +414,7 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Usuario", "CriadorUsuario")
                         .WithMany()
                         .HasForeignKey("CriadorUsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CriadorUsuario");
@@ -590,7 +425,7 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Usuario", "Criador")
                         .WithMany("Competidores")
                         .HasForeignKey("CriadorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Criador");
@@ -601,52 +436,24 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Confronto", "Confronto")
                         .WithMany("ConfrontoInscricoes")
                         .HasForeignKey("ConfrontoId")
-                        .IsRequired();
-
-                    b.HasOne("CRUDAPI.Models.Inscricao", "Inscricao")
-                        .WithMany("ConfrontoInscricoes")
-                        .HasForeignKey("InscricaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CRUDAPI.Models.ConfrontoInscricao", "ConfrontoInscricaoPai")
                         .WithMany()
-                        .HasForeignKey("ConfrontoInscricaoPaiConfrontoId", "ConfrontoInscricaoPaiInscricaoId");
+                        .HasForeignKey("ConfrontoInscricaoPaiId");
+
+                    b.HasOne("CRUDAPI.Models.Inscricao", "Inscricao")
+                        .WithMany("ConfrontoInscricoes")
+                        .HasForeignKey("InscricaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Confronto");
 
                     b.Navigation("ConfrontoInscricaoPai");
 
                     b.Navigation("Inscricao");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.ContaCorrente", b =>
-                {
-                    b.HasOne("CRUDAPI.Models.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.ConviteCompetidor", b =>
-                {
-                    b.HasOne("CRUDAPI.Models.Competidor", "Competidor")
-                        .WithMany("ConvitesCompetidor")
-                        .HasForeignKey("CompetidorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CRUDAPI.Models.Convite", "Convite")
-                        .WithMany("ConvitesCompetidor")
-                        .HasForeignKey("ConviteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Competidor");
-
-                    b.Navigation("Convite");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Inscricao", b =>
@@ -658,14 +465,14 @@ namespace CRUDAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("CRUDAPI.Models.Competidor", "Competidor")
-                        .WithMany()
+                        .WithMany("Inscricoes")
                         .HasForeignKey("CompetidorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CRUDAPI.Models.PagamentoContaCorrente", "PagamentoContaCorrente")
+                    b.HasOne("Pagamento", "Pagamento")
                         .WithMany()
-                        .HasForeignKey("PagamentoContaCorrenteId")
+                        .HasForeignKey("PagamentoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -673,73 +480,27 @@ namespace CRUDAPI.Migrations
                         .WithMany()
                         .HasForeignKey("PremioResgatavelId");
 
-                    b.HasOne("CRUDAPI.Models.Usuario", "Usuario")
-                        .WithMany("Inscricoes")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Categoria");
 
                     b.Navigation("Competidor");
 
-                    b.Navigation("PagamentoContaCorrente");
+                    b.Navigation("Pagamento");
 
                     b.Navigation("PremioResgatavel");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Notificacao", b =>
                 {
-                    b.HasOne("CRUDAPI.Models.Usuario", "Anunciante")
-                        .WithMany()
-                        .HasForeignKey("AnuncianteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CRUDAPI.Models.Pagamento", "Pagamento")
+                    b.HasOne("Pagamento", "Pagamento")
                         .WithMany()
                         .HasForeignKey("PagamentoId");
-
-                    b.Navigation("Anunciante");
-
-                    b.Navigation("Pagamento");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.Pagamento", b =>
-                {
-                    b.HasOne("CRUDAPI.Models.Usuario", "Aprovador")
-                        .WithMany()
-                        .HasForeignKey("AprovadorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aprovador");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.PagamentoContaCorrente", b =>
-                {
-                    b.HasOne("CRUDAPI.Models.ContaCorrente", "ContaCorrente")
-                        .WithMany("PagamentoContasCorrente")
-                        .HasForeignKey("ContaCorrenteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("CRUDAPI.Models.Pagamento", "Pagamento")
-                        .WithMany("PagamentoContasCorrente")
-                        .HasForeignKey("PagamentoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ContaCorrente");
 
                     b.Navigation("Pagamento");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Premio", b =>
                 {
-                    b.HasOne("CRUDAPI.Models.Pagamento", "Pagamento")
+                    b.HasOne("Pagamento", "Pagamento")
                         .WithMany()
                         .HasForeignKey("PagamentoId");
 
@@ -751,13 +512,13 @@ namespace CRUDAPI.Migrations
                     b.HasOne("CRUDAPI.Models.Notificacao", "Notificacao")
                         .WithMany("UsuariosAlvo")
                         .HasForeignKey("NotificacaoId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CRUDAPI.Models.Usuario", "Usuario")
                         .WithMany("AnunciosRecebidos")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Notificacao");
@@ -777,22 +538,12 @@ namespace CRUDAPI.Migrations
 
             modelBuilder.Entity("CRUDAPI.Models.Competidor", b =>
                 {
-                    b.Navigation("ConvitesCompetidor");
+                    b.Navigation("Inscricoes");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Confronto", b =>
                 {
                     b.Navigation("ConfrontoInscricoes");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.ContaCorrente", b =>
-                {
-                    b.Navigation("PagamentoContasCorrente");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.Convite", b =>
-                {
-                    b.Navigation("ConvitesCompetidor");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Inscricao", b =>
@@ -805,18 +556,11 @@ namespace CRUDAPI.Migrations
                     b.Navigation("UsuariosAlvo");
                 });
 
-            modelBuilder.Entity("CRUDAPI.Models.Pagamento", b =>
-                {
-                    b.Navigation("PagamentoContasCorrente");
-                });
-
             modelBuilder.Entity("CRUDAPI.Models.Usuario", b =>
                 {
                     b.Navigation("AnunciosRecebidos");
 
                     b.Navigation("Competidores");
-
-                    b.Navigation("Inscricoes");
                 });
 #pragma warning restore 612, 618
         }

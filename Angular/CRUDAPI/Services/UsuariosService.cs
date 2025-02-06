@@ -106,7 +106,6 @@ namespace CRUDAPI.Services
                 throw new CidadeNaoPertenceAoEstadoException(); // Indica que a cidade não pertence ao estado
             }
 
-            usuario.Inscricoes ??= [];
             return usuario;
         }
 
