@@ -26,13 +26,10 @@ namespace CRUDAPI
             services.AddScoped<CompetidorService>();
             services.AddScoped<ConfrontoInscricaoService>();
             services.AddScoped<ConfrontoService>();
-            services.AddScoped<ConviteCompetidorService>();
-            services.AddScoped<ConviteService>();
             services.AddScoped<GeoNamesService>();
             services.AddScoped<GerencianetService>();
             services.AddScoped<InscricaoService>();
             services.AddScoped<NotificacaoService>();
-            services.AddScoped<PagamentoService>();
             services.AddScoped<PremioService>();
             services.AddScoped<UsuarioNotificacaoService>();
             services.AddScoped<UsuarioService>();

@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("PixPayments")]
-public class PixPayment
+[Table("Pagamentos")]
+public class Pagamento
 {
     public long Id { get; set; }  // Chave primária
     /// <summary>

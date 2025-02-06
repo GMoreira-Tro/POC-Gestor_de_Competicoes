@@ -171,50 +171,50 @@ public class PixController : ControllerBase
     }
 
     [HttpGet("payments")]
-    public async Task<ActionResult<IEnumerable<PixPayment>>> GetPixPayments()
+    public async Task<ActionResult<IEnumerable<Pagamento>>> GetPagamentos()
     {
-        return await _context.PixPayments.ToListAsync();
+        return await _context.Pagamentos.ToListAsync();
     }
 
     [HttpGet("payments/{id}")]
-    public async Task<ActionResult<PixPayment>> GetPixPayment(long id)
+    public async Task<ActionResult<Pagamento>> GetPagamentos(long id)
     {
-        var pixPayment = await _context.PixPayments.FindAsync(id);
+        var pagamento = await _context.Pagamentos.FindAsync(id);
 
-        if (pixPayment == null)
+        if (pagamento == null)
         {
             return NotFound();
         }
 
-        return pixPayment;
+        return pagamento;
     }
 
     [HttpDelete("payments/{id}")]
-    public async Task<IActionResult> DeletePixPayment(long id)
+    public async Task<IActionResult> DeletePagamentos(long id)
     {
-        var payment = await _context.PixPayments.FindAsync(id);
+        var payment = await _context.Pagamentos.FindAsync(id);
         if (payment == null)
         {
             return NotFound();
         }
 
-        _context.PixPayments.Remove(payment);
+        _context.Pagamentos.Remove(payment);
         await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
     [HttpPost("payments/user")]
-    public async Task<IActionResult> RegistrarPagamentoPorUserId([FromBody] PixPayment payment)
+    public async Task<IActionResult> RegistrarPagamentoPorUserId([FromBody] Pagamento payment)
     {
         try
         {
             payment = await _gerencianetService.ValidarPagamento(payment);
             
-            _context.PixPayments.Add(payment);
+            _context.Pagamentos.Add(payment);
             await _context.SaveChangesAsync();
             
-            return CreatedAtAction(nameof(GetPixPayment), new { id = payment.Id }, payment);
+            return CreatedAtAction(nameof(GetPagamentos), new { id = payment.Id }, payment);
         }
         catch (Exception ex)
         {
@@ -225,7 +225,7 @@ public class PixController : ControllerBase
     [HttpGet("payments/user/{userId}")]
     public async Task<IActionResult> GetUserPayments(int userId)
     {
-        var payments = await _context.PixPayments
+        var payments = await _context.Pagamentos
             .Where(p => p.UserId == userId)
             .ToListAsync();
 

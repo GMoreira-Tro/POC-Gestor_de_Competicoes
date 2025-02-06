@@ -23,10 +23,10 @@ public class PixWebhookController : ControllerBase
         }
 
         // Pegamos os dados do primeiro pagamento recebido no webhook
-        var pixPayment = notification.pix.First();
-        var txid = pixPayment.txid;
-        var status = pixPayment.status; // Provavelmente será "CONCLUIDO"
-        var userId = pixPayment.userId;
+        var pagamento = notification.pix.First();
+        var txid = pagamento.txid;
+        var status = pagamento.status; // Provavelmente será "CONCLUIDO"
+        var userId = pagamento.userId;
 
         _logger.LogInformation($"Pagamento recebido. Txid: {txid}, Status: {status}, User Id: {userId}");
 

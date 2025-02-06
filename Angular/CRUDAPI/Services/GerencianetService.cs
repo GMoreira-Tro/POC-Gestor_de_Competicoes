@@ -265,16 +265,16 @@ public class GerencianetService
 
     public async Task UpdatePaymentStatus(string txid, string status, int userId)
     {
-        var payment = await _context.PixPayments.FirstOrDefaultAsync(p => p.Txid == txid);
+        var payment = await _context.Pagamentos.FirstOrDefaultAsync(p => p.Txid == txid);
 
         if (payment == null)
         {
-            payment = new PixPayment
+            payment = new Pagamento
             {
                 Txid = txid,
                 UserId = userId,  // Salva o ID do usuário!
             };
-            _context.PixPayments.Add(payment);
+            _context.Pagamentos.Add(payment);
         }
         else
         {
@@ -393,10 +393,10 @@ public class GerencianetService
         return response.Content;
     }
 
-    public async Task<PixPayment> ValidarPagamento(PixPayment payment)
+    public async Task<Pagamento> ValidarPagamento(Pagamento payment)
     {
         await ConsultaPixPorTxId(payment.Txid);
-        var existingPayment = await _context.PixPayments.FirstOrDefaultAsync(p => p.Txid == payment.Txid);
+        var existingPayment = await _context.Pagamentos.FirstOrDefaultAsync(p => p.Txid == payment.Txid);
 
         if (existingPayment != null)
         {
