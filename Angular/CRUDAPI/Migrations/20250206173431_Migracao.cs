@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CRUDAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class NomeDaMigration : Migration
+    public partial class Migracao : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,6 +43,21 @@ namespace CRUDAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PixPayments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Txid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    InfoPagamento = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PixPayments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
@@ -64,6 +79,35 @@ namespace CRUDAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuarios", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Competicoes",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Modalidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Pais = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BannerImagem = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CriadorUsuarioId = table.Column<long>(type: "bigint", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Competicoes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Competicoes_Usuarios_CriadorUsuarioId",
+                        column: x => x.CriadorUsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -136,6 +180,27 @@ namespace CRUDAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categorias",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompeticaoId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categorias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categorias_Competicoes_CompeticaoId",
+                        column: x => x.CompeticaoId,
+                        principalTable: "Competicoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ConvitesCompetidores",
                 columns: table => new
                 {
@@ -159,54 +224,6 @@ namespace CRUDAPI.Migrations
                         principalTable: "Convites",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Competicoes",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Modalidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Pais = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BannerImagem = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompeticaoAberta = table.Column<bool>(type: "bit", nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CriadorUsuarioId = table.Column<long>(type: "bigint", nullable: false),
-                    ConviteNecessarioId = table.Column<long>(type: "bigint", nullable: true),
-                    PagamentoId = table.Column<long>(type: "bigint", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    CompeticaoId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Competicoes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Competicoes_Competicoes_CompeticaoId",
-                        column: x => x.CompeticaoId,
-                        principalTable: "Competicoes",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Competicoes_Convites_ConviteNecessarioId",
-                        column: x => x.ConviteNecessarioId,
-                        principalTable: "Convites",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Competicoes_Pagamentos_PagamentoId",
-                        column: x => x.PagamentoId,
-                        principalTable: "Pagamentos",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Competicoes_Usuarios_CriadorUsuarioId",
-                        column: x => x.CriadorUsuarioId,
-                        principalTable: "Usuarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -287,27 +304,6 @@ namespace CRUDAPI.Migrations
                         column: x => x.PagamentoId,
                         principalTable: "Pagamentos",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Categorias",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompeticaoId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categorias", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Categorias_Competicoes_CompeticaoId",
-                        column: x => x.CompeticaoId,
-                        principalTable: "Competicoes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -423,24 +419,9 @@ namespace CRUDAPI.Migrations
                 column: "CompeticaoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Competicoes_CompeticaoId",
-                table: "Competicoes",
-                column: "CompeticaoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Competicoes_ConviteNecessarioId",
-                table: "Competicoes",
-                column: "ConviteNecessarioId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Competicoes_CriadorUsuarioId",
                 table: "Competicoes",
                 column: "CriadorUsuarioId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Competicoes_PagamentoId",
-                table: "Competicoes",
-                column: "PagamentoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Competidores_CriadorId",
@@ -566,6 +547,9 @@ namespace CRUDAPI.Migrations
                 name: "ConvitesCompetidores");
 
             migrationBuilder.DropTable(
+                name: "PixPayments");
+
+            migrationBuilder.DropTable(
                 name: "UsuarioNotificacoes");
 
             migrationBuilder.DropTable(
@@ -573,6 +557,9 @@ namespace CRUDAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Inscricoes");
+
+            migrationBuilder.DropTable(
+                name: "Convites");
 
             migrationBuilder.DropTable(
                 name: "Notificacoes");
@@ -594,9 +581,6 @@ namespace CRUDAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "ContasCorrente");
-
-            migrationBuilder.DropTable(
-                name: "Convites");
 
             migrationBuilder.DropTable(
                 name: "Pagamentos");

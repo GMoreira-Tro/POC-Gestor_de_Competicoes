@@ -6,6 +6,5 @@ export interface Categoria {
     nome: string;
     descricao: string;
     competicaoId: number;
-    competicao: Competicao;
     inscricoes: Inscricao[];
   }

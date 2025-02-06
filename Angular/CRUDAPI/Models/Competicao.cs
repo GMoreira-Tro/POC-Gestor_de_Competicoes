@@ -46,11 +46,6 @@ namespace CRUDAPI.Models
         /// Imagem "rosto" da competição.
         /// </summary>
         public string? BannerImagem { get; set; }
-        /// <summary>
-        /// Indica se a Competição depende de um Convite para suas Inscrições.
-        /// </summary>
-        public bool CompeticaoAberta { get; set; }
-
         [Required]
         public DateTime DataInicio { get; set; }
 
@@ -65,30 +60,9 @@ namespace CRUDAPI.Models
         /// Usuário que criou a Competição.
         /// </summary>
         public virtual Usuario? CriadorUsuario { get; set; }
-        /// <summary>
-        /// Id do Convite necessário para uma Inscrição entrar nessa Competição.
-        /// </summary>
-        [ForeignKey("Convites")]
-        public long? ConviteNecessarioId { get; set; }
-        /// <summary>
-        /// Convite necessário para uma Inscrição entrar nessa Competição.
-        /// </summary>
-        public virtual Convite? ConviteNecessario  { get; set; }
-
-        public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
-
-        /// <summary>
-        /// Lista de etapas diretamente anteriores desta Competição. Exemplo: Se estamos na Competição
-        /// "Campeonato Brasileiro", podemos popular esta lista com as Competições "Campeonato Gaúcho",
-        /// "Campeonato Paulista", "Campeonato Mineiro"...
-        /// </summary>
-        public ICollection<Competicao> EtapasAnteriores { get; set; } = new List<Competicao>();
-        //Vai ser útil para filtrarmos resultados de etapas anteriores e gerarmos Convites de acordo 
-        //com os classificados.
-
-        public long? PagamentoId { get; set; }
-        public virtual Pagamento? Pagamento { get; set; }
-        [EnumDataType(typeof(Status))]
+        
+        [EnumDataType(typeof(StatusCompeticao))]
         public StatusCompeticao Status { get; set; }
+        public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
     }
 }

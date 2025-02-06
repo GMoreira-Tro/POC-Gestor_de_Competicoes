@@ -61,15 +61,6 @@ namespace CRUDAPI.Migrations
                     b.Property<string>("Cidade")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("CompeticaoAberta")
-                        .HasColumnType("bit");
-
-                    b.Property<long?>("CompeticaoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ConviteNecessarioId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("CriadorUsuarioId")
                         .HasColumnType("bigint");
 
@@ -89,9 +80,6 @@ namespace CRUDAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("PagamentoId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Pais")
                         .HasColumnType("nvarchar(max)");
 
@@ -104,13 +92,7 @@ namespace CRUDAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompeticaoId");
-
-                    b.HasIndex("ConviteNecessarioId");
-
                     b.HasIndex("CriadorUsuarioId");
-
-                    b.HasIndex("PagamentoId");
 
                     b.ToTable("Competicoes");
                 });
@@ -591,29 +573,13 @@ namespace CRUDAPI.Migrations
 
             modelBuilder.Entity("CRUDAPI.Models.Competicao", b =>
                 {
-                    b.HasOne("CRUDAPI.Models.Competicao", null)
-                        .WithMany("EtapasAnteriores")
-                        .HasForeignKey("CompeticaoId");
-
-                    b.HasOne("CRUDAPI.Models.Convite", "ConviteNecessario")
-                        .WithMany()
-                        .HasForeignKey("ConviteNecessarioId");
-
                     b.HasOne("CRUDAPI.Models.Usuario", "CriadorUsuario")
                         .WithMany()
                         .HasForeignKey("CriadorUsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CRUDAPI.Models.Pagamento", "Pagamento")
-                        .WithMany()
-                        .HasForeignKey("PagamentoId");
-
-                    b.Navigation("ConviteNecessario");
-
                     b.Navigation("CriadorUsuario");
-
-                    b.Navigation("Pagamento");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Competidor", b =>
@@ -804,8 +770,6 @@ namespace CRUDAPI.Migrations
             modelBuilder.Entity("CRUDAPI.Models.Competicao", b =>
                 {
                     b.Navigation("Categorias");
-
-                    b.Navigation("EtapasAnteriores");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Competidor", b =>
