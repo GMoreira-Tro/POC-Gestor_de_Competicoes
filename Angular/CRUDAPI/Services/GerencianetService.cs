@@ -393,6 +393,19 @@ public class GerencianetService
         return response.Content;
     }
 
+    public async Task<PixPayment> ValidarPagamento(PixPayment payment)
+    {
+        await ConsultaPixPorTxId(payment.Txid);
+        var existingPayment = await _context.PixPayments.FirstOrDefaultAsync(p => p.Txid == payment.Txid);
+
+        if (existingPayment != null)
+        {
+            throw new Exception("Já existe um pagamento com este TXID.");
+        }
+
+        return payment;
+    }
+
     public async Task<string> ConsultaLocationPorLocId(string locId)
     {
         var baseUrl = _configuration["Gerencianet:BaseUrl"];

@@ -5,6 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class PixPayment
 {
     public long Id { get; set; }  // Chave primária
-    public string Txid { get; set; }  // Identificador único da transação
-    public int UserId { get; set; }  // ID do usuário que fez o pagamento
+    /// <summary>
+    /// Identificador unico da transação.
+    /// </summary>
+    public string Txid { get; set; }
+    /// <summary>
+    /// Id do usuário que realizou o pagamento.
+    /// </summary>
+    public int UserId { get; set; }
+    /// <summary>
+    /// Informações sobre o pagamento.
+    /// </summary>
+    public string InfoPagamento { get; set; }
 }

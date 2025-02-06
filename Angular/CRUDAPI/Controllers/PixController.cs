@@ -209,7 +209,7 @@ public class PixController : ControllerBase
     {
         try
         {
-            await _gerencianetService.ConsultaPixPorTxId(payment.Txid);
+            payment = await _gerencianetService.ValidarPagamento(payment);
             
             _context.PixPayments.Add(payment);
             await _context.SaveChangesAsync();
