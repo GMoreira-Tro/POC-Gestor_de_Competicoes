@@ -54,7 +54,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
             }
             catch (Exception ex)
             {
-                return BadRequest($"Erro ao salvar a competição: {ex.InnerException?.Message}");
+                return BadRequest(ex.Message);
             }
         }
 

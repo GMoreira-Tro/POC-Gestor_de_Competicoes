@@ -22,15 +22,8 @@ namespace CRUDAPI.Models
         public long PagamentoId { get; set; }
         public virtual Pagamento? Pagamento { get; set; }
 
-        //TODO: Pensar em tela pro front-end de cadastrar Competidores de um Usuário
-        /// <summary>
-        /// Id do Atleta ou Clube que efetivamente irá competir.
-        /// </summary>
         [ForeignKey("Competidores")]
         public long CompetidorId { get; set; }
-        /// <summary>
-        /// Atleta ou Clube que efetivamente irá competir.
-        /// </summary>
         public virtual Competidor? Competidor { get; set; }
         /// <summary>
         /// Número da Posição após o término da participação da Inscrição. 

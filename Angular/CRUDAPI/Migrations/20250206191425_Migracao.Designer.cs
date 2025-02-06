@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20250206190515_Migracao")]
+    [Migration("20250206191425_Migracao")]
     partial class Migracao
     {
         /// <inheritdoc />
@@ -194,6 +194,9 @@ namespace CRUDAPI.Migrations
                     b.Property<long>("CompetidorId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("CompetidorId1")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("PagamentoId")
                         .HasColumnType("bigint");
 
@@ -211,6 +214,8 @@ namespace CRUDAPI.Migrations
                     b.HasIndex("CategoriaId");
 
                     b.HasIndex("CompetidorId");
+
+                    b.HasIndex("CompetidorId1");
 
                     b.HasIndex("PagamentoId");
 
@@ -465,10 +470,14 @@ namespace CRUDAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("CRUDAPI.Models.Competidor", "Competidor")
-                        .WithMany("Inscricoes")
+                        .WithMany()
                         .HasForeignKey("CompetidorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("CRUDAPI.Models.Competidor", null)
+                        .WithMany("Inscricoes")
+                        .HasForeignKey("CompetidorId1");
 
                     b.HasOne("Pagamento", "Pagamento")
                         .WithMany()

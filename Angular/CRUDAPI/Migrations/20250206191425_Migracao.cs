@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CRUDAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Migracao2 : Migration
+    public partial class Migracao : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -222,7 +222,8 @@ namespace CRUDAPI.Migrations
                     CompetidorId = table.Column<long>(type: "bigint", nullable: false),
                     Posição = table.Column<int>(type: "int", nullable: true),
                     WO = table.Column<bool>(type: "bit", nullable: false),
-                    PremioResgatavelId = table.Column<long>(type: "bigint", nullable: true)
+                    PremioResgatavelId = table.Column<long>(type: "bigint", nullable: true),
+                    CompetidorId1 = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -238,7 +239,12 @@ namespace CRUDAPI.Migrations
                         column: x => x.CompetidorId,
                         principalTable: "Competidores",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Inscricoes_Competidores_CompetidorId1",
+                        column: x => x.CompetidorId1,
+                        principalTable: "Competidores",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Inscricoes_Pagamentos_PagamentoId",
                         column: x => x.PagamentoId,
@@ -323,6 +329,11 @@ namespace CRUDAPI.Migrations
                 name: "IX_Inscricoes_CompetidorId",
                 table: "Inscricoes",
                 column: "CompetidorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inscricoes_CompetidorId1",
+                table: "Inscricoes",
+                column: "CompetidorId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inscricoes_PagamentoId",

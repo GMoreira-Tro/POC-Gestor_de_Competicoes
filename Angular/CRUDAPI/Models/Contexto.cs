@@ -29,6 +29,11 @@ namespace CRUDAPI.Models
         /// <param name="modelBuilder">Construtor do modelo de relacionamento entre tabelas.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Inscricao>()
+                .HasOne(i => i.Competidor)
+                .WithMany()
+                .HasForeignKey(i => i.CompetidorId)
+                .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
         }
 
