@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20250206191425_Migracao")]
+    [Migration("20250207185247_Migracao")]
     partial class Migracao
     {
         /// <inheritdoc />
@@ -387,16 +387,19 @@ namespace CRUDAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("FavorecidoId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("InfoPagamento")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("PagadorId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Txid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -12,7 +12,14 @@ public class Pagamento
     /// <summary>
     /// Id do usuário que realizou o pagamento.
     /// </summary>
-    public int UserId { get; set; }
+    [ForeignKey("Usuarios")]
+    public long PagadorId { get; set; }
+
+    /// <summary>
+    /// Id do usuário que recebeu o pagamento.
+    /// </summary>
+    [ForeignKey("Usuarios")]
+    public long FavorecidoId { get; set; }
     /// <summary>
     /// Informações sobre o pagamento.
     /// </summary>

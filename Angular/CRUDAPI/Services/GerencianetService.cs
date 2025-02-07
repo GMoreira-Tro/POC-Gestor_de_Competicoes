@@ -272,7 +272,7 @@ public class GerencianetService
             payment = new Pagamento
             {
                 Txid = txid,
-                UserId = userId,  // Salva o ID do usuário!
+                PagadorId = userId,  // Salva o ID do usuário!
             };
             _context.Pagamentos.Add(payment);
         }

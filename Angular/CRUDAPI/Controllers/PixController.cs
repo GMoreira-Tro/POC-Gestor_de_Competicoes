@@ -226,7 +226,7 @@ public class PixController : ControllerBase
     public async Task<IActionResult> GetUserPayments(int userId)
     {
         var payments = await _context.Pagamentos
-            .Where(p => p.UserId == userId)
+            .Where(p => p.PagadorId == userId)
             .ToListAsync();
 
         return Ok(payments);

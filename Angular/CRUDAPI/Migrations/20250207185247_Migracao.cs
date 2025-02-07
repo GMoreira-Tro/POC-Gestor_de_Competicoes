@@ -33,7 +33,8 @@ namespace CRUDAPI.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Txid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PagadorId = table.Column<long>(type: "bigint", nullable: false),
+                    FavorecidoId = table.Column<long>(type: "bigint", nullable: false),
                     InfoPagamento = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
