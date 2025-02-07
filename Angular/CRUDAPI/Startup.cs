@@ -36,10 +36,10 @@ namespace CRUDAPI
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAnyOrigin",
-                    builder =>
+                options.AddPolicy("AllowSpecificOrigin",
+                    policy =>
                     {
-                        builder.AllowAnyOrigin()
+                        policy.WithOrigins("http://localhost:4200")
                                .AllowAnyMethod()
                                .AllowAnyHeader();
                     });
@@ -66,6 +66,7 @@ namespace CRUDAPI
             app.UseRouting();
 
             app.UseCors(opcoes => opcoes.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthorization();
 

@@ -12,7 +12,7 @@ namespace CRUDAPI.Models
         Cancelada
     };
     /// <summary>
-    /// Evento competitivo de alguma Modalidade divulgado por um Usuário. Pode ser dividido em múltiplas etapas.
+    /// Evento competitivo de alguma Modalidade divulgado por um Usuário.
     /// </summary>
     [Table("Competicoes")]
     public class Competicao

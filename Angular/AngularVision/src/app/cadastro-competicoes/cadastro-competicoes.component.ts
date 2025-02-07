@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Competicao } from '../interfaces/Competicao';
 import { Categoria } from '../interfaces/Categoria';
 import { CompeticaoService } from '../services/competicao.service';
 import { CategoriaService } from '../services/categoria.service';
-import { HttpClient } from '@angular/common/http';
+import { GeoNamesService } from '../services/geonames.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-cadastro-competicoes',
@@ -12,7 +12,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./cadastro-competicoes.component.css']
 })
 export class CadastroCompeticoesComponent implements OnInit {
-
+  @ViewChild('form') form!: NgForm;
+  
   competicao: Competicao = {
     titulo: '',
     descricao: '',
@@ -25,14 +26,36 @@ export class CadastroCompeticoesComponent implements OnInit {
     id: 0,
     dataInicio: new Date(),
     dataFim: new Date(),
-    criadorUsuarioId: 0,  // Ajustar depois para o ID do usuário logado
+    criadorUsuarioId: 1,  // Ajustar depois para o ID do usuário logado
     status: 0
   };
 
-  constructor(private competicaoService: CompeticaoService, private categoriaService: CategoriaService,
-    private router: Router, private http: HttpClient) { }
+  listaPaises: any;
+  listaEstados: any;
+  listaCidades: any;
+value: any;
 
-  ngOnInit(): void { }
+  constructor(private competicaoService: CompeticaoService, private categoriaService: CategoriaService,
+    private geonamesService: GeoNamesService,
+    private cdr: ChangeDetectorRef) { }
+
+  ngOnInit(): void {
+    // Inicializa o formulário após a exibição da visualização do componente
+    setTimeout(() => {
+      //this.form.control.markAsTouched();
+      this.cdr.detectChanges(); // Detecta as alterações manualmente após a inicialização do formulário
+    });
+
+    // Carrega a lista de países do mundo
+    this.geonamesService.getAllCountries().subscribe(
+      paises => {
+        this.listaPaises = paises;
+        this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos países
+      },
+      error => {
+        console.error('Erro ao obter a lista de países:', error);
+      });
+   }
 
   onSubmit(): void {
     if (this.competicao.categorias.length === 0)
@@ -46,7 +69,9 @@ export class CadastroCompeticoesComponent implements OnInit {
       this.competicao.categorias.forEach(categoria => 
         {
           categoria.competicaoId = novaCompeticao.id;
-          this.categoriaService.createCategoria(categoria).subscribe();
+          this.categoriaService.createCategoria(categoria).subscribe(
+            () => {}, error => console.log("Erro ao criar categoria: ", error)
+          );
         });
     }, (error) => {
         console.log("Erro ao criar competição: ", error);
@@ -75,19 +100,55 @@ export class CadastroCompeticoesComponent implements OnInit {
 
     // Função que chama a API do GeoNames para buscar Estado e Cidade com base no País
     buscarEstadoCidade(): void {
-      const pais = this.competicao.pais;
-  
-      if (pais) {
-        this.http.get(`http://api.geonames.org/searchJSON?name_equals=${pais}&maxRows=10000&username=Guiru`)
-          .subscribe((response: any) => {
-            if (response.geonames && response.geonames.length > 0) {
-              const local = response.geonames[0]; // Pega o primeiro local encontrado
-              this.competicao.estado = local.adminName1; // Estado
-              this.competicao.cidade = local.name; // Cidade
-            }
-          }, (error) => {
-            console.error('Erro ao buscar localização:', error);
-          });
-      }
+      this.geonamesService.getAllCountries().subscribe(paises => {
+        this.listaPaises = paises;
+      });
     }
+
+    // Função chamada quando o país selecionado é alterado
+  onCountryChange() {
+    // Limpa a lista de estados
+    this.listaEstados = [];
+    this.listaCidades = [];
+
+    // Obtém os estados/províncias do país selecionado
+    const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.competicao.pais);
+    if (!pais) return;
+
+    this.geonamesService.getStatesByCountry(pais.geonameId).subscribe(
+      (estados: any) => {
+        // Extrai os nomes dos estados/províncias da resposta
+        this.listaEstados = estados;
+        console.log(this.listaEstados.geonames);
+        this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos estados
+      },
+      error => {
+        console.error('Erro ao obter os estados/províncias:', error);
+        // Trate o erro conforme necessário
+      }
+    );
+  }
+
+  // Função chamada quando o estado selecionado é alterado
+  onStateChange() {
+    // Limpa a lista de cidades
+    this.listaCidades = [];
+
+    // Obtém as cidades do estado selecionado
+    const estado = this.listaEstados?.geonames.find((state: any) => state.name === this.competicao.estado);
+    if (!estado) return;
+
+    this.geonamesService.getCitiesByState(estado.geonameId).subscribe(
+      (cidades: any) => {
+        // Extrai os nomes das cidades da resposta
+        this.listaCidades = cidades;
+        console.log(this.listaCidades.geonames);
+        this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção das cidades
+      },
+      error => {
+        console.error('Erro ao obter as cidades:', error);
+        // Trate o erro conforme necessário
+      }
+    );
+  }
 }
