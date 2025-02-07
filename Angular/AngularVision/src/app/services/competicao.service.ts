@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Competicao } from '../interfaces/Competicao';
 
@@ -29,5 +29,10 @@ export class CompeticaoService {
 
   deleteCompeticao(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  buscarCompeticoes(filtro: any): Observable<Competicao[]> {
+    const params = new HttpParams({ fromObject: filtro });
+    return this.http.get<Competicao[]>(`${this.baseUrl}/buscar`, { params });
   }
 }

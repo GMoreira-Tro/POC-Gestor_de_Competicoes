@@ -108,5 +108,43 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
 
             return competicao;
         }
+
+                    [HttpGet("buscar")]
+        public async Task<IActionResult> BuscarCompeticoes(
+            [FromQuery] string? titulo,
+            [FromQuery] string? modalidade,
+            [FromQuery] string? descricao,
+            [FromQuery] string? pais,
+            [FromQuery] string? estado,
+            [FromQuery] string? cidade)
+        {
+            var competicoesResult = await GetCompeticoes();
+            var competicoes = competicoesResult.Value;
+
+            if(competicoes == null)
+            {
+                return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(titulo))
+                competicoes = competicoes.Where(c => c.Titulo.Contains(titulo)).ToList();
+
+            if (!string.IsNullOrEmpty(modalidade))
+                competicoes = competicoes.Where(c => c.Modalidade.Contains(modalidade)).ToList();
+
+            if (!string.IsNullOrEmpty(descricao))
+                competicoes = competicoes.Where(c => c.Descricao.Contains(descricao)).ToList();
+
+            if (!string.IsNullOrEmpty(pais))
+                competicoes = competicoes.Where(c => c.Pais == pais).ToList();
+
+            if (!string.IsNullOrEmpty(estado))
+                competicoes = competicoes.Where(c => c.Estado == estado).ToList();
+
+            if (!string.IsNullOrEmpty(cidade))
+                competicoes = competicoes.Where(c => c.Cidade == cidade).ToList();
+
+            return Ok(competicoes);
+        }
     }
 }
