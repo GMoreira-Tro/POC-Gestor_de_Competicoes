@@ -18,6 +18,8 @@ import { RodapeComponent } from './rodape/rodape.component';
 import { CadastroCompeticoesComponent } from './cadastro-competicoes/cadastro-competicoes.component';
 
 import { UserService } from './services/user.service';
+import { MinhasCompeticoesComponent } from './minhas-competicoes/minhas-competicoes.component';
+import { EditarCompeticaoComponent } from './editar-competicao/editar-competicao.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { UserService } from './services/user.service';
     LoginComponent,
     TelaInicialComponent,
     BuscaCompeticoesComponent,
+    MinhasCompeticoesComponent,
     CadastroCompeticoesComponent,
+    EditarCompeticaoComponent,
     CabecalhoComponent,
     RodapeComponent
   ],

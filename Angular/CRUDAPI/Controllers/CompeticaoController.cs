@@ -109,7 +109,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
             return competicao;
         }
 
-                    [HttpGet("buscar")]
+        [HttpGet("buscar")]
         public async Task<IActionResult> BuscarCompeticoes(
             [FromQuery] string? titulo,
             [FromQuery] string? modalidade,
@@ -127,13 +127,13 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
             }
 
             if (!string.IsNullOrEmpty(titulo))
-                competicoes = competicoes.Where(c => c.Titulo.Contains(titulo)).ToList();
+                competicoes = competicoes.Where(c => c.Titulo.ToLower().Contains(titulo.ToLower())).ToList();
 
             if (!string.IsNullOrEmpty(modalidade))
-                competicoes = competicoes.Where(c => c.Modalidade.Contains(modalidade)).ToList();
+                competicoes = competicoes.Where(c => c.Modalidade.ToLower().Contains(modalidade.ToLower())).ToList();
 
             if (!string.IsNullOrEmpty(descricao))
-                competicoes = competicoes.Where(c => c.Descricao.Contains(descricao)).ToList();
+                competicoes = competicoes.Where(c => c.Descricao.ToLower().Contains(descricao.ToLower())).ToList();
 
             if (!string.IsNullOrEmpty(pais))
                 competicoes = competicoes.Where(c => c.Pais == pais).ToList();
@@ -145,6 +145,13 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
                 competicoes = competicoes.Where(c => c.Cidade == cidade).ToList();
 
             return Ok(competicoes);
+        }
+
+        // GET: api/Competicao/5
+        [HttpGet("buscar-do-usuario/{userId}")]
+        public async Task<ActionResult<IEnumerable<Competicao>>> GetCompeticaoPeloUsuario(long userId)
+        {
+            return await _contexto.Competicoes.Where(competicao => competicao.CriadorUsuarioId == userId).ToListAsync();
         }
     }
 }

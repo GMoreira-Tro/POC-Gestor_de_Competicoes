@@ -10,7 +10,7 @@ import { GeoNamesService } from '../services/geonames.service';
 })
 export class BuscaCompeticoesComponent implements OnInit {
   filtro: any = {
-    nome: '',
+    titulo: '',
     modalidade: '',
     descricao: '',
     pais: '',

@@ -40,6 +40,16 @@ export class CabecalhoComponent implements OnInit {
     }
   }
 
+  minhasCompeticoes(): void {
+    if (!this.usuarioLogado()) {
+      this.router.navigate(['/login']);
+    } else if (this.router.url === '/minhas-competicoes') {
+      this.router.navigate(['']);
+    } else {
+      this.router.navigate(['/minhas-competicoes']);
+    }
+  }
+
   private usuarioLogado(): boolean {
     // Implemente sua lógica para verificar se o usuário está logado aqui
     return true; // Exemplo simples - substitua por sua lógica real

@@ -1,0 +1,15 @@
+<!-- Cabeçalho -->
+<app-cabecalho></app-cabecalho>
+
+<div class="minhas-competicoes">
+    <h2>Minhas Competições</h2>
+    <div *ngFor="let competicao of minhasCompeticoes">
+        <h3>{{ competicao.nome }}</h3>
+        <p>{{ competicao.modalidade }} - {{ competicao.cidade }}, {{ competicao.estado }}</p>
+        <button (click)="editarCompeticao(competicao.id)">Editar</button>
+        <button (click)="excluirCompeticao(competicao.id)">Excluir</button>
+    </div>
+</div>
+
+
+<app-rodape></app-rodape>

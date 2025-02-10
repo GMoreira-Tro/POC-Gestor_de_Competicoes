@@ -3,22 +3,22 @@
 
 <!-- Formulário de busca -->
 <div class="search-form">
-    <input type="text" placeholder="Nome da Competição" [(ngModel)]="filtro.nome">
+    <input type="text" placeholder="Nome da Competição" [(ngModel)]="filtro.titulo">
     <input type="text" placeholder="Modalidade" [(ngModel)]="filtro.modalidade">
     <input type="text" placeholder="Descrição" [(ngModel)]="filtro.descricao">
     
     <select [(ngModel)]="filtro.pais" (change)="onCountryChange()">
-        <option value=""></option>
+        <option value="">Selecione o país</option>
         <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
     </select>
 
     <select [(ngModel)]="filtro.estado" (change)="onStateChange()">
-        <option value=""></option>
+        <option value="">Selecione o estado</option>
         <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
     </select>
 
     <select [(ngModel)]="filtro.cidade">
-        <option value=""></option>
+        <option value="">Selecione a cidade</option>
         <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
     </select>
 
@@ -28,7 +28,7 @@
 <!-- Lista de competições -->
 <div class="competition-list">
     <div *ngFor="let competicao of competicoes">
-        <h3>{{ competicao.nome }}</h3>
+        <h3>{{ competicao.titulo }}</h3>
         <p><strong>Modalidade:</strong> {{ competicao.modalidade }}</p>
         <p><strong>Descrição:</strong> {{ competicao.descricao }}</p>
         <p><strong>Localização:</strong> {{ competicao.cidade }}, {{ competicao.estado }}, {{ competicao.pais }}</p>

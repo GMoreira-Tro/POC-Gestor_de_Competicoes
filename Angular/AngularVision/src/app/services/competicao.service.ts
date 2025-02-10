@@ -35,4 +35,8 @@ export class CompeticaoService {
     const params = new HttpParams({ fromObject: filtro });
     return this.http.get<Competicao[]>(`${this.baseUrl}/buscar`, { params });
   }
+
+  buscarCompeticoesDoUsuario(userId: number): Observable<Competicao[]> {
+    return this.http.get<Competicao[]>(`${this.baseUrl}/buscar-do-usuario/${userId}`);
+  }
 }
