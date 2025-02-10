@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { Categoria } from '../interfaces/Categoria';
 
 @Injectable({
@@ -13,37 +12,25 @@ export class CategoriaService {
   constructor(private http: HttpClient) { }
 
   getCategorias(): Observable<Categoria[]> {
-    return this.http.get<Categoria[]>(`${this.baseUrl}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Categoria[]>(`${this.baseUrl}`);
   }
 
   getCategoria(id: number): Observable<Categoria> {
-    return this.http.get<Categoria>(`${this.baseUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Categoria>(`${this.baseUrl}/${id}`);
   }
 
+  getCategoriasPorCompeticao(idCompeticao: number): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${this.baseUrl}/buscar-de-competicao/${idCompeticao}`);
+  }
   createCategoria(user: Categoria): Observable<Categoria> {
-    return this.http.post<Categoria>(`${this.baseUrl}`, user).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<Categoria>(`${this.baseUrl}`, user);
   }
 
   updateCategoria(id: number, categoria: Categoria): Observable<Categoria> {
-    return this.http.put<Categoria>(`${this.baseUrl}/${id}`, categoria).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.put<Categoria>(`${this.baseUrl}/${id}`, categoria);
   }
 
   deleteCategoria(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  private handleError(error: any) {
-    console.error('Erro:', error);
-    return throwError(error);
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }

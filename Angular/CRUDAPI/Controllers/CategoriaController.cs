@@ -110,5 +110,21 @@ namespace CRUDAPI.Controller
 
             return NoContent();
         }
+
+         // GET: api/Categoria/competicao/5
+        [HttpGet("buscar-de-competicao/{competicaoId}")]
+        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategoriasByCompeticaoId(long competicaoId)
+        {
+            var categorias = await _contexto.Categorias
+                .Where(c => c.CompeticaoId == competicaoId)
+                .ToListAsync();
+
+            if (categorias == null || categorias.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return categorias;
+        }
     }
 }
