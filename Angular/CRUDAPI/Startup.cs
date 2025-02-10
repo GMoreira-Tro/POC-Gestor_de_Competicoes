@@ -32,6 +32,7 @@ namespace CRUDAPI
             services.AddScoped<PremioService>();
             services.AddScoped<UsuarioNotificacaoService>();
             services.AddScoped<UsuarioService>();
+            services.AddScoped<EmailService>();
 
             // Configuração do CORS
             services.AddCors(options =>

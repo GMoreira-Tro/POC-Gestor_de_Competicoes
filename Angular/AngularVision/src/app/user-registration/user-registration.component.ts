@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { GeoNamesService } from '../services/geonames.service';
 import { validarCpfCnpj } from '../utils/validarCpfCnpj';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-user-registration',
@@ -33,7 +34,9 @@ export class UserRegistrationComponent implements AfterViewInit {
   estados: any;
   cidades: any;
 
-  constructor(public userService: UserService, private router: Router, private geonamesService: GeoNamesService, private cdr: ChangeDetectorRef) { }
+  constructor(public userService: UserService, private router: Router, private geonamesService: GeoNamesService, 
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     // Inicializa o formulário após a exibição da visualização do componente
@@ -47,7 +50,6 @@ export class UserRegistrationComponent implements AfterViewInit {
     this.geonamesService.getAllCountries().subscribe(
       paises => {
         this.paisesDoMundo = paises;
-        console.log(this.paisesDoMundo);
         this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos países
       },
       error => {
@@ -84,6 +86,11 @@ export class UserRegistrationComponent implements AfterViewInit {
       alert("O campo e-mail é obrigatório");
       return;
     }
+    if(this.userData.senhaHash === '')
+    {
+      alert("O campo senha é obrigatório");
+      return;
+    }
     if(this.userData.pais === '')
     {
       alert("O campo país é obrigatório");
@@ -104,25 +111,31 @@ export class UserRegistrationComponent implements AfterViewInit {
       alert("CPF/CNPJ inválido");
       return;
     }
+    this.userService.getUserByEmail(this.userData.email).subscribe(
+      (usuario) => {
+        if (usuario) {
+          alert("E-mail já cadastrado");
+          return;
+        }
+        // Continuação do cadastro...
+      },
+      (error) => {
+        console.error("Erro ao buscar usuário:", error);
+      }
+    );    
 
-
+    console.log('Enviando formulário:', this.userData);
     this.userService.createUser(this.userData).subscribe(
       response => {
-        console.log('Usuário cadastrado com sucesso:', response);
-        // Envie o e-mail de confirmação
-        // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
-        //   emailResponse => {
-        //     console.log('E-mail de confirmação enviado:', emailResponse);
-        //     this.router.navigate(['/email-confirmation']);
-        //   },
-        //   error => {
-        //     console.error('Erro ao enviar e-mail de confirmação:', error);
-        //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
-        //   }
-        // );
+        alert('Usuário cadastrado com sucesso:');
+        this.authService.register(this.userData).subscribe(() => {
+          this.router.navigate(['/aguardando-confirmacao']);
+        });
+        
       },
       error => {
         console.error('Erro ao cadastrar usuário:', error);
+        alert(error.error || 'Erro ao cadastrar usuário. Por favor, tente novamente.');
       }
     );
   }
@@ -136,14 +149,13 @@ export class UserRegistrationComponent implements AfterViewInit {
     this.userData.cidade = ''; // Limpa a cidade selecionado
 
     // Obtém os estados/províncias do país selecionado
-    const pais = this.paisesDoMundo?.geonames.find((country: any) => country.countryName === this.userData.pais);
+    const pais = this.paisesDoMundo?.geonames.find((country: any) => country.countryCode === this.userData.pais);
     if (!pais) return;
 
     this.geonamesService.getStatesByCountry(pais.geonameId).subscribe(
       (estados: any) => {
         // Extrai os nomes dos estados/províncias da resposta
         this.estados = estados;
-        console.log(this.estados.geonames);
         this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos estados
       },
       error => {
@@ -167,7 +179,6 @@ export class UserRegistrationComponent implements AfterViewInit {
       (cidades: any) => {
         // Extrai os nomes das cidades da resposta
         this.cidades = cidades;
-        console.log(this.cidades.geonames);
         this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção das cidades
       },
       error => {

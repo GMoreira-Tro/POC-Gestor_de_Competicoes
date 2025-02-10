@@ -31,7 +31,7 @@
             [ngClass]="{ 'error-border': form.controls['pais']?.errors?.['required'] && (form.controls['pais'].touched && signUpButtonPressed) }"
             aria-label="Selecione o país de residência">
             <option value="" disabled selected hidden>Selecione um país</option>
-            <option *ngFor="let country of paisesDoMundo?.geonames" [value]="country.countryName">
+            <option *ngFor="let country of paisesDoMundo?.geonames" [value]="country.countryCode">
               <!-- <span ngxFlag [country]="country.countryCode" size="20"></span> -->
               {{ country.countryName }}
             </option>

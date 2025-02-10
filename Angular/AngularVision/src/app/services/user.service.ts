@@ -13,9 +13,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.baseUrl}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Usuario[]>(`${this.baseUrl}`);
   }
 
   login(userData: { email: string, senha: string }): Observable<any> {
@@ -24,9 +22,7 @@ export class UserService {
         if (response.token) {
           localStorage.setItem('authToken', response.token);
         }
-      }),
-      catchError(this.handleError)
-    );
+      }));
   }
 
   logout() {
@@ -38,39 +34,28 @@ export class UserService {
   }
 
   getUser(id: number): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.baseUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Usuario>(`${this.baseUrl}/${id}`);
+  }
+
+  getUserByEmail(email: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.baseUrl}/email/${email}`);
   }
 
   createUser(user: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.baseUrl}`, user).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<Usuario>(`${this.baseUrl}`, user);
   }
 
   updateUser(id: number, user: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.baseUrl}/${id}`, user).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.put<Usuario>(`${this.baseUrl}/${id}`, user);
   }
 
   deleteUser(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
   sendConfirmationEmail(email: string): Observable<any> {
     const emailData = { email: email };
-    return this.http.post<any>(`${this.baseUrl}/email-confirmation`, emailData).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(`${this.baseUrl}/email-confirmation`, emailData);
     // Substitua pela rota correta no backend para enviar o e-mail de confirmação
-  }
-
-  private handleError(error: any) {
-    console.error('Erro:', error);
-    return throwError(error);
   }
 }

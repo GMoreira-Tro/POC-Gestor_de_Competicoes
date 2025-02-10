@@ -7,6 +7,8 @@ using CRUDAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using BCrypt.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CRUDAPI.Services
 {
@@ -15,11 +17,13 @@ namespace CRUDAPI.Services
         private readonly Contexto _contexto;
         private readonly GeoNamesService _geonamesService;
         private const string GeoNamesBaseUrl = "http://api.geonames.org";
+        private readonly EmailService _emailService;
 
-        public UsuarioService(Contexto contexto, GeoNamesService geonamesService)
+        public UsuarioService(Contexto contexto, GeoNamesService geonamesService, EmailService emailService)
         {
             _contexto = contexto;
             _geonamesService = geonamesService;
+            _emailService = emailService;
         }
 
         public async Task<Usuario> ValidarUsuario(Usuario usuario)
@@ -119,6 +123,30 @@ namespace CRUDAPI.Services
         public bool UsuarioExists(long id)
         {
             return _contexto.Usuarios.Any(e => e.Id == id);
+        }
+
+        public async Task<bool> EnviarTokenConfirmacao(string tokenConfirmacao, string email)
+        {
+            // Envia e-mail de confirmação
+            //TODO: Substituir pelo seu domínio
+            string confirmationLink = $"http://localhost:4200/confirmar-email?token={tokenConfirmacao}";
+            await _emailService.SendEmailAsync(email, "Confirme seu e-mail", 
+                $"Clique no link para confirmar seu e-mail: <a href='{confirmationLink}'>Confirmar</a>");
+
+            return true;
+        }
+        public string GenerateToken(string email)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                // Combina o e-mail com a data/hora atual para gerar um hash único
+                string data = email + DateTime.UtcNow.Ticks;
+                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(data));
+                return Convert.ToBase64String(hashBytes)
+                            .Replace("+", "") // Remove caracteres problemáticos em URLs
+                            .Replace("/", "")
+                            .Replace("=", "");
+            }
         }
     }
 }

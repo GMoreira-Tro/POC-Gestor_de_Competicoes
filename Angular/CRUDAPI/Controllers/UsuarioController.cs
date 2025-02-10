@@ -44,6 +44,19 @@ namespace CRUDAPI.Controller
             return usuario;
         }
 
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<Usuario>> GetUsuarioByEmail(string email)
+        {
+            var usuario = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return usuario;
+        }
+
         // POST: api/Usuario
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
@@ -53,8 +66,12 @@ namespace CRUDAPI.Controller
                 usuario = await _usuarioService.ValidarUsuario(usuario);
 
                 // Se todas as validações passaram, salva o usuário no banco de dados
+                // Gera token de confirmação
+                usuario.TokenConfirmacao = _usuarioService.GenerateToken(usuario.Email);
                 _contexto.Usuarios.Add(usuario);
                 await _contexto.SaveChangesAsync();
+
+                await _usuarioService.EnviarTokenConfirmacao(usuario.TokenConfirmacao, usuario.Email);
 
                 return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
             }
@@ -62,28 +79,6 @@ namespace CRUDAPI.Controller
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        // Método para enviar e-mail de confirmação
-        [HttpPost("email-confirmation")]
-        public async Task<IActionResult> EnviarEmailConfirmacao(string email)
-        {
-            using (var client = new SmtpClient("smtp.webmail.com", 587))
-            {
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential("guilherme.moreira@rodwin.com.br", "Gm$1403s");
-
-                var message = new MailMessage();
-                message.From = new MailAddress("guilherme.moreira@rodwin.com.br");
-                message.To.Add(email);
-                message.Subject = "Confirmação de Cadastro";
-                message.Body = "Olá, obrigado por se cadastrar! Por favor, confirme seu e-mail para ativar sua conta.";
-
-                await client.SendMailAsync(message);
-            }
-
-            return Ok();
         }
 
         // PUT: api/Usuario/5
@@ -182,6 +177,19 @@ namespace CRUDAPI.Controller
             {
                 return Unauthorized(); // Senha incorreta
             }
+        }
+
+        [HttpGet("confirmar-email")]
+        public async Task<IActionResult> ConfirmarEmail(string token)
+        {
+            var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.TokenConfirmacao == token);
+            if (user == null) return BadRequest("Token inválido");
+
+            user.EmailConfirmado = true;
+            user.TokenConfirmacao = "";  // Remove o token após a confirmação
+            await _contexto.SaveChangesAsync();
+
+            return Ok("E-mail confirmado com sucesso! Agora você pode fazer login.");
         }
 
     }
