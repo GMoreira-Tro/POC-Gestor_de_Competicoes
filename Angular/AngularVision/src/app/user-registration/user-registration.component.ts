@@ -4,6 +4,7 @@ import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { GeoNamesService } from '../services/geonames.service';
+import { validarCpfCnpj } from '../utils/validarCpfCnpj';
 
 @Component({
   selector: 'app-user-registration',
@@ -25,10 +26,7 @@ export class UserRegistrationComponent implements AfterViewInit {
     cidade: '',
     dataNascimento: new Date(1900, 0, 1),
     cpfCnpj: '',
-    role: 0,
-    inscricoes: [],
-    competidores: [],
-    anunciosRecebidos: []
+    role: 0
   };
   signUpButtonPressed: boolean = false;
   paisesDoMundo: any;
@@ -71,37 +69,62 @@ export class UserRegistrationComponent implements AfterViewInit {
     this.highlightRequiredFields(); // Certifica-se de que os campos obrigatórios são destacados antes de enviar o formulário
 
     // Verifica se o formulário é válido antes de enviar
-    console.log('Form data:', this.userData); // Log para verificar os dados do formulário
-    if (this.form.valid) {
-
-      this.userService.createUser(this.userData).subscribe(
-        response => {
-          console.log('Usuário cadastrado com sucesso:', response);
-          // Envie o e-mail de confirmação
-          // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
-          //   emailResponse => {
-          //     console.log('E-mail de confirmação enviado:', emailResponse);
-          //     this.router.navigate(['/email-confirmation']);
-          //   },
-          //   error => {
-          //     console.error('Erro ao enviar e-mail de confirmação:', error);
-          //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
-          //   }
-          // );
-        },
-        error => {
-          console.error('Erro ao cadastrar usuário:', error);
-          if (error.error && typeof error.error === 'string') {
-            alert(error.error);
-          } else {
-            alert('Erro ao cadastrar usuário');
-            // Tratar erros de cadastro, exibir mensagens de erro, etc.
-          }
-        }
-      );
-    } else {
-      alert('Por favor, preencha todos os campos obrigatórios.');
+    if(this.userData.nome === '')
+    {
+      alert("O campo nome é obrigatório");
+      return;
     }
+    if(this.userData.sobrenome === '')
+    {
+      alert("O campo sobrenome é obrigatório");
+      return;
+    }
+    if(this.userData.email === '')
+    {
+      alert("O campo e-mail é obrigatório");
+      return;
+    }
+    if(this.userData.pais === '')
+    {
+      alert("O campo país é obrigatório");
+      return;
+    }
+    if(this.userData.estado === '')
+    {
+      alert("O campo estado é obrigatório");
+      return;
+    }
+    if(this.userData.cidade === '')
+    {
+      alert("O campo cidade é obrigatório");
+      return;
+    }
+    if(validarCpfCnpj(this.userData.cpfCnpj) === false)
+    {
+      alert("CPF/CNPJ inválido");
+      return;
+    }
+
+
+    this.userService.createUser(this.userData).subscribe(
+      response => {
+        console.log('Usuário cadastrado com sucesso:', response);
+        // Envie o e-mail de confirmação
+        // this.userService.sendConfirmationEmail(this.userData.email).subscribe(
+        //   emailResponse => {
+        //     console.log('E-mail de confirmação enviado:', emailResponse);
+        //     this.router.navigate(['/email-confirmation']);
+        //   },
+        //   error => {
+        //     console.error('Erro ao enviar e-mail de confirmação:', error);
+        //     alert('Erro ao enviar e-mail de confirmação. Por favor, tente novamente.');
+        //   }
+        // );
+      },
+      error => {
+        console.error('Erro ao cadastrar usuário:', error);
+      }
+    );
   }
 
   // Função chamada quando o país selecionado é alterado
@@ -109,6 +132,8 @@ export class UserRegistrationComponent implements AfterViewInit {
     // Limpa a lista de estados
     this.estados = [];
     this.cidades = [];
+    this.userData.estado = ''; // Limpa o estado selecionado
+    this.userData.cidade = ''; // Limpa a cidade selecionado
 
     // Obtém os estados/províncias do país selecionado
     const pais = this.paisesDoMundo?.geonames.find((country: any) => country.countryName === this.userData.pais);
@@ -132,6 +157,7 @@ export class UserRegistrationComponent implements AfterViewInit {
   onStateChange() {
     // Limpa a lista de cidades
     this.cidades = [];
+    this.userData.cidade = ''; // Limpa a cidade selecionada
 
     // Obtém as cidades do estado selecionado
     const estado = this.estados?.geonames.find((state: any) => state.name === this.userData.estado);

@@ -165,6 +165,8 @@ export class EditarCompeticaoComponent implements OnInit {
 
     this.listaEstados = [];
     this.listaCidades = [];
+    this.competicao.estado = '';
+    this.competicao.cidade = '';
 
     const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.competicao.pais);
     if (!pais) return;
@@ -182,6 +184,7 @@ export class EditarCompeticaoComponent implements OnInit {
 
   onStateChange(): void {
     this.listaCidades = [];
+    this.competicao.cidade = '';
 
     const estado = this.listaEstados?.geonames.find((state: any) => state.name === this.competicao.estado);
     if (!estado) return;

@@ -1,6 +1,3 @@
-import { Competidor } from "./Competidor";
-import { Inscricao } from "./Inscricao";
-import { UsuarioNotificacao } from "./UsuarioNotificacao";
 
 export interface Usuario {
     id: number;
@@ -16,7 +13,4 @@ export interface Usuario {
     dataNascimento: Date;
     cpfCnpj: string;
     role: number
-    inscricoes: Inscricao[];
-    competidores: Competidor[];
-    anunciosRecebidos: UsuarioNotificacao[];
   }

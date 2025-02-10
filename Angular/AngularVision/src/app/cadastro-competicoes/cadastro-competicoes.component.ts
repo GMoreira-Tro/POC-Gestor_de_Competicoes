@@ -124,6 +124,8 @@ export class CadastroCompeticoesComponent implements OnInit {
     // Limpa a lista de estados
     this.listaEstados = [];
     this.listaCidades = [];
+    this.competicao.estado = ''; // Limpa o estado selecionado
+    this.competicao.cidade = ''; // Limpa a cidade selecionada
 
     // Obtém os estados/províncias do país selecionado
     const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.competicao.pais);
@@ -146,6 +148,7 @@ export class CadastroCompeticoesComponent implements OnInit {
   onStateChange() {
     // Limpa a lista de cidades
     this.listaCidades = [];
+    this.competicao.cidade = ''; // Limpa a cidade selecionada
 
     // Obtém as cidades do estado selecionado
     const estado = this.listaEstados?.geonames.find((state: any) => state.name === this.competicao.estado);

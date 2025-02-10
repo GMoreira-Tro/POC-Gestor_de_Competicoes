@@ -70,6 +70,8 @@ export class BuscaCompeticoesComponent implements OnInit {
     // Limpa a lista de estados
     this.listaEstados = [];
     this.listaCidades = [];
+    this.filtro.estado = '';
+    this.filtro.cidade = '';
 
     // Obtém os estados/províncias do país selecionado
     const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.filtro.pais);
@@ -92,6 +94,7 @@ export class BuscaCompeticoesComponent implements OnInit {
   onStateChange() {
     // Limpa a lista de cidades
     this.listaCidades = [];
+    this.filtro.cidade = '';
 
     // Obtém as cidades do estado selecionado
     const estado = this.listaEstados?.geonames.find((state: any) => state.name === this.filtro.estado);
