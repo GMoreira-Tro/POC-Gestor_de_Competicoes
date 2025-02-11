@@ -20,6 +20,9 @@ import { CadastroCompeticoesComponent } from './cadastro-competicoes/cadastro-co
 import { UserService } from './services/user.service';
 import { MinhasCompeticoesComponent } from './minhas-competicoes/minhas-competicoes.component';
 import { EditarCompeticaoComponent } from './editar-competicao/editar-competicao.component';
+import { AguardandoConfirmacaoComponent } from './aguardando-confirmacao/aguardando-confirmacao.component';
+import { ConfirmacaoEmailComponent } from './confirmacao-email/confirmacao-email.component';
+import { EmailConfirmadoComponent } from './email-confirmation/email-confirmado.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { EditarCompeticaoComponent } from './editar-competicao/editar-competicao
     MinhasCompeticoesComponent,
     CadastroCompeticoesComponent,
     EditarCompeticaoComponent,
+    AguardandoConfirmacaoComponent,
+    ConfirmacaoEmailComponent,
+    EmailConfirmadoComponent,
     CabecalhoComponent,
     RodapeComponent
   ],

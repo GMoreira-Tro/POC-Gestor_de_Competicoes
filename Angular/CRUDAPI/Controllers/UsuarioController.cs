@@ -45,14 +45,9 @@ namespace CRUDAPI.Controller
         }
 
         [HttpGet("email/{email}")]
-        public async Task<ActionResult<Usuario>> GetUsuarioByEmail(string email)
+        public async Task<ActionResult<Usuario?>> GetUsuarioByEmail(string email)
         {
             var usuario = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
-
-            if (usuario == null)
-            {
-                return NotFound();
-            }
 
             return usuario;
         }
@@ -79,6 +74,25 @@ namespace CRUDAPI.Controller
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("reenviar-email-confirmacao")]
+        public async Task<ActionResult> ReenviarEmailConfirmacao(string email)
+        {
+            var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return BadRequest("Usuário não encontrado");
+
+            if (user.EmailConfirmado)
+            {
+                return BadRequest("E-mail já confirmado");
+            }
+
+            user.TokenConfirmacao = _usuarioService.GenerateToken(user.Email);
+            await _contexto.SaveChangesAsync();
+
+            await _usuarioService.EnviarTokenConfirmacao(user.TokenConfirmacao, user.Email);
+
+            return Ok("E-mail de confirmação reenviado com sucesso!");
         }
 
         // PUT: api/Usuario/5
@@ -179,7 +193,7 @@ namespace CRUDAPI.Controller
             }
         }
 
-        [HttpGet("confirmar-email")]
+        [HttpGet("confirmar-email/{token}")]
         public async Task<IActionResult> ConfirmarEmail(string token)
         {
             var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.TokenConfirmacao == token);

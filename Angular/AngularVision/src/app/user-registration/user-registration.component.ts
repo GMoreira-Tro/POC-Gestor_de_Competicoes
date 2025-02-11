@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { GeoNamesService } from '../services/geonames.service';
 import { validarCpfCnpj } from '../utils/validarCpfCnpj';
-import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-user-registration',
@@ -34,8 +33,7 @@ export class UserRegistrationComponent implements AfterViewInit {
   estados: any;
   cidades: any;
 
-  constructor(public userService: UserService, private router: Router, private geonamesService: GeoNamesService, 
-    private authService: AuthService,
+  constructor(public userService: UserService, private router: Router, private geonamesService: GeoNamesService,
     private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
@@ -117,10 +115,6 @@ export class UserRegistrationComponent implements AfterViewInit {
           alert("E-mail já cadastrado");
           return;
         }
-        // Continuação do cadastro...
-      },
-      (error) => {
-        console.error("Erro ao buscar usuário:", error);
       }
     );    
 
@@ -128,9 +122,7 @@ export class UserRegistrationComponent implements AfterViewInit {
     this.userService.createUser(this.userData).subscribe(
       response => {
         alert('Usuário cadastrado com sucesso:');
-        this.authService.register(this.userData).subscribe(() => {
-          this.router.navigate(['/aguardando-confirmacao']);
-        });
+        this.router.navigate(['/aguardando-confirmacao']);
         
       },
       error => {

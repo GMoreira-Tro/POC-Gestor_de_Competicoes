@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 public class EmailService
 {
-    private readonly string _smtpServer = "live.smtp.mailtrap.io"; // Exemplo: smtp.gmail.com
+    private readonly string _smtpServer = "smtp.gmail.com"; // Exemplo: smtp.gmail.com
     private readonly int _smtpPort = 587;
-    private readonly string _emailFrom = "hello@demomailtrap.com"; // Melhor armazenar isso em variáveis de ambiente
-    private readonly string _emailPassword = "155e34e621d4d4a1b25bb7058e911616"; // Melhor armazenar isso em variáveis de ambiente
+    private readonly string _emailFrom = "guilherme.dsmoreira@gmail.com"; // Melhor armazenar isso em variáveis de ambiente
+    private readonly string _emailPassword = "blru ewmu zila huwd"; // Melhor armazenar isso em variáveis de ambiente
 
     public async Task SendEmailAsync(string toEmail, string subject, string body)
     {
@@ -15,7 +15,8 @@ public class EmailService
         {
             Port = _smtpPort,
             Credentials = new NetworkCredential(_emailFrom, _emailPassword),
-            EnableSsl = true
+            EnableSsl = true,
+            UseDefaultCredentials = false
         };
 
         var mailMessage = new MailMessage

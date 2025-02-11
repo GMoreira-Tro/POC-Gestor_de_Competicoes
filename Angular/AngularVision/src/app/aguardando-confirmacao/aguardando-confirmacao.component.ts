@@ -8,8 +8,11 @@ import { Router } from '@angular/router';
 })
 export class AguardandoConfirmacaoComponent {
   constructor(private router: Router) {}
-
+  
   login() {
     this.router.navigate(['/login']);
+  }
+  resendConfirmationEmail() {
+    throw new Error('Method not implemented.');
   }
 }

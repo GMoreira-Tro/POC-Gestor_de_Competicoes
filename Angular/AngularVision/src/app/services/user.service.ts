@@ -53,9 +53,11 @@ export class UserService {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
-  sendConfirmationEmail(email: string): Observable<any> {
-    const emailData = { email: email };
-    return this.http.post<any>(`${this.baseUrl}/email-confirmation`, emailData);
-    // Substitua pela rota correta no backend para enviar o e-mail de confirmação
+  confirmarEmail(token: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/confirmar-email/${token}`);
   }
+
+  reenviarEmailConfirmacao(email: string): Observable<any> {
+      return this.http.get(`${this.baseUrl}/reenviar-email-confirmacao/${email}`);
+    }
 }

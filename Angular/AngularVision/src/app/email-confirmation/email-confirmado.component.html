@@ -1,0 +1,13 @@
+<div class="container">
+  <h2 *ngIf="sucesso; else erroTemplate">E-mail confirmado com sucesso!</h2>
+  <p *ngIf="sucesso; else erroTemplate">
+      Seu e-mail foi confirmado. Agora você pode fazer login na plataforma.
+  </p>
+  <button *ngIf="sucesso" (click)="irParaLogin()">Fazer login</button>
+
+  <ng-template #erroTemplate>
+      <h2>Erro ao confirmar e-mail</h2>
+      <p>O link de confirmação é inválido ou já foi utilizado.</p>
+      <button (click)="reenviarConfirmacao()">Reenviar e-mail de confirmação</button>
+  </ng-template>
+</div>

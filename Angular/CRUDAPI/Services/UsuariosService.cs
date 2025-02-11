@@ -84,6 +84,7 @@ namespace CRUDAPI.Services
             }
 
             // Verifica se o CPF/CNPJ já está cadastrado
+            usuario.CpfCnpj = Regex.Replace(usuario.CpfCnpj, @"\D", ""); // Remove tudo que não for número
             var cpfCnpjExistente = await _contexto.Usuarios.AnyAsync(u => u.CpfCnpj == usuario.CpfCnpj);
             if (cpfCnpjExistente)
             {
@@ -129,7 +130,7 @@ namespace CRUDAPI.Services
         {
             // Envia e-mail de confirmação
             //TODO: Substituir pelo seu domínio
-            string confirmationLink = $"http://localhost:4200/confirmar-email?token={tokenConfirmacao}";
+            string confirmationLink = $"http://localhost:4200/email-confirmado/{tokenConfirmacao}";
             await _emailService.SendEmailAsync(email, "Confirme seu e-mail", 
                 $"Clique no link para confirmar seu e-mail: <a href='{confirmationLink}'>Confirmar</a>");
 
