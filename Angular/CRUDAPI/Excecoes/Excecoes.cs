@@ -20,6 +20,11 @@ public class CampoObrigatorioException : Exception
     public CampoObrigatorioException(string campo) : base($"O campo '{campo}' é obrigatório.") { }
 }
 
+public class CredenciaisInvalidasException : Exception
+{
+    public CredenciaisInvalidasException() : base("Email ou senha inválidos.") { }
+}
+
 public class StatusInscricaoInvalidoException : Exception
 {
     public StatusInscricaoInvalidoException() 

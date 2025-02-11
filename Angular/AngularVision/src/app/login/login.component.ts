@@ -2,6 +2,7 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,9 @@ export class LoginComponent implements AfterViewInit {
   };
   loginButtonPressed: boolean = false;
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router,
+    private authService: AuthService
+  ) { }
 
   ngAfterViewInit() {
     this.form.control.markAsTouched();
@@ -35,13 +38,14 @@ export class LoginComponent implements AfterViewInit {
     if (this.form.valid) {
       console.log('Dados do formulário de login:', this.userData);
 
-      this.userService.login(this.userData).subscribe(
+      this.authService.login(this.userData.email, this.userData.senha).subscribe(
         (response: any) => {
           console.log('Usuário autenticado com sucesso:', response);
           this.router.navigate(['']);
         },
-        () => {
-          alert("Erro ao autenticar usuário.")
+        (error) => {
+          console.log(error.error);
+          alert(error.error || 'Erro ao autenticar usuário. Tente novamente mais tarde.');
           // Tratar erros de autenticação, como exibir mensagens de erro
         }
       );

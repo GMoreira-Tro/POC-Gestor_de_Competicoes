@@ -23,6 +23,7 @@ import { EditarCompeticaoComponent } from './editar-competicao/editar-competicao
 import { AguardandoConfirmacaoComponent } from './aguardando-confirmacao/aguardando-confirmacao.component';
 import { ConfirmacaoEmailComponent } from './confirmacao-email/confirmacao-email.component';
 import { EmailConfirmadoComponent } from './email-confirmation/email-confirmado.component';
+import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { EmailConfirmadoComponent } from './email-confirmation/email-confirmado.
     AguardandoConfirmacaoComponent,
     ConfirmacaoEmailComponent,
     EmailConfirmadoComponent,
+    PerfilUsuarioComponent,
     CabecalhoComponent,
     RodapeComponent
   ],

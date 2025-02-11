@@ -16,23 +16,6 @@ export class UserService {
     return this.http.get<Usuario[]>(`${this.baseUrl}`);
   }
 
-  login(userData: { email: string, senha: string }): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/login`, userData).pipe(
-      tap(response => {
-        if (response.token) {
-          localStorage.setItem('authToken', response.token);
-        }
-      }));
-  }
-
-  logout() {
-    localStorage.removeItem('authToken');
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('authToken');
-  }
-
   getUser(id: number): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.baseUrl}/${id}`);
   }

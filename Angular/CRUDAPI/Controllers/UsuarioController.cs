@@ -146,53 +146,6 @@ namespace CRUDAPI.Controller
             return usuario;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginModel model)
-        {
-            // Buscar o usuário pelo e-mail no banco de dados
-            var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == model.Email);
-
-            if (user == null)
-            {
-                return Unauthorized(); // Usuário não encontrado
-            }
-
-            // Verificar se a senha fornecida corresponde ao hash no banco de dados
-            if (BCrypt.Net.BCrypt.Verify(model.Senha, user.SenhaHash))
-            {
-                try
-                {
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.ASCII.GetBytes("k3ZvM4v9BpS+UdW7Y4XeFtHj2NsJ8bRa");
-
-                    var tokenDescriptor = new SecurityTokenDescriptor
-                    {
-                        Subject = new ClaimsIdentity(new Claim[]
-                        {
-                            new Claim(ClaimTypes.Name, user.Id.ToString())
-                        }),
-                        Expires = DateTime.UtcNow.AddDays(7), // Token expira em 7 dias
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                    };
-
-                    var token = tokenHandler.CreateToken(tokenDescriptor);
-                    var tokenString = tokenHandler.WriteToken(token);
-
-                    return Ok(new { Token = tokenString });
-                }
-                catch (Exception ex)
-                {
-                    // Log do erro
-                    Console.WriteLine($"Erro ao gerar token JWT: {ex.Message}");
-                    return StatusCode(500, "Erro interno no servidor ao gerar token JWT");
-                }
-            }
-            else
-            {
-                return Unauthorized(); // Senha incorreta
-            }
-        }
-
         [HttpGet("confirmar-email/{token}")]
         public async Task<IActionResult> ConfirmarEmail(string token)
         {
@@ -205,12 +158,5 @@ namespace CRUDAPI.Controller
 
             return Ok("E-mail confirmado com sucesso! Agora você pode fazer login.");
         }
-
-    }
-
-    public class LoginModel
-    {
-        public string Email { get; set; }
-        public string Senha { get; set; }
     }
 }

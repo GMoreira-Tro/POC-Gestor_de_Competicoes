@@ -1,0 +1,19 @@
+<app-cabecalho></app-cabecalho>
+
+<div class="perfil-usuario">
+  <h2>Perfil do Usuário</h2>
+  <div class="usuario-info">
+    <img [src]="usuario.imagemUrl || 'default-image.png'" alt="Imagem do Usuário" class="usuario-imagem">
+    <div class="usuario-detalhes">
+      <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+      <input type="text" [(ngModel)]="novoNome" placeholder="Atualizar nome">
+      <button (click)="atualizarNome()">Atualizar Nome</button>
+    </div>
+  </div>
+  <div class="upload-imagem">
+    <input type="file" (change)="selecionarImagem($event)">
+    <button (click)="uploadImagem()">Upload Imagem</button>
+  </div>
+</div>
+
+<app-rodape></app-rodape>

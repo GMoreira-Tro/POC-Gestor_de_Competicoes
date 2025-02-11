@@ -34,7 +34,7 @@ namespace CRUDAPI.Services
                 throw new CampoObrigatorioException("Data de início da competição é obrigatória.");
             }
 
-            if(!competicao.Estado.IsNullOrEmpty())
+            if(!string.IsNullOrEmpty(competicao.Estado))
             {
                 // Valida se o estado pertence ao país
                 var estadoPertenceAoPais = await _geonamesService.EstadoPertenceAoPais(competicao.Pais, competicao.Estado);
@@ -45,7 +45,7 @@ namespace CRUDAPI.Services
 
             }
 
-            if(!competicao.Cidade.IsNullOrEmpty())
+            if(!string.IsNullOrEmpty(competicao.Cidade))
             {
                 // Valida se a cidade pertence ao estado
                 var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoPaisEEstado(competicao.Pais, competicao.Estado, competicao.Cidade);
