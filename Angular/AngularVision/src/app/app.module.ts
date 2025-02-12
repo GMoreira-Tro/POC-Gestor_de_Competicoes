@@ -24,6 +24,8 @@ import { AguardandoConfirmacaoComponent } from './aguardando-confirmacao/aguarda
 import { ConfirmacaoEmailComponent } from './confirmacao-email/confirmacao-email.component';
 import { EmailConfirmadoComponent } from './email-confirmation/email-confirmado.component';
 import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.component';
+import { CadastroCompetidoresComponent } from './cadastro-competidores/cadastro-competidores.component';
+import { MeusCompetidoresComponent } from './meus-competidores/meus-competidores.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.componen
     ConfirmacaoEmailComponent,
     EmailConfirmadoComponent,
     PerfilUsuarioComponent,
+    CadastroCompetidoresComponent,
+    MeusCompetidoresComponent,
     CabecalhoComponent,
     RodapeComponent
   ],

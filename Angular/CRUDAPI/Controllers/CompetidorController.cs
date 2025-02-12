@@ -110,5 +110,11 @@ namespace CRUDAPI.Controller
 
             return NoContent();
         }
+
+        [HttpGet("buscar-do-usuario/{userId}")]
+        public async Task<ActionResult<IEnumerable<Competidor>>> BuscarDoUsuario(long userId)
+        {
+            return await _contexto.Competidores.Where(competidor => competidor.CriadorId == userId).ToListAsync();
+        }
     }
 }

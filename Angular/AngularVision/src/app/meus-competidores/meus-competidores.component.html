@@ -1,0 +1,15 @@
+<!-- Cabeçalho -->
+<app-cabecalho></app-cabecalho>
+
+<div class="meus-competidores">
+    <h2>Meus Competidores</h2>
+    <div *ngFor="let competidor of meusCompetidores">
+        <h3>{{ competidor.nome }}</h3>
+        <p>Email: {{ competidor.email }}</p>
+        <p>{{ competidor.tipo === 0 ? 'Atleta' : 'Time' }}</p>
+        <button (click)="editarCompetidor(competidor.id)">Editar</button>
+        <button (click)="excluirCompetidor(competidor.id)">Excluir</button>
+    </div>
+</div>
+
+<app-rodape></app-rodape>
