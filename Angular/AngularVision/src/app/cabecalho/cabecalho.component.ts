@@ -58,13 +58,13 @@ export class CabecalhoComponent implements OnInit {
     }
   }
 
-  minhasCompeticoes(): void {
+  cadastrarCompetidores(): void {
     if (!this.usuarioLogado()) {
       this.router.navigate(['/login']);
-    } else if (this.router.url === '/minhas-competicoes') {
+    } else if (this.router.url === '/cadastro-competidores') {
       this.router.navigate(['']);
     } else {
-      this.router.navigate(['/minhas-competicoes']);
+      this.router.navigate(['/cadastro-competidores']);
     }
   }
 

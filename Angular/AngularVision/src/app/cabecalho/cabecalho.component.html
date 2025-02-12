@@ -1,7 +1,7 @@
 <div class="header">
   <button (click)="buscarCompeticao()">{{ router.url !== '/busca' ? 'Buscar competição' : 'Tela Inicial' }}</button>
   <button (click)="cadastrarCompeticao()">{{ router.url !== '/cadastro-competicao' ? 'Cadastrar Competição' : 'Tela Inicial' }}</button>
-  <button (click)="minhasCompeticoes()">{{ router.url !== '/minhas-competicoes' ? 'Minhas Competições' : 'Tela Inicial' }}</button>
+  <button (click)="cadastrarCompetidores()">{{ router.url !== '/cadastro-competidores' ? 'Cadastrar Competidores' : 'Tela Inicial' }}</button>
 
   <!-- Ícone do usuário logado -->
   <div class="user-menu" *ngIf="usuario">

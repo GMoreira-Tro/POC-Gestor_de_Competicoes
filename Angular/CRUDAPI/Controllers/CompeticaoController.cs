@@ -85,7 +85,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
                     throw;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -97,16 +97,23 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
         [HttpDelete("{id}")]
         public async Task<ActionResult<Competicao>> DeleteCompeticao(long id)
         {
-            var competicao = await _contexto.Competicoes.FindAsync(id);
-            if (competicao == null)
+            try
             {
-                return NotFound();
+                var competicao = await _contexto.Competicoes.FindAsync(id);
+                if (competicao == null)
+                {
+                    return NotFound();
+                }
+
+                _contexto.Competicoes.Remove(competicao);
+                await _contexto.SaveChangesAsync();
+
+                return competicao;
             }
-
-            _contexto.Competicoes.Remove(competicao);
-            await _contexto.SaveChangesAsync();
-
-            return competicao;
+            catch (DbUpdateException)
+            {
+                return StatusCode(400, new { message = "Não é possível deletar esta competição pois existem categorias associadas." });
+            }
         }
 
         [HttpGet("buscar")]
@@ -121,7 +128,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
             var competicoesResult = await GetCompeticoes();
             var competicoes = competicoesResult.Value;
 
-            if(competicoes == null)
+            if (competicoes == null)
             {
                 return NotFound();
             }

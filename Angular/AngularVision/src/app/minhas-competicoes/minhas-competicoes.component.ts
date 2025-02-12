@@ -38,7 +38,7 @@ export class MinhasCompeticoesComponent implements OnInit {
         if (confirm("Tem certeza que deseja excluir esta competição?")) {
             this.competicaoService.deleteCompeticao(id).subscribe(() => {
                 this.buscarMinhasCompeticoes(); // Atualiza a lista
-            }, error => console.log("Erro ao excluir competição: ", error));
+            }, error => alert(error.error.message ?? "Erro ao deletar competição."));
         }
     }
 }
