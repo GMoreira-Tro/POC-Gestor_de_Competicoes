@@ -68,13 +68,13 @@ namespace CRUDAPI.Services
                 throw new EmailInvalidoException();
             }
 
-            var emailExistente = await _contexto.Usuarios.AnyAsync(u => u.Email == usuario.Email);
-            if (emailExistente)
+            var usuarioComEmailExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email);
+            if (usuarioComEmailExistente != null && usuarioComEmailExistente.Id != usuario.Id)
             {
                 throw new EmailJaCadastradoException(); // Indica que o e-mail já está cadastrado
             }
 
-            if (Validators.ValidarSenha(usuario.SenhaHash) && !usuario.SenhaValidada)
+            if (!usuario.SenhaValidada && Validators.ValidarSenha(usuario.SenhaHash))
             {
                 string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
 
@@ -85,8 +85,8 @@ namespace CRUDAPI.Services
 
             // Verifica se o CPF/CNPJ já está cadastrado
             usuario.CpfCnpj = Regex.Replace(usuario.CpfCnpj, @"\D", ""); // Remove tudo que não for número
-            var cpfCnpjExistente = await _contexto.Usuarios.AnyAsync(u => u.CpfCnpj == usuario.CpfCnpj);
-            if (cpfCnpjExistente)
+            var usuarioComCpfCnpjExistente = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.CpfCnpj == usuario.CpfCnpj);
+            if (usuarioComCpfCnpjExistente != null && usuarioComCpfCnpjExistente.Id != usuario.Id)
             {
                 throw new CpfCnpjJaCadastradoException(); // Indica que o CPF/CNPJ já está cadastrado
             }

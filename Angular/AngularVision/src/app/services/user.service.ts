@@ -42,5 +42,9 @@ export class UserService {
 
   reenviarEmailConfirmacao(email: string): Observable<any> {
       return this.http.get(`${this.baseUrl}/reenviar-email-confirmacao/${email}`);
-    }
+  }
+
+  getUsuarioLogado(): Observable<Usuario> {
+    return this.getUser(Number(localStorage.getItem('userId')));
+  }
 }

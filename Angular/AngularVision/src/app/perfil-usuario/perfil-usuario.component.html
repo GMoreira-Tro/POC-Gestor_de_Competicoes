@@ -2,17 +2,80 @@
 
 <div class="perfil-usuario">
   <h2>Perfil do Usuário</h2>
+  
   <div class="usuario-info">
     <img [src]="usuario.imagemUrl || 'default-image.png'" alt="Imagem do Usuário" class="usuario-imagem">
+    
     <div class="usuario-detalhes">
-      <p><strong>Nome:</strong> {{ usuario.nome }}</p>
-      <input type="text" [(ngModel)]="novoNome" placeholder="Atualizar nome">
-      <button (click)="atualizarNome()">Atualizar Nome</button>
+      <!-- Nome -->
+      <p><strong>Nome:</strong> 
+        <span *ngIf="!editandoNome">{{ usuario.nome }}</span>
+        <input *ngIf="editandoNome" type="text" [(ngModel)]="usuario.nome">
+        <button (click)="editandoNome = !editandoNome">
+          {{ editandoNome ? 'Salvar' : 'Editar' }}
+        </button>
+      </p>
+
+      <!-- Sobrenome -->
+      <p><strong>Sobrenome:</strong> 
+        <span *ngIf="!editandoSobrenome">{{ usuario.sobrenome }}</span>
+        <input *ngIf="editandoSobrenome" type="text" [(ngModel)]="usuario.sobrenome">
+        <button (click)="editandoSobrenome = !editandoSobrenome">
+          {{ editandoSobrenome ? 'Salvar' : 'Editar' }}
+        </button>
+      </p>
+
+      <!-- Email (apenas visualização) -->
+      <p><strong>Email:</strong> {{ usuario.email }}</p>
+
+      <!-- Localização com Dropdowns -->
+      <p><strong>País:</strong>
+        <select [(ngModel)]="usuario.pais" (change)="onCountryChange()" *ngIf="editandoLocalizacao">
+          <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
+        </select>
+        <span *ngIf="!editandoLocalizacao">{{ countryName }}</span>
+      </p>
+
+      <p><strong>Estado:</strong>
+        <select [(ngModel)]="usuario.estado" (change)="onStateChange()" *ngIf="editandoLocalizacao">
+          <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
+        </select>
+        <span *ngIf="!editandoLocalizacao">{{ usuario.estado }}</span>
+      </p>
+
+      <p><strong>Cidade:</strong>
+        <select [(ngModel)]="usuario.cidade" *ngIf="editandoLocalizacao">
+          <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
+        </select>
+        <span *ngIf="!editandoLocalizacao">{{ usuario.cidade }}</span>
+        <button (click)="editandoLocalizacao = !editandoLocalizacao">
+          {{ editandoLocalizacao ? 'Salvar' : 'Editar' }}
+        </button>
+      </p>
+
+      <!-- Data de Nascimento -->
+      <p><strong>Data de Nascimento:</strong> 
+        <span *ngIf="!editandoNascimento">{{ usuario.dataNascimento | date }}</span>
+        <input *ngIf="editandoNascimento" type="date" [(ngModel)]="usuario.dataNascimento">
+        <button (click)="editandoNascimento = !editandoNascimento">
+          {{ editandoNascimento ? 'Salvar' : 'Editar' }}
+        </button>
+      </p>
+
+      <!-- CPF/CNPJ e Role (apenas visualização) -->
+      <p><strong>CPF/CNPJ:</strong> {{ usuario.cpfCnpj }}</p>
     </div>
   </div>
+
   <div class="upload-imagem">
+    <p><strong>Alterar foto de perfil:</strong></p>
     <input type="file" (change)="selecionarImagem($event)">
     <button (click)="uploadImagem()">Upload Imagem</button>
+  </div>
+  
+  <!-- Novo botão para salvar todas as alterações -->
+  <div class="salvar-alteracoes">
+    <button (click)="atualizarUsuario()">Salvar Todas as Alterações</button>
   </div>
 </div>
 

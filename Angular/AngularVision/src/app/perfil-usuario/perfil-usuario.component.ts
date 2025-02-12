@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../services/user.service';
+import { GeoNamesService } from '../services/geonames.service';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -9,25 +10,87 @@ import { UserService } from '../services/user.service';
 })
 export class PerfilUsuarioComponent implements OnInit {
   usuario: any = {};
-  novoNome: string = '';
+  countryName: string = '';
   imagemSelecionada: File | null = null;
 
-  constructor(private userService: UserService, private http: HttpClient) {}
+  // Flags para edição inline
+  editandoNome = false;
+  editandoSobrenome = false;
+  editandoNascimento = false;
+  editandoLocalizacao = false;
+
+  // Listas para dropdowns de localização
+  listaPaises: any;
+  listaEstados: any;
+  listaCidades: any;
+
+  constructor(private userService: UserService, private http: HttpClient,
+    private geonamesService: GeoNamesService, private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.carregarUsuario();
+
+    setTimeout(() => {
+      //this.form.control.markAsTouched();
+      this.cdr.detectChanges(); // Detecta as alterações manualmente após a inicialização do formulário
+    });
+
+    // Carrega a lista de países
+    this.geonamesService.getAllCountries().subscribe(
+      paises => {
+        this.listaPaises = paises;
+        if (this.usuario.pais) {
+          const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.usuario.pais);
+          if (pais) {
+            this.countryName = pais.countryName;
+            this.geonamesService.getStatesByCountry(pais.geonameId).subscribe(
+              estados => {
+                this.listaEstados = estados;
+                if (this.usuario.estado) {
+                  const estado = this.listaEstados?.geonames.find((state: any) => state.name === this.usuario.estado);
+                  if (estado) {
+                    this.geonamesService.getCitiesByState(estado.geonameId).subscribe(
+                      cidades => {
+                        this.listaCidades = cidades;
+                        this.cdr.detectChanges();
+                      },
+                      error => {
+                        console.error('Erro ao obter as cidades:', error);
+                      }
+                    );
+                  }
+                }
+              },
+              error => {
+                console.error('Erro ao obter os estados:', error);
+              }
+            );
+          }
+        }
+      },
+      error => {
+        console.error('Erro ao obter a lista de países:', error);
+      }
+    );
   }
 
   carregarUsuario(): void {
     this.userService.getUsuarioLogado().subscribe((data) => {
       this.usuario = data;
-      this.novoNome = this.usuario.nome;
-    });
+    },
+    error => {
+      console.error("Erro ao carregar o usuário", error);
+      }  
+    );
   }
 
-  atualizarNome(): void {
-    this.userService.atualizarNome(this.usuario.id, this.novoNome).subscribe(() => {
-      this.usuario.nome = this.novoNome;
+  atualizarUsuario(): void {
+    this.userService.updateUser(this.usuario.id, this.usuario).subscribe(() => {
+      alert("Usuário atualizado com sucesso");
+    }, error => {
+      console.log(error);
+      alert(error.error);
     });
   }
 
@@ -37,11 +100,75 @@ export class PerfilUsuarioComponent implements OnInit {
 
   uploadImagem(): void {
     if (!this.imagemSelecionada) return;
-    const formData = new FormData();
-    formData.append('imagem', this.imagemSelecionada);
-    this.http.post(`${environment.apiUrl}/usuario/${this.usuario.id}/upload-imagem`, formData)
-      .subscribe(() => {
-        this.carregarUsuario();
-      });
+    // const formData = new FormData();
+    // formData.append('imagem', this.imagemSelecionada);
+    // this.http.post(`${environment.apiUrl}/usuario/${this.usuario.id}/upload-imagem`, formData)
+    //   .subscribe(() => {
+    //     this.carregarUsuario();
+    //   });
   }
+
+  // Função que chama a API do GeoNames para buscar Estado e Cidade com base no País
+    buscarEstadoCidade(): void {
+      this.geonamesService.getAllCountries().subscribe(paises => {
+        this.listaPaises = paises;
+      });
+    }
+
+    // Função chamada quando o país selecionado é alterado
+    onCountryChange() {
+      // Limpa a lista de estados
+      this.listaEstados = [];
+      this.listaCidades = [];
+      this.usuario.estado = ''; // Limpa o estado selecionado
+      this.usuario.cidade = ''; // Limpa a cidade selecionada
+
+      // Obtém os estados/províncias do país selecionado
+      this.carregarEstados();
+    }
+    
+    carregarEstados(): void {
+      const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.usuario.pais);
+      if (!pais) return;
+      
+      this.countryName = pais.countryName; // Atualiza o nome do país selecionado
+      this.geonamesService.getStatesByCountry(pais.geonameId).subscribe(
+        (estados: any) => {
+          // Extrai os nomes dos estados/províncias da resposta
+          this.listaEstados = estados;
+          this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos estados
+        },
+        error => {
+          console.error('Erro ao obter os estados/províncias:', error);
+          // Trate o erro conforme necessário
+        }
+      );
+      
+    }
+
+    // Função chamada quando o estado selecionado é alterado
+    onStateChange() {
+      // Limpa a lista de cidades
+      this.listaCidades = [];
+      this.usuario.cidade = ''; // Limpa a cidade selecionada
+
+      // Obtém as cidades do estado selecionado
+      this.carregarCidades();
+    }
+    
+    carregarCidades(): void {
+      const estado = this.listaEstados?.geonames.find((state: any) => state.name === this.usuario.estado);
+      if (!estado) return;
+
+      this.geonamesService.getCitiesByState(estado.geonameId).subscribe(
+        (cidades: any) => {
+          this.listaCidades = cidades;
+          this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção das cidades
+        },
+        error => {
+          console.error('Erro ao obter as cidades:', error);
+          // Trate o erro conforme necessário
+        }
+      );
+    }
 }
