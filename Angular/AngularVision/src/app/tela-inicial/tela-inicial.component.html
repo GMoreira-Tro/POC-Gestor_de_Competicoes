@@ -1,42 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+<app-cabecalho></app-cabecalho>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela Inicial</title>
-</head>
+<!-- Banner do Projeto -->
+<div class="banner">
+    <img src="assets/images/logo.jpg" alt="Banner do projeto" class="logo">
+    <h1>Encontre, participe e organize competições!</h1>
+</div>
 
-<body>
-    <app-cabecalho></app-cabecalho>
-    <!-- Banner do projeto -->
-    <img src="../../app/assets/images/logo.jpg" alt="Banner do projeto" class="logo">
+<!-- Seção de Competições em Destaque -->
+<div class="conteudo">
+    <h2 class="destaque">Competições em destaque</h2>
 
-    <div class="banner">
-        <!-- Banner grande centralizado -->
-        <h1>Banner do Projeto</h1>
+    <div class="filtros-competicoes">
+        <select id="filtros" [(ngModel)]="filtroSelecionado" (change)="buscarMinhasCompeticoes()">
+            <option value="municipal">Municipal</option>
+            <option value="estadual">Estadual</option>
+            <option value="nacional">Nacional</option>
+            <option value="mundial">Mundial</option>
+        </select>
     </div>
 
-    <div class="conteudo">
-        <h2 class="destaque">Competições em destaque</h2>
-        <div class="competicoes">
-            <label><input type="checkbox" checked> Municipal</label>
-            <label><input type="checkbox" checked> Regional</label>
-            <label><input type="checkbox"> Nacional</label>
-            <label><input type="checkbox"> Mundial</label>
-        </div>
+    <ul>
+        <li *ngFor="let competicao of competicoes">
+            {{ competicao.titulo }}
+        </li>
+    </ul>
+</div>
 
-        <!-- Lista de competições mais acessadas -->
-        <h2>Competições mais acessadas</h2>
-        <ul>
-            <li>Competição 1</li>
-            <li>Competição 2</li>
-            <li>Competição 3</li>
-            <!-- Adicione mais itens conforme necessário -->
-        </ul>
-    </div>
-
-    <app-rodape></app-rodape>
-</body>
-
-</html>
+<app-rodape></app-rodape>

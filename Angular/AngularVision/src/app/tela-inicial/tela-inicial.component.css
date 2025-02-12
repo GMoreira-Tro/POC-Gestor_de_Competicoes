@@ -1,32 +1,87 @@
-body {
-    font-family: Arial, sans-serif;
+/* Estilos globais */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
+.conteudo {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Estilização do Banner */
 .banner {
+    position: relative;
     text-align: center;
-    padding: 50px 0;
+    color: white;
+    background: linear-gradient(135deg, #1a1a1a, #3b3b3b);
+    padding: 50px 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.destaque {
+.banner .logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.banner h1 {
+    font-size: 2rem;
     font-weight: bold;
-    margin-top: 20px;
 }
 
-.competicoes {
+/* Seção de competições em destaque */
+.destaque {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 3px solid #007bff;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Estilização dos filtros */
+.filtros-competicoes {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-.competicoes input[type="checkbox"] {
-    margin-right: 10px;
+.filtros-competicoes label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
-.logo {
-    width: 50px;
-    height: 50px;
-    vertical-align: middle;
-    margin-left: 20px;
+.filtros-competicoes input {
+    transform: scale(1.2);
+}
+
+/* Lista de competições */
+ul {
+    list-style: none;
+    margin-top: 15px;
+}
+
+ul li {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+ul li:hover {
+    background: #007bff;
+    color: white;
+    transform: translateY(-3px);
 }
