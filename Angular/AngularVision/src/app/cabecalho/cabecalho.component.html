@@ -2,7 +2,22 @@
   <button (click)="buscarCompeticao()">{{ router.url !== '/busca' ? 'Buscar competição' : 'Tela Inicial' }}</button>
   <button (click)="cadastrarCompeticao()">{{ router.url !== '/cadastro-competicao' ? 'Cadastrar Competição' : 'Tela Inicial' }}</button>
   <button (click)="minhasCompeticoes()">{{ router.url !== '/minhas-competicoes' ? 'Minhas Competições' : 'Tela Inicial' }}</button>
-  <button (click)="cadastrar()">Cadastrar-se</button>
-  <button (click)="login()">Login</button>
-  <!-- Inclua aqui a lógica para exibir a imagem do usuário logado -->
+
+  <!-- Ícone do usuário logado -->
+  <div class="user-menu" *ngIf="usuario">
+    <img [src]="usuario.imagemUrl || 'assets/default-user.png'" class="user-avatar" (click)="toggleDropdown()">
+    <div class="dropdown-menu" *ngIf="dropdownAberto">
+      <a routerLink="/perfil-usuario">Meu Perfil</a>
+      <a routerLink="/competidores">Meus Competidores</a>
+      <a routerLink="/inscricoes">Minhas Inscrições</a>
+      <a routerLink="/minhas-competicoes">Minhas Competições</a>
+      <a (click)="logout()">Sair</a>
+    </div>
+  </div>
+
+  <!-- Se o usuário não estiver logado, exibir os botões de Login/Cadastro -->
+  <ng-container *ngIf="!usuario">
+    <button (click)="cadastrar()">Cadastrar-se</button>
+    <button (click)="login()">Login</button>
+  </ng-container>
 </div>

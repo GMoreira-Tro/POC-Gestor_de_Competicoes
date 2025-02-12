@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-cabecalho',
@@ -8,11 +9,28 @@ import { Router } from '@angular/router';
 })
 export class CabecalhoComponent implements OnInit {
 
-  constructor(public router: Router) { }
+  usuario: any; // Substitua pelo tipo real de usuário que você está usando
+  dropdownAberto = false;
+
+  constructor(public router: Router,
+    public userService: UserService
+  ) { }
+
   ngOnInit(): void {
+    // Inicialize o usuário (exemplo)
+    this.userService.getUsuarioLogado().subscribe((data) => {
+      this.usuario = data;
+      this.usuario.imagemUrl = this.usuario.imagemUrl?.startsWith('http')
+        ? this.usuario.imagemUrl
+        : `http://localhost:5000/${this.usuario.imagemUrl}`;
+    },
+      error => {
+        console.error("Erro ao carregar o usuário", error);
+      }
+    );
   }
 
-  retornarTelaInicial() {
+  retornarTelaInicial(): void {
     this.router.navigate(['']);
   }
 
@@ -50,12 +68,22 @@ export class CabecalhoComponent implements OnInit {
     }
   }
 
-  private usuarioLogado(): boolean {
-    // Implemente sua lógica para verificar se o usuário está logado aqui
-    return true; // Exemplo simples - substitua por sua lógica real
+  toggleDropdown(): void {
+    this.dropdownAberto = !this.dropdownAberto;
   }
 
-  login() {
+  logout(): void {
+    // Implemente a lógica de logout aqui (exemplo)
+    this.usuario = null;
+    this.router.navigate(['/login']);
+  }
+
+  private usuarioLogado(): boolean {
+    // Implemente sua lógica para verificar se o usuário está logado aqui
+    return this.usuario !== null; // Exemplo simples - substitua por sua lógica real
+  }
+
+  login(): void {
     this.router.navigate(['/login']);
   }
 }
