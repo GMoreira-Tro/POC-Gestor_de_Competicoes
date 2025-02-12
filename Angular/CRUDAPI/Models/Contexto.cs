@@ -35,12 +35,72 @@ namespace CRUDAPI.Models
                 .HasForeignKey(i => i.CompetidorId)
                 .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Categoria>()
+                .HasOne(c => c.Competicao)
+                .WithMany(c => c.Categorias)
+                .HasForeignKey(c => c.CompeticaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasOne(ci => ci.Confronto)
+                .WithMany(c => c.ConfrontoInscricoes)
+                .HasForeignKey(ci => ci.ConfrontoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasOne(ci => ci.Inscricao)
+                .WithMany(i => i.ConfrontoInscricoes)
+                .HasForeignKey(ci => ci.InscricaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ConfrontoInscricao>()
+                .HasOne(ci => ci.ConfrontoInscricaoPai)
+                .WithMany()
+                .HasForeignKey(ci => ci.ConfrontoInscricaoPaiId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Inscricao>()
+                .HasOne(i => i.Categoria)
+                .WithMany(c => c.Inscricoes)
+                .HasForeignKey(i => i.CategoriaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Inscricao>()
+                .HasOne(i => i.Pagamento)
+                .WithMany()
+                .HasForeignKey(i => i.PagamentoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Inscricao>()
+                .HasOne(i => i.PremioResgatavel)
+                .WithMany()
+                .HasForeignKey(i => i.PremioResgatavelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Notificacao>()
+                .HasOne(n => n.Pagamento)
+                .WithMany()
+                .HasForeignKey(n => n.PagamentoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UsuarioNotificacao>()
+                .HasOne(un => un.Usuario)
+                .WithMany(u => u.AnunciosRecebidos)
+                .HasForeignKey(un => un.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UsuarioNotificacao>()
+                .HasOne(un => un.Notificacao)
+                .WithMany(n => n.UsuariosAlvo)
+                .HasForeignKey(un => un.NotificacaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Premio>()
+                .HasOne(p => p.Pagamento)
+                .WithMany()
+                .HasForeignKey(p => p.PagamentoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
-
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.UseLazyLoadingProxies();
-        // }
-
     }
 }
