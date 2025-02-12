@@ -33,7 +33,8 @@ namespace CRUDAPI.Services
             }
 
             var emailExistente = await _contexto.Competidores
-            .AnyAsync(c => c.CriadorId == competidor.CriadorId && c.Email == competidor.Email);
+            .AnyAsync(c => c.CriadorId == competidor.CriadorId && c.Email == competidor.Email &&
+            c.Id != competidor.Id);
 
             if (emailExistente)
             {
