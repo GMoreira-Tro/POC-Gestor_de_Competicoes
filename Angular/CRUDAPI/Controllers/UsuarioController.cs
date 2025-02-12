@@ -158,5 +158,34 @@ namespace CRUDAPI.Controller
 
             return Ok("E-mail confirmado com sucesso! Agora você pode fazer login.");
         }
+
+        [HttpPost("{id}/upload-imagem")]
+        public async Task<IActionResult> UploadImagem(long id, IFormFile imagem)
+        {
+            var usuario = await _contexto.Usuarios.FindAsync(id);
+            if (usuario == null) return NotFound("Usuário não encontrado");
+
+            if (imagem == null || imagem.Length == 0)
+                return BadRequest("Nenhuma imagem foi enviada");
+
+            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+            if (!Directory.Exists(uploadsPath))
+                Directory.CreateDirectory(uploadsPath);
+
+            var fileName = $"{Guid.NewGuid()}_{imagem.FileName}";
+            var filePath = Path.Combine(uploadsPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imagem.CopyToAsync(stream);
+            }
+
+            usuario.ImagemUrl = $"/uploads/{fileName}";
+            _contexto.Usuarios.Update(usuario);
+            await _contexto.SaveChangesAsync();
+
+            return Ok(new { imagemUrl = usuario.ImagemUrl });
+        }
+
     }
 }

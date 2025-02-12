@@ -73,6 +73,8 @@ namespace CRUDAPI.Models
         [EnumDataType(typeof(Role))]
         public Role Role { get; set; }
 
+        public string ImagemUrl { get; set; } = "";
+
         public ICollection<Competidor> Competidores { get; set; } = new List<Competidor>();
         public ICollection<UsuarioNotificacao> AnunciosRecebidos { get; set; } = new List<UsuarioNotificacao>();
     }

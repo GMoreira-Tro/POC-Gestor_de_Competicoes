@@ -47,4 +47,11 @@ export class UserService {
   getUsuarioLogado(): Observable<Usuario> {
     return this.getUser(Number(localStorage.getItem('userId')));
   }
+
+  uploadImagem(id: number, imagem: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imagem', imagem);
+
+    return this.http.post<any>(`${this.baseUrl}/${id}/upload-imagem`, formData);
+  }
 }

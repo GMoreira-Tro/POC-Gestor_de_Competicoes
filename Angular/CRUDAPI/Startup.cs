@@ -2,6 +2,7 @@ using CRUDAPI.Models;
 using CRUDAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -127,6 +128,14 @@ namespace CRUDAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+            // Configura a pasta "uploads" para servir arquivos
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.WebRootPath, "uploads")),
+                RequestPath = "/uploads"
+            });
             app.UseHttpsRedirection();
             app.UseRouting();
 

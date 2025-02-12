@@ -4,7 +4,7 @@
   <h2>Perfil do Usuário</h2>
   
   <div class="usuario-info">
-    <img [src]="usuario.imagemUrl || 'default-image.png'" alt="Imagem do Usuário" class="usuario-imagem">
+    <img [src]="usuario.imagemUrl || 'favicon.ico'" alt="Imagem do Usuário" class="usuario-imagem">
     
     <div class="usuario-detalhes">
       <!-- Nome -->
@@ -12,7 +12,7 @@
         <span *ngIf="!editandoNome">{{ usuario.nome }}</span>
         <input *ngIf="editandoNome" type="text" [(ngModel)]="usuario.nome">
         <button (click)="editandoNome = !editandoNome">
-          {{ editandoNome ? 'Salvar' : 'Editar' }}
+          {{ editandoNome ? 'Confirmar' : 'Editar' }}
         </button>
       </p>
 
@@ -21,7 +21,7 @@
         <span *ngIf="!editandoSobrenome">{{ usuario.sobrenome }}</span>
         <input *ngIf="editandoSobrenome" type="text" [(ngModel)]="usuario.sobrenome">
         <button (click)="editandoSobrenome = !editandoSobrenome">
-          {{ editandoSobrenome ? 'Salvar' : 'Editar' }}
+          {{ editandoSobrenome ? 'Confirmar' : 'Editar' }}
         </button>
       </p>
 
@@ -49,7 +49,7 @@
         </select>
         <span *ngIf="!editandoLocalizacao">{{ usuario.cidade }}</span>
         <button (click)="editandoLocalizacao = !editandoLocalizacao">
-          {{ editandoLocalizacao ? 'Salvar' : 'Editar' }}
+          {{ editandoLocalizacao ? 'Confirmar' : 'Editar' }}
         </button>
       </p>
 
@@ -58,7 +58,7 @@
         <span *ngIf="!editandoNascimento">{{ usuario.dataNascimento | date }}</span>
         <input *ngIf="editandoNascimento" type="date" [(ngModel)]="usuario.dataNascimento">
         <button (click)="editandoNascimento = !editandoNascimento">
-          {{ editandoNascimento ? 'Salvar' : 'Editar' }}
+          {{ editandoNascimento ? 'Confirmar' : 'Editar' }}
         </button>
       </p>
 

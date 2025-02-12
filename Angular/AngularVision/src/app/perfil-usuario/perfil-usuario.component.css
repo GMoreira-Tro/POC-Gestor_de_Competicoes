@@ -1,32 +1,104 @@
-.email-confirmation-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
-  }
-  
-  h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  p {
-    margin-bottom: 20px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+/* CSS para o componente perfil-usuario */
+
+.perfil-usuario {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-usuario h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.usuario-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.usuario-imagem {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.usuario-detalhes p {
+  margin: 10px 0;
+}
+
+.usuario-detalhes strong {
+  color: #555;
+}
+
+.usuario-detalhes input,
+.usuario-detalhes select {
+  margin-left: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.usuario-detalhes button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.usuario-detalhes button:hover {
+  background-color: #0056b3;
+}
+
+.upload-imagem {
+  margin-top: 20px;
+}
+
+.upload-imagem p {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.upload-imagem input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.upload-imagem button {
+  padding: 5px 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.upload-imagem button:hover {
+  background-color: #218838;
+}
+
+.salvar-alteracoes {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.salvar-alteracoes button {
+  padding: 10px 20px;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.salvar-alteracoes button:hover {
+  background-color: #e0a800;
+}
