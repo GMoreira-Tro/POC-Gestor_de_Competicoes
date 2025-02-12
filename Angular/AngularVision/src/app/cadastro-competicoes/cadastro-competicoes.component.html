@@ -26,11 +26,16 @@
     <div *ngFor="let categoria of competicao.categorias; let i = index" class="categoria-container">
       <input type="text" placeholder="Nome da Categoria" [(ngModel)]="categoria.nome" required>
       <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
+      <div class="campo">
+        <label for="valorInscricao">Valor da Inscrição:</label>
+        <input type="number" id="valorInscricao" name="valorInscricao" [(ngModel)]="categoria.valorInscricao" required>
+        <small *ngIf="categoria.valorInscricao < 15.99" class="aviso">A inscrição deve possuir um valor maior que a taxa mínima de 15,99R$</small>
+      </div>
       <button type="button" (click)="removerCategoria(i)">-</button>
     </div>
     <button type="button" (click)="adicionarCategoria()">+ Adicionar Categoria</button>
   </div>
-
+  
   <!-- Localização -->
   <div class="campo">
     <label for="pais">País:</label>

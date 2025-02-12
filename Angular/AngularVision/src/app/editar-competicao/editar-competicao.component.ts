@@ -206,6 +206,7 @@ export class EditarCompeticaoComponent implements OnInit {
       nome: '',
       descricao: '',
       competicaoId: this.competicao.id,
+      valorInscricao: 0,
       inscricoes: []
     };
     this.competicao.categorias.push(novaCategoria);

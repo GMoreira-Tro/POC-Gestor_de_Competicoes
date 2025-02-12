@@ -65,3 +65,8 @@ public class HistoricoFinanceiroJaPossuiUsuarioException : Exception
 {
     public HistoricoFinanceiroJaPossuiUsuarioException() : base("Já existe um histórico financeiro para o usuário fornecido.") { }
 }
+
+public class ValorInscricaoInvalidoException : Exception
+{
+    public ValorInscricaoInvalidoException() : base("O valor da inscrição deve ser maior ou igual ao valor da taxa mínima de R$15,99.") { }
+}

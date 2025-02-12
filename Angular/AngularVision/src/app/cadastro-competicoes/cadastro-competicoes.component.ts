@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class CadastroCompeticoesComponent implements OnInit {
   @ViewChild('form') form!: NgForm;
-  
+
   competicao: Competicao = {
     titulo: '',
     descricao: '',
@@ -56,43 +56,40 @@ export class CadastroCompeticoesComponent implements OnInit {
       error => {
         console.error('Erro ao obter a lista de países:', error);
       });
-   }
+  }
 
-   onSubmit(): void {
+  onSubmit(): void {
     if (this.competicao.categorias.length === 0) {
       alert("A competição deve ter pelo menos uma categoria.");
       return;
     }
-  
+
     this.competicao.status = 1; // Ajusta o status para publicada
     console.log(this.competicao);
-  
+
     this.competicaoService.createCompeticao(this.competicao).subscribe(
-      novaCompeticao => {  
-        let categoriasCriadas = 0; // Contador de categorias criadas
-  
+      novaCompeticao => {
+
         this.competicao.categorias.forEach(categoria => {
           categoria.competicaoId = novaCompeticao.id;
           this.categoriaService.createCategoria(categoria).subscribe(
             () => {
-              categoriasCriadas++;
-              // Se todas as categorias foram criadas, exibe alerta e redireciona
-              if (categoriasCriadas === this.competicao.categorias.length) {
-                alert("Competição criada com sucesso!");
-                this.router.navigate(['/']); // Redireciona para a tela inicial
-              }
             },
             error => console.log("Erro ao criar categoria: ", error)
           );
         });
+
+        alert("Competição criada com sucesso!");
+        this.router.navigate(['/']); // Redireciona para a tela inicial
+
       },
       error => {
         console.log("Erro ao criar competição: ", error);
         alert("Erro ao criar a competição. Tente novamente.");
       }
     );
-  }  
-  
+  }
+
   onFileSelected(event: any): void {
     this.competicao.bannerImagem = event.target.files[0] as File;
   }
@@ -103,6 +100,7 @@ export class CadastroCompeticoesComponent implements OnInit {
       nome: '',
       descricao: '',
       competicaoId: 0,
+      valorInscricao: 0,
       inscricoes: []
     };
     this.competicao.categorias.push(novaCategoria);
@@ -112,14 +110,14 @@ export class CadastroCompeticoesComponent implements OnInit {
     this.competicao.categorias.splice(index, 1);
   }
 
-    // Função que chama a API do GeoNames para buscar Estado e Cidade com base no País
-    buscarEstadoCidade(): void {
-      this.geonamesService.getAllCountries().subscribe(paises => {
-        this.listaPaises = paises;
-      });
-    }
+  // Função que chama a API do GeoNames para buscar Estado e Cidade com base no País
+  buscarEstadoCidade(): void {
+    this.geonamesService.getAllCountries().subscribe(paises => {
+      this.listaPaises = paises;
+    });
+  }
 
-    // Função chamada quando o país selecionado é alterado
+  // Função chamada quando o país selecionado é alterado
   onCountryChange() {
     // Limpa a lista de estados
     this.listaEstados = [];

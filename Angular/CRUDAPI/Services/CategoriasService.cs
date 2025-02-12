@@ -26,6 +26,11 @@ namespace CRUDAPI.Services
                 throw new CampoObrigatorioException("O ID da competição é obrigatório.");
             }
 
+            if (categoria.ValorInscricao < 15.99m)
+            {
+                throw new ValorInscricaoInvalidoException();
+            }
+
             return categoria;
         }
 
