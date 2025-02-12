@@ -1,0 +1,34 @@
+<div class="competition-categories">
+    <h2>Categorias da Competição</h2>
+    <ul>
+        <li *ngFor="let categoria of categorias">
+            {{ categoria.nome }}
+            <button (click)="openInscricaoModal(categoria)">Inscrever-se</button>
+        </li>
+    </ul>
+</div>
+
+<div class="total-value">
+    <h3>Valor Total: {{ valorTotal | currency }}</h3>
+</div>
+
+<!-- Modal de Inscrição -->
+<div class="modal" *ngIf="isModalOpen">
+    <div class="modal-content">
+        <span class="close" (click)="closeInscricaoModal()">&times;</span>
+        <h2>Inscrição na Categoria: {{ categoriaSelecionada.nome }}</h2>
+        <form (ngSubmit)="inscreverCompetidor()">
+            <!-- Campos do formulário de inscrição -->
+            <label for="competidorNome">Nome do Competidor:</label>
+            <input type="text" id="competidorNome" [(ngModel)]="competidor.nome" name="competidorNome" required>
+            
+            <button type="submit">Inscrever</button>
+        </form>
+    </div>
+</div>
+
+<!-- QR Code -->
+<div class="qr-code" *ngIf="isQrCodeGenerated">
+    <h3>QR Code para Pagamento</h3>
+    <img [src]="qrCodeUrl" alt="QR Code">
+</div>
