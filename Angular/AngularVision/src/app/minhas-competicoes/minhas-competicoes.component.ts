@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CompeticaoService } from '../services/competicao.service';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { CategoriaService } from '../services/categoria.service';
 
 @Component({
     selector: 'app-minhas-competicoes',
@@ -14,7 +15,8 @@ export class MinhasCompeticoesComponent implements OnInit {
 
     constructor(private competicaoService: CompeticaoService,
         private router: Router,
-        private userService: UserService
+        private userService: UserService,
+        private categoriaService: CategoriaService
     ) { }
 
     ngOnInit(): void {
@@ -41,11 +43,28 @@ export class MinhasCompeticoesComponent implements OnInit {
         this.router.navigate(['/editar-competicao', id]);
     }
 
-    excluirCompeticao(id: number): void {
-        if (confirm("Tem certeza que deseja excluir esta competição?")) {
-            this.competicaoService.deleteCompeticao(id).subscribe(() => {
-                this.buscarMinhasCompeticoes(); // Atualiza a lista
-            }, error => alert(error.error.message ?? "Erro ao deletar competição."));
-        }
+    async excluirCategorias(id: number): Promise<void> {
+
+        this.categoriaService.getCategoriasPorCompeticao(id).subscribe(async (categorias) => {
+            console.log(categorias)
+            let countCategorias = 0;
+            categorias.forEach(async categoria => {
+                this.categoriaService.deleteCategoria(categoria.id).subscribe(categoria => {
+                    countCategorias++;
+                    if (countCategorias === categorias.length) {
+                        this.competicaoService.deleteCompeticao(id).subscribe(() => {
+                            this.buscarMinhasCompeticoes(); // Atualiza a lista
+                        }, error => alert(error.error.message ?? "Erro ao deletar competição."));
+                    }
+                }, error => console.log("Erro ao deletar categoria")
+                );
+            });
+        });
+
+    }
+
+    async excluirCompeticao(id: number) {
+        if (!confirm("Tem certeza que deseja excluir esta competição?")) return;
+        await this.excluirCategorias(id);
     }
 }
