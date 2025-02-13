@@ -10,14 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./cadastro-competidores.component.css']
 })
 export class CadastroCompetidoresComponent {
-  competidor: Competidor = {
-    id: 0,
-    nome: '',
-    email: '',
-    tipo: 0,
-    criadorId: 0,
-    imagemUrl: null
-  }
+  competidor: any = {}
+  imagemSelecionada: File | null = null;
   userId: number = 0;
 
   constructor(private userService: UserService,
@@ -35,18 +29,46 @@ export class CadastroCompetidoresComponent {
     );
   }
 
+  selecionarImagem(event: any): void {
+    this.imagemSelecionada = event.target.files[0] as File;
+  }
+
+  async uploadImagem(): Promise<void> {
+    if (!this.imagemSelecionada) return;
+    this.competidorService.uploadImagem(this.competidor.id, this.imagemSelecionada).subscribe(
+      (response) => {
+        console.log("Imagem enviada com sucesso!", response);
+        this.competidor.imagemUrl = response.imagemUrl; // Atualiza a imagem na interface
+
+        this.competidor.imagemUrl = this.competidor.imagemUrl?.startsWith('http')
+          ? this.competidor.imagemUrl
+          : `http://localhost:5000/${this.competidor.imagemUrl}`;
+      },
+      (error) => {
+        console.error("Erro ao fazer upload da imagem", error);
+      }
+    );
+  }
+
   onSubmit() {
     this.competidor.criadorId = this.userId;
-    this.competidorService.cadastrarCompetidor(this.competidor).subscribe(competidor => {
-      console.log(competidor);
+    this.competidor.tipo = Number(this.competidor.tipo);
+    console.log(this.competidor)
+    this.competidorService.cadastrarCompetidor(this.competidor).subscribe(async competidor => {
+
+      await this.uploadImagem();
       this.router.navigate(['/meus-competidores']);
+      alert('Competidor cadastrado com sucesso!');
     },
       error => {
         if (typeof error.error === 'string') {
           alert(error.error);
         } else {
+          console.log(error)
           alert("Preencha todos os campos");
         }
       });
+
+
   }
 }

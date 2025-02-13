@@ -91,11 +91,11 @@ export class EditarCompeticaoComponent implements OnInit {
           }
 
         }
-      );
-      this.competicao = competicao;
-      this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
-      ? this.competicao.bannerImagem
-      : `http://localhost:5000/${this.competicao.bannerImagem}`;
+        );
+        this.competicao = competicao;
+        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
+          ? this.competicao.bannerImagem
+          : `http://localhost:5000/${this.competicao.bannerImagem}`;
         this.onCountryChange();
       },
       error => console.log('Erro ao carregar competição:', error)
@@ -120,7 +120,11 @@ export class EditarCompeticaoComponent implements OnInit {
     console.log(this.competicao);
 
     this.competicaoService.updateCompeticao(this.competicao.id, this.competicao).subscribe(
-      () => {
+      async () => {
+
+        await this.uploadImagem();
+        alert("Competição atualizada com sucesso!");
+        this.router.navigate(['/minhas-competicoes']);
 
         this.categorias.forEach(categoria => {
           if (categoria.id === 0) {
@@ -149,10 +153,6 @@ export class EditarCompeticaoComponent implements OnInit {
           }
         });
 
-        this.uploadImagem();
-        alert("Competição atualizada com sucesso!");
-        this.router.navigate(['/minhas-competicoes']);
-
       },
       error => {
         console.log('Erro ao atualizar competição:', error);
@@ -166,7 +166,7 @@ export class EditarCompeticaoComponent implements OnInit {
     this.imagemSelecionada = event.target.files[0] as File;
   }
 
-  uploadImagem(): void {
+  async uploadImagem(): Promise<void> {
     if (!this.imagemSelecionada) return;
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
       (response) => {

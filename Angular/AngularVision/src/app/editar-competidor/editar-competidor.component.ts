@@ -42,23 +42,23 @@ export class EditarCompetidorComponent implements OnInit {
 
     this.competidor.tipo = Number(this.competidor.tipo);
     this.competidorService.atualizarCompetidor(this.competidor.id, this.competidor).subscribe(
-      () => {
+      async () => {
+        await this.uploadImagem();
+        alert('Competidor atualizado com sucesso!');
+        this.router.navigate(['/meus-competidores']);
       },
       error => {
         console.log('Erro ao atualizar competidor:', error);
         alert('Erro ao atualizar o competidor. Tente novamente.');
       }
     );
-    this.uploadImagem();
-    alert('Competidor atualizado com sucesso!');
-    this.router.navigate(['/meus-competidores']);
   }
 
   selecionarImagem(event: any): void {
     this.imagemSelecionada = event.target.files[0] as File;
   }
 
-  uploadImagem(): void {
+  async uploadImagem(): Promise<void> {
     if (!this.imagemSelecionada) return;
     this.competidorService.uploadImagem(this.competidor.id, this.imagemSelecionada).subscribe(
       (response) => {

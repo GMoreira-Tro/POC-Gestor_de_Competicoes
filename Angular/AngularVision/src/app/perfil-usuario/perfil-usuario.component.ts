@@ -101,7 +101,7 @@ export class PerfilUsuarioComponent implements OnInit {
     this.imagemSelecionada = event.target.files[0];
   }
 
-  uploadImagem(): void {
+  async uploadImagem(): Promise<void> {
     if (!this.imagemSelecionada) return;
     this.userService.uploadImagem(this.usuario.id, this.imagemSelecionada).subscribe(
       (response) => {

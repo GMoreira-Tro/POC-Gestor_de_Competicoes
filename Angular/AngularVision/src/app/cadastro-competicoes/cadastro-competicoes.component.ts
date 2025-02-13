@@ -75,7 +75,7 @@ export class CadastroCompeticoesComponent implements OnInit {
     this.competicao.status = 1; // Ajusta o status para publicada
 
     this.competicaoService.createCompeticao(this.competicao).subscribe(
-      novaCompeticao => {
+      async novaCompeticao => {
 
         this.competicao.bannerImagem = novaCompeticao.bannerImagem; // Atualiza a imagem na interface
 
@@ -91,24 +91,24 @@ export class CadastroCompeticoesComponent implements OnInit {
             error => console.log("Erro ao criar categoria: ", error)
           );
         });
-        
-        this.uploadImagem();
+
+        await this.uploadImagem();
+        this.router.navigate(['/minhas-competicoes']); // Redireciona para a tela inicial
+        alert("Competição criada com sucesso!");
       },
       error => {
         console.log("Erro ao criar competição: ", error);
         alert("Erro ao criar a competição. Tente novamente.");
       }
     );
-    
-    this.router.navigate(['/minhas-competicoes']); // Redireciona para a tela inicial
-    alert("Competição criada com sucesso!");
+
   }
 
   selecionarImagemBanner(event: any): void {
     this.imagemSelecionada = event.target.files[0] as File;
   }
-  
-  uploadImagem(): void {
+
+  async uploadImagem(): Promise<void> {
     if (!this.imagemSelecionada) return;
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
       (response) => {
