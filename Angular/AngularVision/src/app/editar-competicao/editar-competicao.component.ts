@@ -6,6 +6,7 @@ import { CategoriaService } from '../services/categoria.service';
 import { GeoNamesService } from '../services/geonames.service';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-editar-competicao',
@@ -14,29 +15,31 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EditarCompeticaoComponent implements OnInit {
   @ViewChild('form') form!: NgForm;
-  
+
   competicao: Competicao = {} as Competicao;
   listaPaises: any;
   listaEstados: any;
   listaCidades: any;
   idCategoriasParaDeletar: number[] = [];
   primeiroLoad = true;
+  categorias: Categoria[] = [];
 
   constructor(
     private competicaoService: CompeticaoService,
     private categoriaService: CategoriaService,
     private geonamesService: GeoNamesService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.carregarCompeticao(Number(id));
     }
-  
+
     // Carrega a lista de países
     this.geonamesService.getAllCountries().subscribe(
       paises => {
@@ -78,6 +81,15 @@ export class EditarCompeticaoComponent implements OnInit {
   carregarCompeticao(id: number): void {
     this.competicaoService.getCompeticao(id).subscribe(
       competicao => {
+        this.userService.getUsuarioLogado().subscribe(usuario => {
+          const userId = usuario.id;
+          if (competicao.criadorUsuarioId !== userId) {
+            console.log("Usuário tentou editar uma competição que não lhe pertence.");
+            this.router.navigate(['/']);
+            return;
+          }
+        }
+      );
         this.competicao = competicao;
         this.onCountryChange();
       },
@@ -86,7 +98,7 @@ export class EditarCompeticaoComponent implements OnInit {
 
     this.categoriaService.getCategoriasPorCompeticao(id).subscribe(
       categorias => {
-        this.competicao.categorias = categorias;
+        this.categorias = categorias;
       },
       error => console.log('Erro ao carregar categorias:', error)
     );
@@ -94,52 +106,53 @@ export class EditarCompeticaoComponent implements OnInit {
 
   onSubmit(): void {
     if (!this.competicao) return;
-    
-    if (this.competicao.categorias.length === 0) {
+
+    if (this.categorias.length === 0) {
       alert('A competição deve ter pelo menos uma categoria.');
       return;
     }
-    
+
     console.log(this.competicao);
-    
+
     this.competicaoService.updateCompeticao(this.competicao.id, this.competicao).subscribe(
-      () => {  
+      () => {
         let categoriasCriadas = 0; // Contador de categorias criadas
-  
-        this.competicao.categorias.forEach(categoria => {
+
+        this.categorias.forEach(categoria => {
           categoriasCriadas++;
-          if(categoria.id === 0) {
-          this.categoriaService.createCategoria(categoria).subscribe(
-            () => {
-              // Se todas as categorias foram criadas, exibe alerta e redireciona
-              if (categoriasCriadas === this.competicao.categorias.length) {
-                alert("Competição atualizada com sucesso!");
-                this.router.navigate(['/']); // Redireciona para a tela inicial
-              }
-            },
-            error => console.log("Erro ao criar categoria: ", error)
-          )}
+          if (categoria.id === 0) {
+            this.categoriaService.createCategoria(categoria).subscribe(
+              () => {
+                // Se todas as categorias foram criadas, exibe alerta e redireciona
+                if (categoriasCriadas === this.categorias.length) {
+                  alert("Competição atualizada com sucesso!");
+                  this.router.navigate(['/']); // Redireciona para a tela inicial
+                }
+              },
+              error => console.log("Erro ao criar categoria: ", error)
+            )
+          }
           else {
             this.categoriaService.updateCategoria(categoria.id, categoria).subscribe(
               () => {
-                if (categoriasCriadas === this.competicao.categorias.length) {
+                if (categoriasCriadas === this.categorias.length) {
                   alert("Competição criada com sucesso!");
                   this.router.navigate(['/']); // Redireciona para a tela inicial
                 }
               },
               error => console.log("Erro ao atualizar categoria: ", error)
-            )};
+            )
+          };
         });
 
         this.idCategoriasParaDeletar.forEach(id => {
-          if(id !== 0)
-          {
+          if (id !== 0) {
             this.categoriaService.deleteCategoria(id).subscribe(
               () => {
-                  console.log("Categoria deletada com sucesso!");
-                },
-                    error => console.log("Erro ao deletar categoria: ", error)
-                );
+                console.log("Categoria deletada com sucesso!");
+              },
+              error => console.log("Erro ao deletar categoria: ", error)
+            );
           }
         });
 
@@ -158,7 +171,7 @@ export class EditarCompeticaoComponent implements OnInit {
   }
 
   onCountryChange(): void {
-    if(this.primeiroLoad) {
+    if (this.primeiroLoad) {
       this.primeiroLoad = false;
       return;
     }
@@ -209,16 +222,16 @@ export class EditarCompeticaoComponent implements OnInit {
       valorInscricao: 0,
       inscricoes: []
     };
-    this.competicao.categorias.push(novaCategoria);
+    this.categorias.push(novaCategoria);
   }
-  
-  removerCategoria(index: number): void {
-    console.log(this.competicao.categorias[index]);
 
-    this.idCategoriasParaDeletar.push(this.competicao.categorias[index].id);
-    this.competicao.categorias.splice(index, 1);
+  removerCategoria(index: number): void {
+    console.log(this.categorias[index]);
+
+    this.idCategoriasParaDeletar.push(this.categorias[index].id);
+    this.categorias.splice(index, 1);
   }
-  
+
   cancel(): void {
     this.router.navigate(['/minhas-competicoes']);
   }

@@ -6,6 +6,7 @@ import { CategoriaService } from '../services/categoria.service';
 import { GeoNamesService } from '../services/geonames.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-cadastro-competicoes',
@@ -23,13 +24,13 @@ export class CadastroCompeticoesComponent implements OnInit {
     estado: '',
     cidade: '',
     bannerImagem: undefined,
-    categorias: [],
     id: 0,
     dataInicio: new Date(),
     dataFim: new Date(),
-    criadorUsuarioId: 1,  // Ajustar depois para o ID do usuário logado
+    criadorUsuarioId: 0,  // Ajustar depois para o ID do usuário logado
     status: 0
   };
+  categorias: Categoria[] = [];
 
   listaPaises: any;
   listaEstados: any;
@@ -38,6 +39,7 @@ export class CadastroCompeticoesComponent implements OnInit {
   constructor(private competicaoService: CompeticaoService, private categoriaService: CategoriaService,
     private geonamesService: GeoNamesService,
     private router: Router,
+    private userService: UserService,
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -46,6 +48,11 @@ export class CadastroCompeticoesComponent implements OnInit {
       //this.form.control.markAsTouched();
       this.cdr.detectChanges(); // Detecta as alterações manualmente após a inicialização do formulário
     });
+
+    this.userService.getUsuarioLogado().subscribe(usuario => {
+      this.competicao.criadorUsuarioId = usuario.id;
+    }
+    );
 
     // Carrega a lista de países do mundo
     this.geonamesService.getAllCountries().subscribe(
@@ -59,18 +66,17 @@ export class CadastroCompeticoesComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.competicao.categorias.length === 0) {
+    if (this.categorias.length === 0) {
       alert("A competição deve ter pelo menos uma categoria.");
       return;
     }
 
     this.competicao.status = 1; // Ajusta o status para publicada
-    console.log(this.competicao);
 
     this.competicaoService.createCompeticao(this.competicao).subscribe(
       novaCompeticao => {
 
-        this.competicao.categorias.forEach(categoria => {
+        this.categorias.forEach(categoria => {
           categoria.competicaoId = novaCompeticao.id;
           this.categoriaService.createCategoria(categoria).subscribe(
             () => {
@@ -103,11 +109,11 @@ export class CadastroCompeticoesComponent implements OnInit {
       valorInscricao: 0,
       inscricoes: []
     };
-    this.competicao.categorias.push(novaCategoria);
+    this.categorias.push(novaCategoria);
   }
 
   removerCategoria(index: number): void {
-    this.competicao.categorias.splice(index, 1);
+    this.categorias.splice(index, 1);
   }
 
   // Função que chama a API do GeoNames para buscar Estado e Cidade com base no País

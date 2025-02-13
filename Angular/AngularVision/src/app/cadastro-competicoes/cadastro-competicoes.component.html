@@ -23,7 +23,7 @@
   <!-- Seção de Categorias -->
   <div class="campo">
     <label>Categorias:</label>
-    <div *ngFor="let categoria of competicao.categorias; let i = index" class="categoria-container">
+    <div *ngFor="let categoria of categorias; let i = index" class="categoria-container">
       <input type="text" placeholder="Nome da Categoria" [(ngModel)]="categoria.nome" required>
       <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
       <div class="campo">

@@ -22,8 +22,8 @@ export class CategoriaService {
   getCategoriasPorCompeticao(idCompeticao: number): Observable<Categoria[]> {
     return this.http.get<Categoria[]>(`${this.baseUrl}/buscar-de-competicao/${idCompeticao}`);
   }
-  createCategoria(user: Categoria): Observable<Categoria> {
-    return this.http.post<Categoria>(`${this.baseUrl}`, user);
+  createCategoria(categoria: Categoria): Observable<Categoria> {
+    return this.http.post<Categoria>(`${this.baseUrl}`, categoria);
   }
 
   updateCategoria(id: number, categoria: Categoria): Observable<Categoria> {

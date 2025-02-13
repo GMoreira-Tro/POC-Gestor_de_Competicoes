@@ -12,6 +12,5 @@ export interface Competicao {
     dataInicio: Date;
     dataFim: Date;
     criadorUsuarioId: number;
-    categorias: Categoria[];
     status: number;
   }
