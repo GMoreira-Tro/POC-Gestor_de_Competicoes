@@ -20,6 +20,11 @@
             <option value=1>Time</option>
         </select>
     </div>
+
+    <div>
+        <label for="imagem">Selecionar Foto:</label>
+        <input type="file" id="imagem" (change)="selecionarImagem($event)">
+    </div>
     
     <button type="submit">Salvar</button>
     <button type="button" (click)="cancel()">Cancelar</button>

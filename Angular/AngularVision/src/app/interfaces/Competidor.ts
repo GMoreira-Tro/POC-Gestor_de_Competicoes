@@ -3,5 +3,6 @@ export interface Competidor {
     nome: string;
     email: string;
     tipo: number;
+    imagemUrl: File|null; 
     criadorId: number;
 }

@@ -116,5 +116,33 @@ namespace CRUDAPI.Controller
         {
             return await _contexto.Competidores.Where(competidor => competidor.CriadorId == userId).ToListAsync();
         }
+
+        [HttpPost("{id}/upload-imagem")]
+        public async Task<IActionResult> UploadImagem(long id, IFormFile imagem)
+        {
+            var competidor = await _contexto.Competidores.FindAsync(id);
+            if (competidor == null) return NotFound("Competidor não encontrada");
+
+            if (imagem == null || imagem.Length == 0)
+                return BadRequest("Nenhuma imagem foi enviada");
+
+            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+            if (!Directory.Exists(uploadsPath))
+                Directory.CreateDirectory(uploadsPath);
+
+            var fileName = $"{Guid.NewGuid()}_{imagem.FileName}";
+            var filePath = Path.Combine(uploadsPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imagem.CopyToAsync(stream);
+            }
+
+            competidor.ImagemUrl = $"/uploads/{fileName}";
+            _contexto.Competidores.Update(competidor);
+            await _contexto.SaveChangesAsync();
+
+            return Ok(new { imagemUrl = competidor.ImagemUrl });
+        }
     }
 }

@@ -15,7 +15,8 @@ export class CadastroCompetidoresComponent {
     nome: '',
     email: '',
     tipo: 0,
-    criadorId: 0
+    criadorId: 0,
+    imagemUrl: null
   }
   userId: number = 0;
 

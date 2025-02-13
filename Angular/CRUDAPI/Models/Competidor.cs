@@ -33,6 +33,8 @@ namespace CRUDAPI.Models
         [EnumDataType(typeof(TipoCompetidor))]
         public TipoCompetidor Tipo { get; set; }
 
+        public string? ImagemUrl { get; set; }
+
         /// <summary>
         /// Id do Usuário responsável por criar este Competidor.
         /// </summary>

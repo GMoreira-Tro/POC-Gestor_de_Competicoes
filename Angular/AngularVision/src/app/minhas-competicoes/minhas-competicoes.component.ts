@@ -29,7 +29,6 @@ export class MinhasCompeticoesComponent implements OnInit {
             this.minhasCompeticoes = competicoes;
 
             this.minhasCompeticoes.forEach(competicao => {
-                competicao = competicao;
                 competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
                     ? competicao.bannerImagem
                     : `http://localhost:5000/${competicao.bannerImagem}`;

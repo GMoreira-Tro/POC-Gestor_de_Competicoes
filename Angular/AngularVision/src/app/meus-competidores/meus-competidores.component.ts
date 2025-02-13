@@ -27,6 +27,13 @@ export class MeusCompetidoresComponent implements OnInit {
     buscarMeusCompetidores(): void {
         this.competidorService.buscarCompetidoresDoUsuario(this.userId).subscribe(competidores => {
             this.meusCompetidores = competidores;
+
+            this.meusCompetidores.forEach(competidor => {
+                competidor.imagemUrl = competidor.imagemUrl?.startsWith('http')
+                    ? competidor.imagemUrl
+                    : `http://localhost:5000/${competidor.imagemUrl}`;
+            }
+            );
         }, error => console.log("Erro ao buscar competidores: ", error));
     }
 
