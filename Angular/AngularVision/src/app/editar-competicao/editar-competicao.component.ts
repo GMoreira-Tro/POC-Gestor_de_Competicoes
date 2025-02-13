@@ -89,7 +89,7 @@ export class EditarCompeticaoComponent implements OnInit {
             return;
           }
         }
-      );
+        );
         this.competicao = competicao;
         this.onCountryChange();
       },
@@ -116,18 +116,11 @@ export class EditarCompeticaoComponent implements OnInit {
 
     this.competicaoService.updateCompeticao(this.competicao.id, this.competicao).subscribe(
       () => {
-        let categoriasCriadas = 0; // Contador de categorias criadas
 
         this.categorias.forEach(categoria => {
-          categoriasCriadas++;
           if (categoria.id === 0) {
             this.categoriaService.createCategoria(categoria).subscribe(
               () => {
-                // Se todas as categorias foram criadas, exibe alerta e redireciona
-                if (categoriasCriadas === this.categorias.length) {
-                  alert("Competição atualizada com sucesso!");
-                  this.router.navigate(['/']); // Redireciona para a tela inicial
-                }
               },
               error => console.log("Erro ao criar categoria: ", error)
             )
@@ -135,10 +128,6 @@ export class EditarCompeticaoComponent implements OnInit {
           else {
             this.categoriaService.updateCategoria(categoria.id, categoria).subscribe(
               () => {
-                if (categoriasCriadas === this.categorias.length) {
-                  alert("Competição criada com sucesso!");
-                  this.router.navigate(['/']); // Redireciona para a tela inicial
-                }
               },
               error => console.log("Erro ao atualizar categoria: ", error)
             )
@@ -149,12 +138,14 @@ export class EditarCompeticaoComponent implements OnInit {
           if (id !== 0) {
             this.categoriaService.deleteCategoria(id).subscribe(
               () => {
-                console.log("Categoria deletada com sucesso!");
               },
               error => console.log("Erro ao deletar categoria: ", error)
             );
           }
         });
+
+        alert("Competição atualizada com sucesso!");
+        this.router.navigate(['/minhas-competicoes']);
 
       },
       error => {
