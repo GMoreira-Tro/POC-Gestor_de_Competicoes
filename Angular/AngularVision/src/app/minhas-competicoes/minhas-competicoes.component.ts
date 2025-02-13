@@ -27,6 +27,14 @@ export class MinhasCompeticoesComponent implements OnInit {
     buscarMinhasCompeticoes(): void {
         this.competicaoService.buscarCompeticoesDoUsuario(this.userId).subscribe(competicoes => {
             this.minhasCompeticoes = competicoes;
+
+            this.minhasCompeticoes.forEach(competicao => {
+                competicao = competicao;
+                competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
+                    ? competicao.bannerImagem
+                    : `http://localhost:5000/${competicao.bannerImagem}`;
+            }
+            );
         }, error => console.log("Erro ao buscar competições: ", error));
     }
 

@@ -3,13 +3,19 @@
 
 <div class="minhas-competicoes">
     <h2>Minhas Competições</h2>
-    <div *ngFor="let competicao of minhasCompeticoes">
-        <h3>{{ competicao.nome }}</h3>
-        <p>{{ competicao.modalidade }} - {{ competicao.cidade }}, {{ competicao.estado }}</p>
-        <button (click)="editarCompeticao(competicao.id)">Editar</button>
-        <button (click)="excluirCompeticao(competicao.id)">Excluir</button>
+    <div class="competicoes-container">
+        <div *ngFor="let competicao of minhasCompeticoes" class="competicao-card" [ngStyle]="{'background-image': 'url(' + (competicao.bannerImagem ? competicao.bannerImagem : 'logo.jpg') + ')'}">
+            <div class="competicao-info">
+                <h3>{{ competicao.titulo }}</h3>
+                <p>{{ competicao.descricao }}</p>
+                <p *ngIf="competicao.cidade && competicao.estado">{{ competicao.modalidade }} - {{ competicao.cidade }}, {{ competicao.estado }}</p>
+                <p *ngIf="!competicao.cidade && competicao.estado">{{ competicao.modalidade }} - {{ competicao.estado }}</p>
+                <p *ngIf="!competicao.cidade && !competicao.estado">{{ competicao.modalidade }}</p>
+                <button (click)="editarCompeticao(competicao.id)">Editar</button>
+                <button (click)="excluirCompeticao(competicao.id)">Excluir</button>
+            </div>
+        </div>
     </div>
 </div>
-
 
 <app-rodape></app-rodape>

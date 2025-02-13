@@ -1,47 +1,80 @@
+/* Minhas Competições */
 .minhas-competicoes {
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .minhas-competicoes h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+    text-align: center;
     color: #333;
-}
-
-.minhas-competicoes div {
     margin-bottom: 20px;
-    padding: 15px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
-.minhas-competicoes h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #444;
+.competicoes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-.minhas-competicoes p {
-    font-size: 16px;
+.competicao-card {
+    position: relative;
+    width: calc(33.333% - 20px); /* Três cards por linha */
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    .competicao-card {
+        width: calc(50% - 20px); /* Dois cards por linha */
+    }
+}
+
+@media (max-width: 480px) {
+    .competicao-card {
+        width: 100%; /* Um card por linha */
+    }
+}
+
+.competicao-info {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.competicao-info h3 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.competicao-info p {
     margin: 5px 0;
-    color: #555;
 }
 
-.minhas-competicoes button {
-    margin-right: 10px;
-    padding: 8px 12px;
+button {
+    margin-top: 10px;
+    padding: 10px 15px;
     font-size: 14px;
     color: #fff;
-    background-color: #28a745;
+    background-color: #007bff;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.minhas-competicoes button:hover {
-    background-color: #218838;
+button:hover {
+    background-color: #0056b3;
 }

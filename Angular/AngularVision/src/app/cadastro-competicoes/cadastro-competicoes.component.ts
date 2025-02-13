@@ -31,6 +31,7 @@ export class CadastroCompeticoesComponent implements OnInit {
     status: 0
   };
   categorias: Categoria[] = [];
+  imagemSelecionada: File | null = null;
 
   listaPaises: any;
   listaEstados: any;
@@ -90,20 +91,38 @@ export class CadastroCompeticoesComponent implements OnInit {
             error => console.log("Erro ao criar categoria: ", error)
           );
         });
-
-        alert("Competição criada com sucesso!");
-        this.router.navigate(['/minhas-competicoes']); // Redireciona para a tela inicial
-
+        
+        this.uploadImagem();
       },
       error => {
         console.log("Erro ao criar competição: ", error);
         alert("Erro ao criar a competição. Tente novamente.");
       }
     );
+    
+    this.router.navigate(['/minhas-competicoes']); // Redireciona para a tela inicial
+    alert("Competição criada com sucesso!");
   }
 
   selecionarImagemBanner(event: any): void {
-    this.competicao.bannerImagem = event.target.files[0] as File;
+    this.imagemSelecionada = event.target.files[0] as File;
+  }
+  
+  uploadImagem(): void {
+    if (!this.imagemSelecionada) return;
+    this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
+      (response) => {
+        console.log("Imagem enviada com sucesso!", response);
+        this.competicao.bannerImagem = response.bannerImagem; // Atualiza a imagem na interface
+
+        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
+          ? this.competicao.bannerImagem
+          : `http://localhost:5000/${this.competicao.bannerImagem}`;
+      },
+      (error) => {
+        console.error("Erro ao fazer upload da imagem", error);
+      }
+    );
   }
 
   adicionarCategoria(): void {
