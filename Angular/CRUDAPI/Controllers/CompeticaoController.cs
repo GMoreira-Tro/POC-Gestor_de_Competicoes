@@ -160,5 +160,33 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
         {
             return await _contexto.Competicoes.Where(competicao => competicao.CriadorUsuarioId == userId).ToListAsync();
         }
+
+        [HttpPost("{id}/upload-imagem")]
+        public async Task<IActionResult> UploadImagem(long id, IFormFile imagem)
+        {
+            var competicao = await _contexto.Competicoes.FindAsync(id);
+            if (competicao == null) return NotFound("Competição não encontrada");
+
+            if (imagem == null || imagem.Length == 0)
+                return BadRequest("Nenhuma imagem foi enviada");
+
+            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+            if (!Directory.Exists(uploadsPath))
+                Directory.CreateDirectory(uploadsPath);
+
+            var fileName = $"{Guid.NewGuid()}_{imagem.FileName}";
+            var filePath = Path.Combine(uploadsPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imagem.CopyToAsync(stream);
+            }
+
+            competicao.BannerImagem = $"/uploads/{fileName}";
+            _contexto.Competicoes.Update(competicao);
+            await _contexto.SaveChangesAsync();
+
+            return Ok(new { imagemUrl = competicao.BannerImagem });
+        }
     }
 }

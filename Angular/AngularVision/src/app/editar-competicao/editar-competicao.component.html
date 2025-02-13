@@ -9,52 +9,61 @@
         <input type="text" id="nome" name="nome" [(ngModel)]="competicao.titulo" required>
     </div>
 
-    <div class="campo">
-        <label for="descricao">Descrição:</label>
-        <textarea id="descricao" name="descricao" [(ngModel)]="competicao.descricao" required></textarea>
-    </div>
+    <div class="banner">
+        <img [src]="competicao.bannerImagem || 'favicon.ico'" alt="Imagem do Usuário" class="usuario-imagem">
 
-    <!-- Modalidade -->
-    <div class="campo">
-        <label for="modalidade">Modalidade:</label>
-        <input type="text" id="modalidade" name="modalidade" [(ngModel)]="competicao.modalidade" required>
-    </div>
-
-    <!-- Seção de Categorias -->
-    <div class="campo">
-        <label>Categorias:</label>
-        <div *ngFor="let categoria of categorias; let i = index" class="categoria-container">
-            <input type="text" placeholder="Nome da Categoria" [(ngModel)]="categoria.nome" required>
-            <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
-            <button type="button" (click)="removerCategoria(i)">-</button>
+        <!-- Upload de Imagem do Banner -->
+        <div class="campo upload-imagem">
+            <label for="banner">Imagem do Banner:</label>
+            <input type="file" id="banner" (change)="selecionarImagemBanner($event)">
         </div>
-        <button type="button" (click)="adicionarCategoria()">+ Adicionar Categoria</button>
+        <div class="campo">
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricao" [(ngModel)]="competicao.descricao" required></textarea>
+        </div>
+
+        <!-- Modalidade -->
+        <div class="campo">
+            <label for="modalidade">Modalidade:</label>
+            <input type="text" id="modalidade" name="modalidade" [(ngModel)]="competicao.modalidade" required>
+        </div>
+
+        <!-- Seção de Categorias -->
+        <div class="campo">
+            <label>Categorias:</label>
+            <div *ngFor="let categoria of categorias; let i = index" class="categoria-container">
+                <input type="text" placeholder="Nome da Categoria" [(ngModel)]="categoria.nome" required>
+                <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
+                <button type="button" (click)="removerCategoria(i)">-</button>
+            </div>
+            <button type="button" (click)="adicionarCategoria()">+ Adicionar Categoria</button>
+        </div>
+
+        <!-- Localização -->
+        <div class="campo">
+            <label for="pais">País:</label>
+            <select id="pais" name="pais" [(ngModel)]="competicao.pais" (change)="onCountryChange()">
+                <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}
+                </option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado" [(ngModel)]="competicao.estado" (change)="onStateChange()">
+                <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="cidade">Cidade:</label>
+            <select id="cidade" name="cidade" [(ngModel)]="competicao.cidade">
+                <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
+            </select>
+        </div>
+
+        <button type="submit" (click)="onSubmit()">Salvar</button>
+        <button type="button" (click)="cancel()">Cancelar</button>
     </div>
 
-    <!-- Localização -->
-    <div class="campo">
-        <label for="pais">País:</label>
-        <select id="pais" name="pais" [(ngModel)]="competicao.pais" (change)="onCountryChange()">
-            <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
-        </select>
-    </div>
-
-    <div class="campo">
-        <label for="estado">Estado:</label>
-        <select id="estado" name="estado" [(ngModel)]="competicao.estado" (change)="onStateChange()">
-            <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
-        </select>
-    </div>
-
-    <div class="campo">
-        <label for="cidade">Cidade:</label>
-        <select id="cidade" name="cidade" [(ngModel)]="competicao.cidade">
-            <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
-        </select>
-    </div>
-
-    <button type="submit" (click)="onSubmit()">Salvar</button>
-    <button type="button" (click)="cancel()">Cancelar</button>
-</div>
-
-<app-rodape></app-rodape>
+    <app-rodape></app-rodape>

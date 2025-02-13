@@ -16,14 +16,14 @@ import { UserService } from '../services/user.service';
 export class CadastroCompeticoesComponent implements OnInit {
   @ViewChild('form') form!: NgForm;
 
-  competicao: Competicao = {
+  competicao: any = {
     titulo: '',
     descricao: '',
     modalidade: '',
     pais: '',
     estado: '',
     cidade: '',
-    bannerImagem: undefined,
+    bannerImagem: null,
     id: 0,
     dataInicio: new Date(),
     dataFim: new Date(),
@@ -76,6 +76,12 @@ export class CadastroCompeticoesComponent implements OnInit {
     this.competicaoService.createCompeticao(this.competicao).subscribe(
       novaCompeticao => {
 
+        this.competicao.bannerImagem = novaCompeticao.bannerImagem; // Atualiza a imagem na interface
+
+        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
+          ? this.competicao.bannerImagem
+          : `http://localhost:5000/${this.competicao.bannerImagem}`;
+
         this.categorias.forEach(categoria => {
           categoria.competicaoId = novaCompeticao.id;
           this.categoriaService.createCategoria(categoria).subscribe(
@@ -86,7 +92,7 @@ export class CadastroCompeticoesComponent implements OnInit {
         });
 
         alert("Competição criada com sucesso!");
-        this.router.navigate(['/']); // Redireciona para a tela inicial
+        this.router.navigate(['/minhas-competicoes']); // Redireciona para a tela inicial
 
       },
       error => {
@@ -96,7 +102,7 @@ export class CadastroCompeticoesComponent implements OnInit {
     );
   }
 
-  onFileSelected(event: any): void {
+  selecionarImagemBanner(event: any): void {
     this.competicao.bannerImagem = event.target.files[0] as File;
   }
 

@@ -9,6 +9,15 @@
     <input type="text" id="nome" name="nome" [(ngModel)]="competicao.titulo" required>
   </div>
 
+  <div class="competicao-info">
+    <img [src]="competicao.bannerImagem || 'favicon.ico'" alt="Imagem do Usuário" class="usuario-imagem">
+
+    <!-- Upload de Imagem do Banner -->
+    <div class="campo upload-imagem">
+      <label for="banner">Imagem do Banner:</label>
+      <input type="file" id="banner" (change)="selecionarImagemBanner($event)">
+    </div>
+
   <div class="campo">
     <label for="descricao">Descrição:</label>
     <textarea id="descricao" name="descricao" [(ngModel)]="competicao.descricao" required></textarea>

@@ -16,13 +16,14 @@ import { UserService } from '../services/user.service';
 export class EditarCompeticaoComponent implements OnInit {
   @ViewChild('form') form!: NgForm;
 
-  competicao: Competicao = {} as Competicao;
+  competicao: any = {};
   listaPaises: any;
   listaEstados: any;
   listaCidades: any;
   idCategoriasParaDeletar: number[] = [];
   primeiroLoad = true;
   categorias: Categoria[] = [];
+  imagemSelecionada: File | null = null;
 
   constructor(
     private competicaoService: CompeticaoService,
@@ -88,9 +89,13 @@ export class EditarCompeticaoComponent implements OnInit {
             this.router.navigate(['/']);
             return;
           }
+
         }
-        );
-        this.competicao = competicao;
+      );
+      this.competicao = competicao;
+      this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
+      ? this.competicao.bannerImagem
+      : `http://localhost:5000/${this.competicao.bannerImagem}`;
         this.onCountryChange();
       },
       error => console.log('Erro ao carregar competição:', error)
@@ -144,6 +149,7 @@ export class EditarCompeticaoComponent implements OnInit {
           }
         });
 
+        this.uploadImagem();
         alert("Competição atualizada com sucesso!");
         this.router.navigate(['/minhas-competicoes']);
 
@@ -153,12 +159,28 @@ export class EditarCompeticaoComponent implements OnInit {
         alert('Erro ao atualizar a competição. Tente novamente.');
       }
     );
+
   }
 
-  onFileSelected(event: any): void {
-    if (this.competicao) {
-      this.competicao.bannerImagem = event.target.files[0] as File;
-    }
+  selecionarImagemBanner(event: any): void {
+    this.imagemSelecionada = event.target.files[0] as File;
+  }
+
+  uploadImagem(): void {
+    if (!this.imagemSelecionada) return;
+    this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
+      (response) => {
+        console.log("Imagem enviada com sucesso!", response);
+        this.competicao.bannerImagem = response.bannerImagem; // Atualiza a imagem na interface
+
+        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
+          ? this.competicao.bannerImagem
+          : `http://localhost:5000/${this.competicao.bannerImagem}`;
+      },
+      (error) => {
+        console.error("Erro ao fazer upload da imagem", error);
+      }
+    );
   }
 
   onCountryChange(): void {

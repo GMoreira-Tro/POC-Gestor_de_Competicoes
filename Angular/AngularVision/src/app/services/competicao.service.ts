@@ -39,4 +39,11 @@ export class CompeticaoService {
   buscarCompeticoesDoUsuario(userId: number): Observable<Competicao[]> {
     return this.http.get<Competicao[]>(`${this.baseUrl}/buscar-do-usuario/${userId}`);
   }
+
+  uploadImagem(id: number, imagem: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imagem', imagem);
+
+    return this.http.post<any>(`${this.baseUrl}/${id}/upload-imagem`, formData);
+  }
 }
