@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { CompeticaoService } from '../services/competicao.service';
+import { Router } from '@angular/router';
 
 interface Competicao {
   nome: string;
@@ -17,7 +18,8 @@ export class TelaInicialComponent implements OnInit {
   usuarioLogado: any
 
   constructor(private userService: UserService,
-    private competicaoService: CompeticaoService
+    private competicaoService: CompeticaoService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -28,33 +30,45 @@ export class TelaInicialComponent implements OnInit {
   }
 
   buscarMinhasCompeticoes(): void {
-    const params: { pais?: string,
+    const params: {
+      pais?: string,
       estado?: string,
       cidade?: string
-     } = {};
+    } = {};
     switch (this.filtroSelecionado) {
       case 'mundial':
-      // No filter needed for mundial
-      break;
+        // No filter needed for mundial
+        break;
       case 'nacional':
-      params.pais = this.usuarioLogado.pais;
-      break;
+        params.pais = this.usuarioLogado.pais;
+        break;
       case 'estadual':
-      params.pais = this.usuarioLogado.pais;
-      params.estado = this.usuarioLogado.estado;
-      break;
+        params.pais = this.usuarioLogado.pais;
+        params.estado = this.usuarioLogado.estado;
+        break;
       case 'municipal':
-      params.pais = this.usuarioLogado.pais;
-      params.estado = this.usuarioLogado.estado;
-      params.cidade = this.usuarioLogado.cidade;
-      break;
+        params.pais = this.usuarioLogado.pais;
+        params.estado = this.usuarioLogado.estado;
+        params.cidade = this.usuarioLogado.cidade;
+        break;
       default:
-      // Handle default case if needed
-      break;
+        // Handle default case if needed
+        break;
     }
 
     this.competicaoService.buscarCompeticoes(params).subscribe(competicoes => {
       this.competicoes = competicoes;
+
+      this.competicoes.forEach(competicao => {
+        competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
+          ? competicao.bannerImagem
+          : `http://localhost:5000/${competicao.bannerImagem}`;
+      });
     }, error => console.log("Erro ao buscar competições: ", error));
+  }
+
+  // Função para se inscrever em uma competição
+  inscreverCompeticao(id: number): void {
+    this.router.navigate(['/inscricao-na-competicao']);
   }
 }
