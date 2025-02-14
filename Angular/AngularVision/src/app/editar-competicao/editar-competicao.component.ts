@@ -93,9 +93,11 @@ export class EditarCompeticaoComponent implements OnInit {
         }
         );
         this.competicao = competicao;
-        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
-          ? this.competicao.bannerImagem
-          : `http://localhost:5000/${this.competicao.bannerImagem}`;
+        if (competicao.bannerImagem) {
+          this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
+            ? this.competicao.bannerImagem
+            : `http://localhost:5000/${this.competicao.bannerImagem}`;
+        }
         this.onCountryChange();
       },
       error => console.log('Erro ao carregar competição:', error)
@@ -117,25 +119,35 @@ export class EditarCompeticaoComponent implements OnInit {
       return;
     }
 
+    for (let i = 0; i < this.categorias.length; i++) {
+      const categoria = this.categorias[i];
+      if (categoria.nome === '') {
+        alert('Todas as categorias devem conter um nome.');
+        return;
+      }
+      if (categoria.valorInscricao < 15.99) {
+        alert('O valor de inscrição das categorias deve ser maior ou igual a R$ 15,99');
+        return;
+      }
+    }
+
     console.log(this.competicao);
 
     this.competicaoService.updateCompeticao(this.competicao.id, this.competicao).subscribe(
       async () => {
 
         await this.uploadImagem();
-        alert("Competição atualizada com sucesso!");
-        this.router.navigate(['/minhas-competicoes']);
 
-        this.categorias.forEach(categoria => {
+        this.categorias.forEach(async categoria => {
           if (categoria.id === 0) {
-            this.categoriaService.createCategoria(categoria).subscribe(
+            await this.categoriaService.createCategoria(categoria).subscribe(
               () => {
               },
               error => console.log("Erro ao criar categoria: ", error)
             )
           }
           else {
-            this.categoriaService.updateCategoria(categoria.id, categoria).subscribe(
+            await this.categoriaService.updateCategoria(categoria.id, categoria).subscribe(
               () => {
               },
               error => console.log("Erro ao atualizar categoria: ", error)
@@ -143,9 +155,9 @@ export class EditarCompeticaoComponent implements OnInit {
           };
         });
 
-        this.idCategoriasParaDeletar.forEach(id => {
+        this.idCategoriasParaDeletar.forEach(async id => {
           if (id !== 0) {
-            this.categoriaService.deleteCategoria(id).subscribe(
+            await this.categoriaService.deleteCategoria(id).subscribe(
               () => {
               },
               error => console.log("Erro ao deletar categoria: ", error)
@@ -153,6 +165,8 @@ export class EditarCompeticaoComponent implements OnInit {
           }
         });
 
+        alert("Competição atualizada com sucesso!");
+        this.router.navigate(['/minhas-competicoes']);
       },
       error => {
         console.log('Erro ao atualizar competição:', error);
@@ -169,13 +183,7 @@ export class EditarCompeticaoComponent implements OnInit {
   async uploadImagem(): Promise<void> {
     if (!this.imagemSelecionada) return;
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
-      (response) => {
-        console.log("Imagem enviada com sucesso!", response);
-        this.competicao.bannerImagem = response.bannerImagem; // Atualiza a imagem na interface
-
-        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
-          ? this.competicao.bannerImagem
-          : `http://localhost:5000/${this.competicao.bannerImagem}`;
+      () => {
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);

@@ -71,28 +71,34 @@ export class CadastroCompeticoesComponent implements OnInit {
       alert("A competição deve ter pelo menos uma categoria.");
       return;
     }
+    for (let i = 0; i < this.categorias.length; i++) {
+      const categoria = this.categorias[i];
+      if (categoria.nome === '') {
+        alert('Todas as categorias devem conter um nome.');
+        return;
+      }
+      if (categoria.valorInscricao < 15.99) {
+        alert('O valor de inscrição das categorias deve ser maior ou igual a R$ 15,99');
+        return;
+      }
+    }
 
     this.competicao.status = 1; // Ajusta o status para publicada
 
     this.competicaoService.createCompeticao(this.competicao).subscribe(
       async novaCompeticao => {
 
-        this.competicao.bannerImagem = novaCompeticao.bannerImagem; // Atualiza a imagem na interface
+        await this.uploadImagem();
 
-        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
-          ? this.competicao.bannerImagem
-          : `http://localhost:5000/${this.competicao.bannerImagem}`;
-
-        this.categorias.forEach(categoria => {
+        this.categorias.forEach(async categoria => {
           categoria.competicaoId = novaCompeticao.id;
-          this.categoriaService.createCategoria(categoria).subscribe(
+          await this.categoriaService.createCategoria(categoria).subscribe(
             () => {
             },
             error => console.log("Erro ao criar categoria: ", error)
           );
         });
 
-        await this.uploadImagem();
         this.router.navigate(['/minhas-competicoes']); // Redireciona para a tela inicial
         alert("Competição criada com sucesso!");
       },
@@ -111,13 +117,7 @@ export class CadastroCompeticoesComponent implements OnInit {
   async uploadImagem(): Promise<void> {
     if (!this.imagemSelecionada) return;
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
-      (response) => {
-        console.log("Imagem enviada com sucesso!", response);
-        this.competicao.bannerImagem = response.bannerImagem; // Atualiza a imagem na interface
-
-        this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
-          ? this.competicao.bannerImagem
-          : `http://localhost:5000/${this.competicao.bannerImagem}`;
+      () => {
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);
