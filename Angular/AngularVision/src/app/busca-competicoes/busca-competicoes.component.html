@@ -27,11 +27,16 @@
 
 <!-- Lista de competições -->
 <div class="competition-list">
-    <div *ngFor="let competicao of competicoes">
-        <h3>{{ competicao.titulo }}</h3>
-        <p><strong>Modalidade:</strong> {{ competicao.modalidade }}</p>
-        <p><strong>Descrição:</strong> {{ competicao.descricao }}</p>
-        <p><strong>Localização:</strong> {{ competicao.cidade }}, {{ competicao.estado }}, {{ competicao.pais }}</p>
+    <div class="competicoes-container">
+        <div *ngFor="let competicao of competicoes" class="competicao-card" [ngStyle]="{'background-image': 'url(' + (competicao.bannerImagem ? competicao.bannerImagem : 'logo.jpg') + ')'}">
+            <div class="competicao-info">
+                <h3>{{ competicao.titulo }}</h3>
+                <p><strong>Modalidade:</strong> {{ competicao.modalidade }}</p>
+                <p><strong>Descrição:</strong> {{ competicao.descricao }}</p>
+                <p><strong>Localização:</strong> {{ competicao.cidade }}, {{ competicao.estado }}, {{ competicao.pais }}</p>
+                <button (click)="inscreverCompeticao(competicao.id)">Inscrever-se</button>
+            </div>
+        </div>
     </div>
 </div>
 

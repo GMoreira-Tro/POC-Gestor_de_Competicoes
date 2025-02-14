@@ -61,7 +61,7 @@
 }
 
 .background-image {
-  background-image: url("../assets/images/background.jpg");
+  background-image: url("../../assets/images/background.jpg");
   /* Substitua 'background.jpg' pelo nome do seu arquivo de imagem */
   height: 100vh;
   width: 100vw;

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CompeticaoService } from '../services/competicao.service';
 import { GeoNamesService } from '../services/geonames.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buscar-competicoes',
@@ -24,13 +25,13 @@ export class BuscaCompeticoesComponent implements OnInit {
   listaCidades: any;
 
   constructor(private http: HttpClient, private competicaoService: CompeticaoService,
-    private geonamesService: GeoNamesService, private cdr: ChangeDetectorRef
-  ) {}
+    private geonamesService: GeoNamesService, private cdr: ChangeDetectorRef,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     // Inicializa o formulário após a exibição da visualização do componente
     setTimeout(() => {
-      //this.form.control.markAsTouched();
       this.cdr.detectChanges(); // Detecta as alterações manualmente após a inicialização do formulário
     });
 
@@ -58,11 +59,22 @@ export class BuscaCompeticoesComponent implements OnInit {
       (res) => {
         console.log('Competições encontradas:', res);
         this.competicoes = res;
+
+        this.competicoes.forEach(competicao => {
+          competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
+            ? competicao.bannerImagem
+            : `http://localhost:5000/${competicao.bannerImagem}`;
+        });
       },
       (error) => {
         console.error('Erro ao buscar competições:', error);
       }
     );
+  }
+
+  // Função para se inscrever em uma competição
+  inscreverCompeticao(id: number): void {
+    this.router.navigate(['/inscricao-na-competicao']);
   }
 
   // Função chamada quando o país selecionado é alterado
@@ -112,6 +124,7 @@ export class BuscaCompeticoesComponent implements OnInit {
       }
     );
   }
+
   carregarMais(): void {
     // Lógica para carregar mais competições se houver paginação
   }
