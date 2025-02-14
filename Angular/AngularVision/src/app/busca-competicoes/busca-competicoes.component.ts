@@ -61,9 +61,12 @@ export class BuscaCompeticoesComponent implements OnInit {
         this.competicoes = res;
 
         this.competicoes.forEach(competicao => {
-          competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
-            ? competicao.bannerImagem
-            : `http://localhost:5000/${competicao.bannerImagem}`;
+          if (competicao.bannerImagem !== null) {
+
+            competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
+              ? competicao.bannerImagem
+              : `http://localhost:5000/${competicao.bannerImagem}`;
+          }
         });
       },
       (error) => {

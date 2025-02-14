@@ -60,9 +60,11 @@ export class TelaInicialComponent implements OnInit {
       this.competicoes = competicoes;
 
       this.competicoes.forEach(competicao => {
-        competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
-          ? competicao.bannerImagem
-          : `http://localhost:5000/${competicao.bannerImagem}`;
+        if (competicao.bannerImagem !== null) {
+          competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
+            ? competicao.bannerImagem
+            : `http://localhost:5000/${competicao.bannerImagem}`;
+        }
       });
     }, error => console.log("Erro ao buscar competições: ", error));
   }

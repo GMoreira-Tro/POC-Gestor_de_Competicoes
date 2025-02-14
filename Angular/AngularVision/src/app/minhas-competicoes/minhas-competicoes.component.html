@@ -1,16 +1,22 @@
 <!-- Cabeçalho -->
 <app-cabecalho></app-cabecalho>
 
+<!-- Lista de competições -->
 <div class="minhas-competicoes">
     <h2>Minhas Competições</h2>
     <div class="competicoes-container">
-        <div *ngFor="let competicao of minhasCompeticoes" class="competicao-card" [ngStyle]="{'background-image': 'url(' + (competicao.bannerImagem ? competicao.bannerImagem : 'logo.jpg') + ')'}">
-            <div class="competicao-info">
+        <div *ngFor="let competicao of minhasCompeticoes" class="competicao-card"
+            [ngStyle]="{'background-image': 'url(' + (competicao.bannerImagem ? competicao.bannerImagem : 'none') + ')'}">
+            <div [ngClass]="{'competicao-info': true, 'com-banner': competicao.bannerImagem !== null}">
                 <h3>{{ competicao.titulo }}</h3>
-                <p>{{ competicao.descricao }}</p>
-                <p *ngIf="competicao.cidade && competicao.estado">{{ competicao.modalidade }} - {{ competicao.cidade }}, {{ competicao.estado }}</p>
-                <p *ngIf="!competicao.cidade && competicao.estado">{{ competicao.modalidade }} - {{ competicao.estado }}</p>
-                <p *ngIf="!competicao.cidade && !competicao.estado">{{ competicao.modalidade }}</p>
+                <p><strong>Modalidade:</strong> {{ competicao.modalidade }}</p>
+                <p><strong>Descrição:</strong> {{ competicao.descricao }}</p>
+                <p><strong>Localização:</strong>
+                    <span *ngIf="!competicao.pais"> Não informado</span>
+                    <span *ngIf="competicao.pais">{{ competicao.pais }}</span>
+                    <span *ngIf="competicao.estado">, {{ competicao.estado }}</span>
+                    <span *ngIf="competicao.cidade">, {{ competicao.cidade }}</span>
+                </p>
                 <button (click)="editarCompeticao(competicao.id)">Editar</button>
                 <button (click)="excluirCompeticao(competicao.id)">Excluir</button>
             </div>

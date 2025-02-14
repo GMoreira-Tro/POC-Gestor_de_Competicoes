@@ -68,7 +68,7 @@ body {
     overflow: hidden;
     background-size: cover;
     background-position: center;
-    color: #fff;
+    color: #000;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -96,6 +96,9 @@ body {
 .competicao-info h3 {
     margin-top: 0;
     font-size: 24px;
+}
+.competicao-info.com-banner {
+    background-color: transparent;
 }
 
 .competicao-info p {

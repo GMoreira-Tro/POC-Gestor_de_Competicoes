@@ -29,7 +29,7 @@
     overflow: hidden;
     background-size: cover;
     background-position: center;
-    color: #fff;
+    color: #000;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -61,6 +61,10 @@
 
 .competicao-info p {
     margin: 5px 0;
+}
+
+.competicao-info.com-banner {
+    background-color: transparent;
 }
 
 button {

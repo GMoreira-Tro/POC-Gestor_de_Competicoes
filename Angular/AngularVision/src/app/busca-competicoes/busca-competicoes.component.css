@@ -19,7 +19,9 @@ body {
     justify-content: center;
 }
 
-.search-form input, .search-form select, .search-form button {
+.search-form input,
+.search-form select,
+.search-form button {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -56,28 +58,32 @@ body {
 
 .competicao-card {
     position: relative;
-    width: calc(33.333% - 20px); /* Três cards por linha */
+    width: calc(33.333% - 20px);
+    /* Três cards por linha */
     margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden;
     background-size: cover;
     background-position: center;
-    color: #fff;
+    color: #000;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    background-color: transparent !important;
 }
 
 /* Ajustes para dispositivos móveis */
 @media (max-width: 768px) {
     .competicao-card {
-        width: calc(50% - 20px); /* Dois cards por linha */
+        width: calc(50% - 20px);
+        /* Dois cards por linha */
     }
 }
 
 @media (max-width: 480px) {
     .competicao-card {
-        width: 100%; /* Um card por linha */
+        width: 100%;
+        /* Um card por linha */
     }
 }
 
@@ -85,6 +91,10 @@ body {
     padding: 20px;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 8px;
+}
+
+.competicao-info.com-banner {
+    background-color: transparent;
 }
 
 .competicao-info h3 {
