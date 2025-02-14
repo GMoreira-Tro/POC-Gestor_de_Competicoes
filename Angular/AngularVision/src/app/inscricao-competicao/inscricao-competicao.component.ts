@@ -12,9 +12,9 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./inscricao-competicao.component.css']
 })
 export class InscricaoCompeticaoComponent implements OnInit {
-gerarCamposCompetidores() {
-throw new Error('Method not implemented.');
-}
+  gerarCamposCompetidores() {
+    throw new Error('Method not implemented.');
+  }
   categorias: Categoria[] = [];
   competidores: Competidor[] = [];
   valorTotal = 0;
@@ -22,12 +22,11 @@ throw new Error('Method not implemented.');
   isQrCodeGenerated = false;
   qrCodeUrl = '';
   categoriaSelecionada: any = {};
-  competidoresSelecionados: any[] = [];
   competidor = { nome: '' };
   isFinalizarModalOpen = false;
   competicaoId: number = 0;
-  numeroCompetidores: number = 1;
-  quantidadeInscricoes: number = 1;
+  infoModals: { quantidadeInscricoes: number, competidoresSelecionados: any[]}[] = [];
+  indexCategoria: number = 0;
 
   constructor(private categoriaService: CategoriaService,
     private competidorService: CompetidorService,
@@ -44,19 +43,21 @@ throw new Error('Method not implemented.');
   loadCategorias() {
     this.categoriaService.getCategoriasPorCompeticao(this.competicaoId).subscribe(categorias => {
       this.categorias = categorias;
+      this.infoModals = categorias.map(() => ({ quantidadeInscricoes: 1, competidoresSelecionados: [] }));
     });
   }
-  
+
   loadCompetidores() {
     this.userService.getUsuarioLogado().subscribe(usuario => {
       this.competidorService.buscarCompetidoresDoUsuario(usuario.id).subscribe(competidores => {
         this.competidores = competidores;
-        });
+      });
     });
   }
 
-  openInscricaoModal(categoria: any) {
+  openInscricaoModal(categoria: any, index: number) {
     this.categoriaSelecionada = categoria;
+    this.indexCategoria = index;
     this.isModalOpen = true;
   }
 
@@ -65,9 +66,16 @@ throw new Error('Method not implemented.');
   }
 
   inscreverCompetidor() {
-    // Lógica para inscrever o competidor na categoria selecionada
-    this.valorTotal += 100; // Exemplo de incremento do valor total
-    this.isModalOpen = false;
+    if (this.infoModals[this.indexCategoria].competidoresSelecionados.length !== this.infoModals[this.indexCategoria].quantidadeInscricoes) {
+      alert('Você precisa selecionar todos os competidores da categoria.');
+      return;
+    }
+
+    this.valorTotal = 0;
+    for (let i = 0; i < this.infoModals.length; i++) {
+      this.valorTotal += this.categorias[i].valorInscricao * this.infoModals[i].quantidadeInscricoes;
+    }
+    this.closeInscricaoModal();
   }
 
   finalizarInscricoes() {
