@@ -29,9 +29,11 @@ export class MeusCompetidoresComponent implements OnInit {
             this.meusCompetidores = competidores;
 
             this.meusCompetidores.forEach(competidor => {
-                competidor.imagemUrl = competidor.imagemUrl?.startsWith('http')
-                    ? competidor.imagemUrl
-                    : `http://localhost:5000/${competidor.imagemUrl}`;
+                if (competidor.imagemUrl !== null) {
+                    competidor.imagemUrl = competidor.imagemUrl?.startsWith('http')
+                        ? competidor.imagemUrl
+                        : `http://localhost:5000/${competidor.imagemUrl}`;
+                }
             }
             );
         }, error => console.log("Erro ao buscar competidores: ", error));
