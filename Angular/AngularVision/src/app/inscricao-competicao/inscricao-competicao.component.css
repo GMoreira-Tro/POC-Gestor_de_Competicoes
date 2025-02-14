@@ -1,82 +1,136 @@
-.formulario {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .formulario h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .formulario .campo {
-    margin-bottom: 20px;
-  }
-  
-  .formulario label {
-    display: block;
-    font-weight: bold;
-  }
-  
-  .formulario input[type="text"],
-  .formulario input[type="file"],
-  .formulario textarea {
-    width: calc(100% - 20px);
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .formulario textarea {
-    height: 100px;
-  }
-  
-  .formulario img {
-    display: block;
-    margin-top: 10px;
-    max-width: 100%;
-  }
-  
-  .formulario .categorias {
-    display: flex;
-    align-items: center;
-  }
-  
-  .formulario .categorias input[type="text"] {
-    flex: 1;
-    margin-right: 10px;
-  }
-  
-  .formulario .categorias button {
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  
-  .formulario button[type="submit"] {
-    background-color: #3498db;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: block;
-    margin: 0 auto;
-  }
-  
-  .formulario button[type="submit"]:hover,
-  .formulario .categorias button:hover {
-    background-color: #2980b9;
-  }
-  
-  /* Estilização adicional conforme necessário */
-  
+/* Estilização geral */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Estilização da lista de categorias */
+.competition-categories {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+  margin: 20px 0;
+}
+
+.competition-categories h2 {
+  text-align: center;
+  color: #333;
+}
+
+.competition-categories ul {
+  list-style: none;
+  padding: 0;
+}
+
+.competition-categories li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #eef;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  transition: background 0.3s;
+}
+
+.competition-categories li:hover {
+  background: #dde;
+}
+
+/* Botão de inscrição */
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Valor total */
+.total-value {
+  margin: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Estilização do modal */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #444;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: #000;
+}
+
+/* Inputs e selects */
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input:focus, select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* QR Code */
+.qr-code {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.qr-code img {
+  border: 5px solid #007bff;
+  border-radius: 10px;
+  padding: 10px;
+}

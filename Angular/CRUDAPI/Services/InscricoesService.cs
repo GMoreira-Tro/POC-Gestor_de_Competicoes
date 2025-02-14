@@ -27,6 +27,15 @@ namespace CRUDAPI.Services
                 throw new InvalidOperationException($"O Competidor com ID {inscricao.CompetidorId} já possui uma inscrição na Categoria com ID {inscricao.CategoriaId}.");
             }
 
+            if(inscricao.Status != InscricaoStatus.Paga && inscricao.PagamentoId != null)
+            {
+                throw new InvalidOperationException("Uma inscrição com o Status diferente de Paga não pode possuir um Pagamento.");
+            }
+            if(inscricao.Status == InscricaoStatus.Paga && inscricao.PagamentoId == null)
+            {
+                throw new InvalidOperationException("Uma inscrição com o Status de Paga deve possuir um Pagamento.");
+            }
+
             inscricao.ConfrontoInscricoes ??= new List<ConfrontoInscricao>();
             return inscricao;
         }

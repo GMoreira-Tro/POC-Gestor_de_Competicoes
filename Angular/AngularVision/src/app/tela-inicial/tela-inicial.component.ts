@@ -71,6 +71,6 @@ export class TelaInicialComponent implements OnInit {
 
   // Função para se inscrever em uma competição
   inscreverCompeticao(id: number): void {
-    this.router.navigate(['/inscricao-na-competicao']);
+    this.router.navigate([`/inscricao-competicao/${id}`]);
   }
 }

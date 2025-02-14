@@ -20,10 +20,19 @@
         <span class="close" (click)="closeInscricaoModal()">&times;</span>
         <h2>Inscrição na Categoria: {{ categoriaSelecionada.nome }}</h2>
         <form (ngSubmit)="inscreverCompetidor()">
-            <!-- Campos do formulário de inscrição -->
-            <label for="competidorNome">Nome do Competidor:</label>
-            <input type="text" id="competidorNome" [(ngModel)]="competidor.nome" name="competidorNome" required>
-            
+            <label for="quantidadeInscricoes">Quantidade de Inscrições:</label>
+            <input type="number" id="quantidadeInscricoes" [(ngModel)]="quantidadeInscricoes"
+                name="quantidadeInscricoes" min="1" required>
+
+            <label for="competidorSelecionado">Selecionar Competidor:</label>
+            <div *ngFor="let i of [].constructor(quantidadeInscricoes); let idx = index">
+                <select id="competidorSelecionado{{idx}}" [(ngModel)]="competidoresSelecionados[idx]"
+                    name="competidorSelecionado{{idx}}" required>
+                    <option *ngFor="let competidor of competidores" [ngValue]="competidor">
+                        {{ competidor.nome }} - {{ competidor.email }}
+                    </option>
+                </select>
+            </div>
             <button type="submit">Inscrever</button>
         </form>
     </div>

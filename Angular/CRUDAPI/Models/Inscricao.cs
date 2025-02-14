@@ -5,6 +5,13 @@ using System.Runtime.Serialization;
 
 namespace CRUDAPI.Models
 {
+    public enum InscricaoStatus
+    {
+        Solicitada,
+        APagar,
+        Paga
+    }
+
     /// <summary>
     /// Inscrição referente a participação de um Competidor em uma Categoria de uma Competição.
     /// </summary>
@@ -18,8 +25,10 @@ namespace CRUDAPI.Models
         public long CategoriaId { get; set; }
         public virtual Categoria? Categoria { get; set; }
 
+        public InscricaoStatus Status { get; set; }
+
         [ForeignKey("Pagamentos")]
-        public long PagamentoId { get; set; }
+        public long? PagamentoId { get; set; }
         public virtual Pagamento? Pagamento { get; set; }
 
         [ForeignKey("Competidores")]

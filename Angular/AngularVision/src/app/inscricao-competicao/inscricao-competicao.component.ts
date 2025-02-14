@@ -12,6 +12,9 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./inscricao-competicao.component.css']
 })
 export class InscricaoCompeticaoComponent implements OnInit {
+gerarCamposCompetidores() {
+throw new Error('Method not implemented.');
+}
   categorias: Categoria[] = [];
   competidores: Competidor[] = [];
   valorTotal = 0;
@@ -19,10 +22,12 @@ export class InscricaoCompeticaoComponent implements OnInit {
   isQrCodeGenerated = false;
   qrCodeUrl = '';
   categoriaSelecionada: any = {};
-  competidorSelecionado: any = {};
+  competidoresSelecionados: any[] = [];
   competidor = { nome: '' };
   isFinalizarModalOpen = false;
   competicaoId: number = 0;
+  numeroCompetidores: number = 1;
+  quantidadeInscricoes: number = 1;
 
   constructor(private categoriaService: CategoriaService,
     private competidorService: CompetidorService,
