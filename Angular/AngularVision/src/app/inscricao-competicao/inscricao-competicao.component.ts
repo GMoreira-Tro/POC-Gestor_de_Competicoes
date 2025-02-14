@@ -70,6 +70,14 @@ export class InscricaoCompeticaoComponent implements OnInit {
       alert('Você precisa selecionar todos os competidores da categoria.');
       return;
     }
+    for(let i = 0; i < this.infoModals[this.indexCategoria].competidoresSelecionados.length; i++)
+    {
+      if(this.infoModals[this.indexCategoria].competidoresSelecionados[i] === undefined)
+      {
+        alert('Você precisa selecionar todos os competidores da categoria.');
+        return;
+      }
+    }
 
     this.valorTotal = 0;
     for (let i = 0; i < this.infoModals.length; i++) {
