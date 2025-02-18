@@ -29,7 +29,8 @@
                 <select id="competidorSelecionado{{idx}}" [(ngModel)]="infoModals[indexCategoria].competidoresSelecionados[idx]"
                     name="competidorSelecionado{{idx}}" required>
                     <option *ngFor="let competidor of competidores" [ngValue]="competidor" 
-                        [disabled]="infoModals[indexCategoria].competidoresSelecionados.includes(competidor)">
+                        [disabled]="infoModals[indexCategoria].competidoresSelecionados.includes(competidor)
+                        || infoModals[indexCategoria].competidoresDesabilitados.includes(competidor)">
                         {{ competidor.nome }} - {{ competidor.email }}
                     </option>
                 </select>

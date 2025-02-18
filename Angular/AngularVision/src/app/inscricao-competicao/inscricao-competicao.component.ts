@@ -24,7 +24,10 @@ export class InscricaoCompeticaoComponent implements OnInit {
   competidor = { nome: '' };
   isFinalizarModalOpen = false;
   competicaoId: number = 0;
-  infoModals: { quantidadeInscricoes: number, competidoresSelecionados: any[], categoriaId: number }[] = [];
+  infoModals: {
+    quantidadeInscricoes: number, competidoresSelecionados: any[], categoriaId: number,
+    competidoresDesabilitados: any[]
+  }[] = [];
   indexCategoria: number = 0;
 
   constructor(private categoriaService: CategoriaService,
@@ -45,7 +48,7 @@ export class InscricaoCompeticaoComponent implements OnInit {
       this.categorias = categorias;
       this.infoModals = categorias.map((categoria) => ({
         quantidadeInscricoes: 0, competidoresSelecionados: [],
-        categoriaId: categoria.id
+        categoriaId: categoria.id, competidoresDesabilitados: []
       }));
     });
   }
@@ -54,6 +57,9 @@ export class InscricaoCompeticaoComponent implements OnInit {
     this.userService.getUsuarioLogado().subscribe(usuario => {
       this.competidorService.buscarCompetidoresDoUsuario(usuario.id).subscribe(competidores => {
         this.competidores = competidores;
+        this.infoModals.forEach(infoModal => {
+          this.filtrarCompetidores(infoModal);
+        });
       });
     });
   }
@@ -62,6 +68,21 @@ export class InscricaoCompeticaoComponent implements OnInit {
     this.categoriaSelecionada = categoria;
     this.indexCategoria = index;
     this.isModalOpen = true;
+  }
+
+  filtrarCompetidores(infoModal: any) {
+    const categoriaId = infoModal.categoriaId;
+    this.inscricaoService.getInscricoesPorCategoria(categoriaId).subscribe(inscricoes => {
+      inscricoes.forEach(inscricao => {
+        this.competidores.forEach(competidor => {
+          if (inscricao.competidorId === competidor.id) {
+            infoModal.competidoresDesabilitados.push(competidor);
+          }
+        }
+        )
+      }
+      )
+    })
   }
 
   closeInscricaoModal() {
@@ -108,7 +129,7 @@ export class InscricaoCompeticaoComponent implements OnInit {
         this.inscricaoService.cadastrarInscricao(novaInscricao).subscribe(inscricao => {
           console.log(inscricao)
         },
-          error => console.error(error));
+          error => alert(error.error));
       })
     })
   }

@@ -111,5 +111,16 @@ namespace CRUDAPI.Controllers
 
             return inscricao;
         }
+
+        // GET: api/Inscricao/Categoria/{categoriaId}
+        [HttpGet("categoria/{categoriaId}")]
+        public async Task<ActionResult<IEnumerable<Inscricao>>> GetInscricoesPorCategoria(long categoriaId)
+        {
+            var inscricoes = await _contexto.Inscricoes
+                .Where(i => i.CategoriaId == categoriaId)
+                .ToListAsync();
+
+            return inscricoes;
+        }
     }
 }

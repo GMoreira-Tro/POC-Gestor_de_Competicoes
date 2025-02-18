@@ -39,4 +39,8 @@ export class InscricaoService {
   buscarInscricoesDoUsuario(userId: number): Observable<Inscricao[]> {
     return this.http.get<Inscricao[]>(`${this.apiUrl}/buscar-do-usuario/${userId}`);
   }
+
+  getInscricoesPorCategoria(categoriaId: number): Observable<Inscricao[]> {
+    return this.http.get<Inscricao[]>(`${this.apiUrl}/categoria/${categoriaId}`);
+  }
 }
