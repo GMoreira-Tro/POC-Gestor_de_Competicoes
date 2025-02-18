@@ -122,5 +122,12 @@ namespace CRUDAPI.Controllers
 
             return inscricoes;
         }
+
+        [HttpPost("enviar-inscricoes")]
+        public async Task<ActionResult> EnviarInscricoesParaOrganizador([FromBody] Inscricao[] inscricoes, string emailOrganizador)
+        {
+            await _inscricaoService.EnviarInscricoesParaOrganizador(inscricoes, emailOrganizador);
+            return Ok();
+        }
     }
 }

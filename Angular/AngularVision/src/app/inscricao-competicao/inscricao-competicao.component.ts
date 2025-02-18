@@ -3,10 +3,11 @@ import { Categoria } from '../interfaces/Categoria';
 import { Competidor } from '../interfaces/Competidor';
 import { CategoriaService } from '../services/categoria.service';
 import { CompetidorService } from '../services/competidor.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { InscricaoService } from '../services/inscricao.service';
 import { Inscricao } from '../interfaces/Inscricao';
+import { CompeticaoService } from '../services/competicao.service';
 
 @Component({
   selector: 'app-inscricao-competicao',
@@ -29,18 +30,33 @@ export class InscricaoCompeticaoComponent implements OnInit {
     competidoresDesabilitados: any[]
   }[] = [];
   indexCategoria: number = 0;
+  showSuccessMessage: boolean = false;
+  emailOrganizador: string= ""
+  inscricoes: Inscricao[] = []
 
   constructor(private categoriaService: CategoriaService,
     private competidorService: CompetidorService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private inscricaoService: InscricaoService
+    private inscricaoService: InscricaoService,
+    private competicaoService: CompeticaoService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.competicaoId = Number(this.route.snapshot.paramMap.get('id'));
+    this.pegarEmailOrganizador();
     this.loadCategorias();
     this.loadCompetidores();
+  }
+
+  pegarEmailOrganizador()
+  {
+    this.competicaoService.getCompeticao(this.competicaoId).subscribe(competicao => {
+      this.userService.getUser(competicao.criadorUsuarioId).subscribe(organizador => {
+        this.emailOrganizador = organizador.email
+      });
+    });
   }
 
   loadCategorias() {
@@ -119,18 +135,36 @@ export class InscricaoCompeticaoComponent implements OnInit {
   onSubmit() {
     this.infoModals.forEach((info) => {
       info.competidoresSelecionados.forEach((competidor) => {
-        const novaInscricao: Inscricao = {
+        let novaInscricao: Inscricao = {
           id: 0,
           categoriaId: info.categoriaId,
           status: 0,
-          competidorId: competidor.id
+          competidorId: competidor.id,
+          pagamentoId: null,
+          posicao: 0,
+          wo: false,
+          premioResgatavelId: null
         }
         console.log(novaInscricao)
         this.inscricaoService.cadastrarInscricao(novaInscricao).subscribe(inscricao => {
-          console.log(inscricao)
+          novaInscricao.id = inscricao.id
+          this.inscricoes.push(novaInscricao);
         },
           error => alert(error.error));
       })
     })
+    this.showSuccessMessage = true;
+  }
+
+  hideSuccessMessage() {
+    this.showSuccessMessage = false;
+    console.log(this.emailOrganizador)
+    console.log(this.inscricoes)
+    this.inscricaoService.enviarInscricoesParaOrganizador(this.inscricoes, this.emailOrganizador).subscribe(ok =>
+    {
+      console.log(ok)
+    }
+    );
+    //this.router.navigate(['/minhas-inscricoes']);
   }
 }

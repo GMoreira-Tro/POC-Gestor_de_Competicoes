@@ -6,7 +6,7 @@ public class EmailService
 {
     private readonly string _smtpServer = "smtp.gmail.com"; // Exemplo: smtp.gmail.com
     private readonly int _smtpPort = 587;
-    private readonly string _emailFrom = "guilherme.dsmoreira@gmail.com"; // Melhor armazenar isso em variáveis de ambiente
+    private readonly string _emailFrom = "guilherme.dsmoreira@gmail.com"; ///TODO: mandar de email empresarial
     private readonly string _emailPassword = "blru ewmu zila huwd"; // Melhor armazenar isso em variáveis de ambiente
 
     public async Task SendEmailAsync(string toEmail, string subject, string body)

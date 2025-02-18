@@ -99,7 +99,7 @@ export class CadastroCompeticoesComponent implements OnInit {
           );
         });
 
-        this.router.navigate(['/minhas-competicoes']); // Redireciona para a tela inicial
+        this.router.navigate(['/minhas-competicoes']);
         alert("Competição criada com sucesso!");
       },
       error => {

@@ -40,10 +40,10 @@
     </div>
 </div>
 
-<!-- QR Code -->
-<div class="qr-code" *ngIf="isQrCodeGenerated">
-    <h3>QR Code para Pagamento</h3>
-    <img [src]="qrCodeUrl" alt="QR Code">
+<!-- Mensagem de Sucesso -->
+<div class="toast" *ngIf="showSuccessMessage">
+    <p>Suas inscrições foram enviadas com sucesso! Agora, o organizador da competição precisará revisar e aprovar sua solicitação. Assim que aprovada, você receberá um e-mail com um QR Code para realizar o pagamento. Fique atento à sua caixa de entrada. O contato do organizador do evento é <strong>{{emailOrganizador}}</strong></p>
+    <button (click)="hideSuccessMessage()">OK</button>
 </div>
 
 <button type="submit"(click)="onSubmit()">Cadastrar</button>

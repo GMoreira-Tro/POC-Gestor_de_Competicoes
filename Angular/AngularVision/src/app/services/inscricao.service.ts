@@ -43,4 +43,9 @@ export class InscricaoService {
   getInscricoesPorCategoria(categoriaId: number): Observable<Inscricao[]> {
     return this.http.get<Inscricao[]>(`${this.apiUrl}/categoria/${categoriaId}`);
   }
+
+  enviarInscricoesParaOrganizador(inscricoes: Inscricao[], emailOrganizador: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/enviar-inscricoes`, { inscricoes: inscricoes,
+       emailOrganizador: emailOrganizador});
+  }
 }
