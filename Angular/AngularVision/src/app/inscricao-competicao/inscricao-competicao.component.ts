@@ -5,6 +5,8 @@ import { CategoriaService } from '../services/categoria.service';
 import { CompetidorService } from '../services/competidor.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { InscricaoService } from '../services/inscricao.service';
+import { Inscricao } from '../interfaces/Inscricao';
 
 @Component({
   selector: 'app-inscricao-competicao',
@@ -12,9 +14,6 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./inscricao-competicao.component.css']
 })
 export class InscricaoCompeticaoComponent implements OnInit {
-  gerarCamposCompetidores() {
-    throw new Error('Method not implemented.');
-  }
   categorias: Categoria[] = [];
   competidores: Competidor[] = [];
   valorTotal = 0;
@@ -25,13 +24,14 @@ export class InscricaoCompeticaoComponent implements OnInit {
   competidor = { nome: '' };
   isFinalizarModalOpen = false;
   competicaoId: number = 0;
-  infoModals: { quantidadeInscricoes: number, competidoresSelecionados: any[]}[] = [];
+  infoModals: { quantidadeInscricoes: number, competidoresSelecionados: any[], categoriaId: number }[] = [];
   indexCategoria: number = 0;
 
   constructor(private categoriaService: CategoriaService,
     private competidorService: CompetidorService,
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private inscricaoService: InscricaoService
   ) { }
 
   ngOnInit() {
@@ -43,7 +43,10 @@ export class InscricaoCompeticaoComponent implements OnInit {
   loadCategorias() {
     this.categoriaService.getCategoriasPorCompeticao(this.competicaoId).subscribe(categorias => {
       this.categorias = categorias;
-      this.infoModals = categorias.map(() => ({ quantidadeInscricoes: 1, competidoresSelecionados: [] }));
+      this.infoModals = categorias.map((categoria) => ({
+        quantidadeInscricoes: 0, competidoresSelecionados: [],
+        categoriaId: categoria.id
+      }));
     });
   }
 
@@ -66,14 +69,12 @@ export class InscricaoCompeticaoComponent implements OnInit {
   }
 
   inscreverCompetidor() {
-    if (this.infoModals[this.indexCategoria].competidoresSelecionados.length !== this.infoModals[this.indexCategoria].quantidadeInscricoes) {
+    if (this.infoModals[this.indexCategoria].competidoresSelecionados.length < this.infoModals[this.indexCategoria].quantidadeInscricoes) {
       alert('Você precisa selecionar todos os competidores da categoria.');
       return;
     }
-    for(let i = 0; i < this.infoModals[this.indexCategoria].competidoresSelecionados.length; i++)
-    {
-      if(this.infoModals[this.indexCategoria].competidoresSelecionados[i] === undefined)
-      {
+    for (let i = 0; i < this.infoModals[this.indexCategoria].competidoresSelecionados.length; i++) {
+      if (this.infoModals[this.indexCategoria].competidoresSelecionados[i] === undefined) {
         alert('Você precisa selecionar todos os competidores da categoria.');
         return;
       }
@@ -92,5 +93,23 @@ export class InscricaoCompeticaoComponent implements OnInit {
 
   closeFinalizarModal() {
     this.isFinalizarModalOpen = false;
+  }
+
+  onSubmit() {
+    this.infoModals.forEach((info) => {
+      info.competidoresSelecionados.forEach((competidor) => {
+        const novaInscricao: Inscricao = {
+          id: 0,
+          categoriaId: info.categoriaId,
+          status: 0,
+          competidorId: competidor.id
+        }
+        console.log(novaInscricao)
+        this.inscricaoService.cadastrarInscricao(novaInscricao).subscribe(inscricao => {
+          console.log(inscricao)
+        },
+          error => console.error(error));
+      })
+    })
   }
 }

@@ -112,7 +112,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
             }
             catch (DbUpdateException)
             {
-                return StatusCode(400, new { message = "Não é possível deletar esta competição pois existem categorias associadas." });
+                return StatusCode(400, new { message = "Não é possível deletar esta competição pois existem tabelas associadas." });
             }
         }
 

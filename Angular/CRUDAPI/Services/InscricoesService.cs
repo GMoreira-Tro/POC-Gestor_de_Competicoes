@@ -12,12 +12,6 @@ namespace CRUDAPI.Services
         }
         public async Task<Inscricao> ValidarInscricao(Inscricao inscricao)
         {
-            // Verifica se a categoria está definida
-            if (inscricao.CategoriaId <= 0)
-            {
-                throw new CampoObrigatorioException("Categoria");
-            }
-
             // Verifica se já existe uma inscrição com o mesmo TimeID e CategoriaID
             var inscricaoExistente = await _contexto.Inscricoes
                 .AnyAsync(i => i.CompetidorId == inscricao.CompetidorId && i.CategoriaId == inscricao.CategoriaId && i.Id != inscricao.Id);
@@ -36,7 +30,6 @@ namespace CRUDAPI.Services
                 throw new InvalidOperationException("Uma inscrição com o Status de Paga deve possuir um Pagamento.");
             }
 
-            inscricao.ConfrontoInscricoes ??= new List<ConfrontoInscricao>();
             return inscricao;
         }
 

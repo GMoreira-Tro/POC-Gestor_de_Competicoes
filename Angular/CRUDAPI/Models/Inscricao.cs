@@ -9,7 +9,8 @@ namespace CRUDAPI.Models
     {
         Solicitada,
         APagar,
-        Paga
+        Paga,
+        Recusada
     }
 
     /// <summary>
