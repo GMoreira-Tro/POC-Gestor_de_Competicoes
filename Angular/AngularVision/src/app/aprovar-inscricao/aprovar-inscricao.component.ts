@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompeticaoService } from '../services/competicao.service';
 import { UserService } from '../services/user.service';
-import { RodapeModule } from "../rodape/rodape.module";
 import { InscricaoService } from '../services/inscricao.service';
 import { CategoriaService } from '../services/categoria.service';
 
@@ -52,6 +51,7 @@ export class AprovarInscricaoComponent implements OnInit {
         {
           infoInscricao.status = inscricao.status;
           infoInscricao.categoriaId = inscricao.categoriaId;
+          infoInscricao.inscricao = inscricao;
           this.infoInscricoes.push(infoInscricao);
         });
 
@@ -64,8 +64,16 @@ export class AprovarInscricaoComponent implements OnInit {
     });
   }
 
-  aprovarInscricao()
+  aprovarInscricao(infoInscricao: any)
   {
-    alert("gay")
+    infoInscricao.inscricao.status = 1;
+    this.inscricaoService.atualizarInscricao(infoInscricao.inscricao.id, infoInscricao.inscricao).subscribe();
+    
+  }
+
+  recusarInscricao(infoInscricao: any)
+  {
+    infoInscricao.inscricao.status = 3;
+    this.inscricaoService.atualizarInscricao(infoInscricao.inscricao.id, infoInscricao.inscricao).subscribe();
   }
 }

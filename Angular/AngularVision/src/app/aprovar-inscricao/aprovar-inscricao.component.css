@@ -43,6 +43,20 @@ h2 {
   transition: background-color 0.3s ease;
 }
 
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
 .btn-success:hover {
   background-color: #218838;
 }

@@ -21,8 +21,9 @@
                 infoInscricao.status === 1 ? "Aguardando pagamento" :
                 infoInscricao.status === 2 ? "Paga" : "Recusada"}}</td>
                 <td>
-                    <button *ngIf="infoInscricao.status === 0" (click)="aprovarInscricao()" class="btn btn-success">Aprovar</button>
-                </td>
+                    <button *ngIf="infoInscricao.status === 0 || infoInscricao.status === 3" (click)="aprovarInscricao(infoInscricao)" class="btn btn-success">Aprovar</button>
+                    <button *ngIf="infoInscricao.status !== 2 && infoInscricao.status !== 3" (click)="recusarInscricao(infoInscricao)" class="btn btn-danger">Recusar</button> 
+                </td> 
             </tr>
         </tbody>
     </table>
