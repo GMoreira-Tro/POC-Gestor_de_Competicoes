@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRUDAPI.Models;
-using CRUDAPI.Services; // Importe o serviço de inscrições
+using CRUDAPI.Services;
+using Newtonsoft.Json; // Importe o serviço de inscrições
 
 namespace CRUDAPI.Controllers
 {
@@ -123,10 +124,16 @@ namespace CRUDAPI.Controllers
             return inscricoes;
         }
 
-        [HttpPost("enviar-inscricoes")]
-        public async Task<ActionResult> EnviarInscricoesParaOrganizador([FromBody] Inscricao[] inscricoes, string emailOrganizador)
+        public class EnviarInscricaoRequest
         {
-            await _inscricaoService.EnviarInscricoesParaOrganizador(inscricoes, emailOrganizador);
+            public long[] InscricoesIds { get; set; } = [];
+            public string EmailOrganizador { get; set; } = "";
+        }
+
+        [HttpPost("enviar-inscricoes")]
+        public async Task<ActionResult> EnviarInscricoesParaOrganizador([FromBody] EnviarInscricaoRequest request)
+        {
+            await _inscricaoService.EnviarInscricoesParaOrganizador(request.InscricoesIds, request.EmailOrganizador);
             return Ok();
         }
     }

@@ -41,25 +41,35 @@ namespace CRUDAPI.Services
             return _contexto.Inscricoes.Any(e => e.Id == id);
         }
 
-        public async Task<bool> EnviarInscricoesParaOrganizador(Inscricao[] inscricoes, string organizadorEmail)
+        public async Task<bool> EnviarInscricoesParaOrganizador(long[] inscricoesIds, string organizadorEmail)
         {
             // Link de confirmação (substitua pelo domínio correto)
             string confirmationLink = $"http://localhost:4200/inscricoes-confirmadas";
 
             // Obtém as informações das inscrições corretamente
-            var inscricoesInfoArray = await Task.WhenAll(inscricoes.Select(async i =>
-            {
-                var competidor = await _contexto.Competidores.FindAsync(i.CompetidorId);
-                var usuario = competidor != null ? await _contexto.Usuarios.FindAsync(competidor.CriadorId) : null;
+            var inscricoesList = await _contexto.Inscricoes
+            .Where(i => inscricoesIds.Contains(i.Id))
+            .ToListAsync();
 
-                return $"Competidor: {competidor?.Nome ?? "Desconhecido"}, Categoria ID: {i.CategoriaId}, Usuário Email: {usuario?.Email ?? "Não encontrado"}";
-            }));
+            if (!inscricoesList.Any())
+            {
+            throw new InvalidOperationException("Nenhuma inscrição encontrada com os IDs fornecidos.");
+            }
+
+            var inscricoesInfoArray = new List<string>();
+            foreach (var inscricao in inscricoesList)
+            {
+            var competidor = await _contexto.Competidores.FindAsync(inscricao.CompetidorId);
+            var usuario = competidor != null ? await _contexto.Usuarios.FindAsync(competidor.CriadorId) : null;
+
+            inscricoesInfoArray.Add($"Competidor: {competidor?.Nome ?? "Desconhecido"}, Categoria ID: {inscricao.CategoriaId}, Usuário Email: {usuario?.Email ?? "Não encontrado"}");
+            }
 
             string inscricoesInfo = string.Join("<br>", inscricoesInfoArray);
 
             // Enviar e-mail com os dados das inscrições
             await _emailService.SendEmailAsync(organizadorEmail, "Dados das Inscrições",
-                $"Aqui estão os dados das inscrições:<br>{inscricoesInfo}<br><br>Acesse o sistema para aprovar ou recusar as inscrições.");
+            $"Aqui estão os dados das inscrições:<br>{inscricoesInfo}<br><br>Acesse o sistema para aprovar ou recusar as inscrições.<br><br><a href='{confirmationLink}'>Confirmar Inscrições</a>");
 
             return true;
         }

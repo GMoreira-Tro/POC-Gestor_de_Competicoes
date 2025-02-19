@@ -158,9 +158,10 @@ export class InscricaoCompeticaoComponent implements OnInit {
 
   hideSuccessMessage() {
     this.showSuccessMessage = false;
-    console.log(this.emailOrganizador)
-    console.log(this.inscricoes)
-    this.inscricaoService.enviarInscricoesParaOrganizador(this.inscricoes, this.emailOrganizador).subscribe(ok =>
+    const inscricoesIds = this.inscricoes.map(inscricao => inscricao.id);
+    console.log(JSON.stringify({ inscricoes: this.inscricoes, emailOrganizador: this.emailOrganizador }));
+
+    this.inscricaoService.enviarInscricoesParaOrganizador(inscricoesIds, this.emailOrganizador).subscribe(ok =>
     {
       console.log(ok)
     }
