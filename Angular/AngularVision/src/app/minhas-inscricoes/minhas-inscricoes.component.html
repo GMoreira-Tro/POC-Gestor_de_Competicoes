@@ -6,12 +6,11 @@
         <div *ngFor="let inscricao of minhasInscricoes" class="inscricao-card">
             <div class="inscricao-info">
                 <h3>Inscrição #{{ inscricao.id }}</h3>
-                <p>Categoria ID: {{ inscricao.categoriaId }}</p>
-                <p>Competidor ID: {{ inscricao.competidorId }}</p>
-                <p>Posição: {{ inscricao.posicao }}</p>
-                <p>Status: {{ inscricao.status === 0 ? 'Pendente' : inscricao.status === 1 ? 'Aceita' : 'Recusada' }}</p>
-                <button (click)="editarInscricao(inscricao.id)">Editar</button>
-                <button (click)="excluirInscricao(inscricao.id)">Excluir</button>
+                <p>Competicao: {{ dadosInscricoes[inscricao.id].tituloCompeticao }}</p>
+                <p>Categoria: {{ dadosInscricoes[inscricao.id].nomeCategoria }}</p>
+                <p>Competidor: {{ dadosInscricoes[inscricao.id].nomeCompetidor }} - {{ dadosInscricoes[inscricao.id].emailCompetidor}} </p>
+                <p>Status: {{ inscricao.status === 0 ? 'Pendente' : inscricao.status === 1 ? 
+                'Aguardando Pagamento' : inscricao.status === 2 ? 'Paga' : 'Recusada' }}</p>
             </div>
         </div>
     </div>

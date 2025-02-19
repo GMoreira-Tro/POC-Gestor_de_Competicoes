@@ -49,4 +49,8 @@ export class InscricaoService {
 
     return this.http.post(`${this.apiUrl}/enviar-inscricoes`, payload);
   }
+
+  getInfoInscricao(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/info/${id}`);
+  }
 }

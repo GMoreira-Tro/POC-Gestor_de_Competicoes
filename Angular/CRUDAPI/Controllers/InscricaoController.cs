@@ -152,5 +152,32 @@ namespace CRUDAPI.Controllers
 
             return inscricoes;
         }
+
+        [HttpGet("info/{inscricaoId}")]
+        public async Task<ActionResult<InfoInscricao>> GetInfoInscricao(long inscricaoId)
+        {
+            var inscricao = await _contexto.Inscricoes.FirstAsync(inscricao => inscricao.Id == inscricaoId);
+            var categoria = await _contexto.Categorias.FirstAsync(categoria => categoria.Id == inscricao.CategoriaId);
+            var competicao = await _contexto.Competicoes.FirstAsync(competicao => categoria.CompeticaoId == competicao.Id);
+            var competidor = await _contexto.Competidores.FirstAsync(competidor => competidor.Id == inscricao.CompetidorId);
+
+            var infoInscricao = new InfoInscricao
+            {
+                TituloCompeticao = competicao.Titulo,
+                NomeCategoria = categoria.Nome,
+                NomeCompetidor = competidor.Nome,
+                EmailCompetidor = competidor.Email
+            };
+
+            return infoInscricao;
+        }
+
+        public class InfoInscricao
+        {
+            public string TituloCompeticao { get; set; } = "";
+            public string NomeCategoria { get; set; } = "";
+            public string NomeCompetidor { get; set; } = "";
+            public string EmailCompetidor { get; set; } = "";
+        }
     }
 }
