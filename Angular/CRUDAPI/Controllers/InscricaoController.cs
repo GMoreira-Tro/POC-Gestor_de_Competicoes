@@ -136,5 +136,21 @@ namespace CRUDAPI.Controllers
             await _inscricaoService.EnviarInscricoesParaOrganizador(request.InscricoesIds, request.EmailOrganizador);
             return Ok();
         }
+
+        [HttpGet("buscar-do-usuario/{userId}")]
+        public async Task<ActionResult<IEnumerable<Inscricao>>> GetInscricoesDoUsuario(long userId)
+        {
+            List<Inscricao> inscricoes = new List<Inscricao>();
+            var competidoresDoUsuario = await _contexto.Competidores.Where(c => c.CriadorId == userId).ToListAsync();
+            foreach (var competidor in competidoresDoUsuario)
+            {
+                var inscricoesDoCompetidor = await _contexto.Inscricoes
+                    .Where(i => i.CompetidorId == competidor.Id)
+                    .ToListAsync();
+                inscricoes.AddRange(inscricoesDoCompetidor);
+            }
+
+            return inscricoes;
+        }
     }
 }

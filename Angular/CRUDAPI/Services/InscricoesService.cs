@@ -44,7 +44,7 @@ namespace CRUDAPI.Services
         public async Task<bool> EnviarInscricoesParaOrganizador(long[] inscricoesIds, string organizadorEmail)
         {
             // Link de confirmação (substitua pelo domínio correto)
-            string confirmationLink = $"http://localhost:4200/inscricoes-confirmadas";
+            string confirmationLink = $"http://localhost:4200/confirmar-inscricoes";
 
             // Obtém as informações das inscrições corretamente
             var inscricoesList = await _contexto.Inscricoes
@@ -60,9 +60,11 @@ namespace CRUDAPI.Services
             foreach (var inscricao in inscricoesList)
             {
             var competidor = await _contexto.Competidores.FindAsync(inscricao.CompetidorId);
+            var categoria = await _contexto.Categorias.FindAsync(inscricao.CategoriaId);
+            var competicao = categoria != null ? await _contexto.Competicoes.FindAsync(categoria.CompeticaoId) : null;
             var usuario = competidor != null ? await _contexto.Usuarios.FindAsync(competidor.CriadorId) : null;
 
-            inscricoesInfoArray.Add($"Competidor: {competidor?.Nome ?? "Desconhecido"}, Categoria ID: {inscricao.CategoriaId}, Usuário Email: {usuario?.Email ?? "Não encontrado"}");
+            inscricoesInfoArray.Add($"Competição: {competicao?.Titulo}, Competidor: {competidor?.Nome}, Categoria: {categoria?.Nome}, Email do solicitante: {usuario?.Email ?? "Não encontrado"}");
             }
 
             string inscricoesInfo = string.Join("<br>", inscricoesInfoArray);

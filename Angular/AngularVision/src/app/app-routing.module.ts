@@ -14,6 +14,7 @@ import { CadastroCompetidoresComponent } from './cadastro-competidores/cadastro-
 import { MeusCompetidoresComponent } from './meus-competidores/meus-competidores.component';
 import { EditarCompetidorComponent } from './editar-competidor/editar-competidor.component';
 import { InscricaoCompeticaoComponent } from './inscricao-competicao/inscricao-competicao.component';
+import { MinhasInscricoesComponent } from './minhas-inscricoes/minhas-inscricoes.component';
 
 const routes: Routes = [
   { path: '', component: TelaInicialComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'cadastro-competidores', component: CadastroCompetidoresComponent },
   { path: 'minhas-competicoes', component: MinhasCompeticoesComponent },
   { path: 'meus-competidores', component: MeusCompetidoresComponent },
+  { path: 'minhas-inscricoes', component: MinhasInscricoesComponent },
   { path: 'editar-competicao/:id', component: EditarCompeticaoComponent },
   { path: 'editar-competidor/:id', component: EditarCompetidorComponent },
   { path: 'inscricao-competicao/:id', component: InscricaoCompeticaoComponent },

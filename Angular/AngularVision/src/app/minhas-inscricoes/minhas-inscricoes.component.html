@@ -1,0 +1,20 @@
+<app-cabecalho></app-cabecalho>
+
+<div class="minhas-inscricoes">
+    <h2>Minhas Inscrições</h2>
+    <div class="inscricoes-container">
+        <div *ngFor="let inscricao of minhasInscricoes" class="inscricao-card">
+            <div class="inscricao-info">
+                <h3>Inscrição #{{ inscricao.id }}</h3>
+                <p>Categoria ID: {{ inscricao.categoriaId }}</p>
+                <p>Competidor ID: {{ inscricao.competidorId }}</p>
+                <p>Posição: {{ inscricao.posicao }}</p>
+                <p>Status: {{ inscricao.status === 0 ? 'Pendente' : inscricao.status === 1 ? 'Aceita' : 'Recusada' }}</p>
+                <button (click)="editarInscricao(inscricao.id)">Editar</button>
+                <button (click)="excluirInscricao(inscricao.id)">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-rodape></app-rodape>

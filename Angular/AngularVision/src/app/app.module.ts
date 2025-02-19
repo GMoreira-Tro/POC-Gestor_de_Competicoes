@@ -28,6 +28,7 @@ import { CadastroCompetidoresComponent } from './cadastro-competidores/cadastro-
 import { MeusCompetidoresComponent } from './meus-competidores/meus-competidores.component';
 import { EditarCompetidorComponent } from './editar-competidor/editar-competidor.component';
 import { InscricaoCompeticaoComponent } from './inscricao-competicao/inscricao-competicao.component';
+import { MinhasInscricoesComponent } from './minhas-inscricoes/minhas-inscricoes.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { InscricaoCompeticaoComponent } from './inscricao-competicao/inscricao-c
     MeusCompetidoresComponent,
     EditarCompetidorComponent,
     InscricaoCompeticaoComponent,
+    MinhasInscricoesComponent,
     CabecalhoComponent,
     RodapeComponent
   ],
