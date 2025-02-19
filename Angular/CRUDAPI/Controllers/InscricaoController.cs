@@ -140,15 +140,25 @@ namespace CRUDAPI.Controllers
         [HttpGet("buscar-do-usuario/{userId}")]
         public async Task<ActionResult<IEnumerable<Inscricao>>> GetInscricoesDoUsuario(long userId)
         {
-            List<Inscricao> inscricoes = new List<Inscricao>();
-            var competidoresDoUsuario = await _contexto.Competidores.Where(c => c.CriadorId == userId).ToListAsync();
-            foreach (var competidor in competidoresDoUsuario)
-            {
-                var inscricoesDoCompetidor = await _contexto.Inscricoes
-                    .Where(i => i.CompetidorId == competidor.Id)
-                    .ToListAsync();
-                inscricoes.AddRange(inscricoesDoCompetidor);
-            }
+            var inscricoes = await _contexto.Inscricoes
+                .Where(i => _contexto.Competidores
+                    .Where(c => c.CriadorId == userId)
+                    .Select(c => c.Id)
+                    .Contains(i.CompetidorId))
+                .ToListAsync();
+
+            return inscricoes;
+        }
+
+        [HttpGet("buscar-de-competicao/{competicaoId}")]
+        public async Task<ActionResult<IEnumerable<Inscricao>>> GetInscricoesDeCompeticao(long competicaoId)
+        {
+            var inscricoes = await _contexto.Inscricoes
+                .Where(i => _contexto.Categorias
+                    .Where(c => c.CompeticaoId == competicaoId)
+                    .Select(c => c.Id)
+                    .Contains(i.CategoriaId))
+                .ToListAsync();
 
             return inscricoes;
         }

@@ -53,4 +53,8 @@ export class InscricaoService {
   getInfoInscricao(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/info/${id}`);
   }
+
+  getInscricoesDeCompeticao(competicaoId: number): Observable<Inscricao[]> {
+    return this.http.get<Inscricao[]>(`${this.apiUrl}/buscar-de-competicao/${competicaoId}`);
+  }
 }
