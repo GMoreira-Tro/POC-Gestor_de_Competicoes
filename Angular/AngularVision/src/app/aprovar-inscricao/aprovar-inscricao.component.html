@@ -1,0 +1,27 @@
+<app-cabecalho></app-cabecalho>
+
+<div class="container">
+    <h2>Aprovar Inscrições</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome do Participante</th>
+                <th>Competição</th>
+                <th>Status</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let inscricao of inscricoes">
+                <td>{{ inscricao.participante }}</td>
+                <td>{{ inscricao.competicao }}</td>
+                <td>{{ inscricao.status }}</td>
+                <td>
+                    <button *ngIf="inscricao.status === 0" (click)="aprovarInscricao()" class="btn btn-success">Aprovar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-rodape></app-rodape>
