@@ -99,3 +99,14 @@
     top: 40px;
     right: 0;
   }
+
+  .notification-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .notification-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

@@ -8,7 +8,11 @@
     <img src="../../assets/images/notification-icon.png" class="notification-icon" (click)="toggleNotificationDropdown()">
     <span class="badge">{{ numeroDeNotificacoes }}</span>
     <div class="dropdown-menu" *ngIf="notificationDropdownAberto">
-      <a *ngFor="let notificacao of notificacoes" [routerLink]="['/notificacoes', notificacao.id]">{{ notificacao.titulo }}</a>
+      <div class="notification-list">
+        <a *ngFor="let notificacao of notificacoes" [routerLink]="['/notificacoes', notificacao.id]" class="notification-item">
+          {{ notificacao.titulo | slice:0:50 }}{{ notificacao.titulo.length > 50 ? '...' : '' }}
+        </a>
+      </div>
     </div>
   </div>
 
