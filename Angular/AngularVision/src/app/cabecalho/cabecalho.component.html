@@ -8,7 +8,7 @@
     <img src="../../assets/images/notification-icon.png" class="notification-icon" (click)="toggleNotificationDropdown()">
     <span class="badge">{{ numeroDeNotificacoes }}</span>
     <div class="dropdown-menu" *ngIf="notificationDropdownAberto">
-      <a routerLink="/notificacoes">Ver todas as notificações</a>
+      <a *ngFor="let notificacao of notificacoes" [routerLink]="['/notificacoes', notificacao.id]">{{ notificacao.titulo }}</a>
     </div>
   </div>
 

@@ -76,6 +76,6 @@ namespace CRUDAPI.Models
         public string ImagemUrl { get; set; } = "";
 
         public ICollection<Competidor> Competidores { get; set; } = new List<Competidor>();
-        public ICollection<UsuarioNotificacao> AnunciosRecebidos { get; set; } = new List<UsuarioNotificacao>();
+        public ICollection<Notificacao> Notificacoes { get; set; } = new List<Notificacao>();
     }
 }

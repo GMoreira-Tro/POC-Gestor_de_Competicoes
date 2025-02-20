@@ -4,6 +4,7 @@ using CRUDAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20250220180713_Migracao60")]
+    partial class Migracao60
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,9 +253,6 @@ namespace CRUDAPI.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("NotificadoId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("TipoAnuncio")
                         .HasColumnType("nvarchar(max)");
 
@@ -261,8 +261,6 @@ namespace CRUDAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NotificadoId");
 
                     b.ToTable("Notificacoes");
                 });
@@ -359,6 +357,38 @@ namespace CRUDAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("CRUDAPI.Models.UsuarioNotificacao", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("DataLeitura")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Lido")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("NotificacaoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("UsuarioAnunciante")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("UsuarioId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificacaoId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("UsuarioNotificacoes");
                 });
 
             modelBuilder.Entity("Pagamento", b =>
@@ -484,17 +514,6 @@ namespace CRUDAPI.Migrations
                     b.Navigation("PremioResgatavel");
                 });
 
-            modelBuilder.Entity("CRUDAPI.Models.Notificacao", b =>
-                {
-                    b.HasOne("CRUDAPI.Models.Usuario", "Notificado")
-                        .WithMany("Notificacoes")
-                        .HasForeignKey("NotificadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Notificado");
-                });
-
             modelBuilder.Entity("CRUDAPI.Models.Premio", b =>
                 {
                     b.HasOne("Pagamento", "Pagamento")
@@ -503,6 +522,25 @@ namespace CRUDAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Pagamento");
+                });
+
+            modelBuilder.Entity("CRUDAPI.Models.UsuarioNotificacao", b =>
+                {
+                    b.HasOne("CRUDAPI.Models.Notificacao", "Notificacao")
+                        .WithMany("UsuariosAlvo")
+                        .HasForeignKey("NotificacaoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CRUDAPI.Models.Usuario", "Usuario")
+                        .WithMany("AnunciosRecebidos")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Notificacao");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Categoria", b =>
@@ -530,11 +568,16 @@ namespace CRUDAPI.Migrations
                     b.Navigation("ConfrontoInscricoes");
                 });
 
+            modelBuilder.Entity("CRUDAPI.Models.Notificacao", b =>
+                {
+                    b.Navigation("UsuariosAlvo");
+                });
+
             modelBuilder.Entity("CRUDAPI.Models.Usuario", b =>
                 {
-                    b.Navigation("Competidores");
+                    b.Navigation("AnunciosRecebidos");
 
-                    b.Navigation("Notificacoes");
+                    b.Navigation("Competidores");
                 });
 #pragma warning restore 612, 618
         }

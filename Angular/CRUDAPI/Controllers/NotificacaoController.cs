@@ -110,5 +110,11 @@ namespace CRUDAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("buscar-do-usuario/{userId}")]
+        public async Task<ActionResult<IEnumerable<Notificacao>>> GetNotificacoesPeloUsuario(long userId)
+        {
+            return await _contexto.Notificacoes.Where(notificacao => notificacao.NotificadoId == userId).ToListAsync();
+        }
     }
 }

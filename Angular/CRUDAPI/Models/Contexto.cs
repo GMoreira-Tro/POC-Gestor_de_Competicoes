@@ -15,7 +15,6 @@ namespace CRUDAPI.Models
         public DbSet<Confronto> Confrontos { get; set; }
         public DbSet<ConfrontoInscricao> ConfrontoInscricoes { get; set; }
         public DbSet<Notificacao> Notificacoes { get; set; }
-        public DbSet<UsuarioNotificacao> UsuarioNotificacoes { get; set; }
         public DbSet<Premio> Premios { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
 
@@ -76,24 +75,6 @@ namespace CRUDAPI.Models
                 .HasOne(i => i.PremioResgatavel)
                 .WithMany()
                 .HasForeignKey(i => i.PremioResgatavelId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Notificacao>()
-                .HasOne(n => n.Pagamento)
-                .WithMany()
-                .HasForeignKey(n => n.PagamentoId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<UsuarioNotificacao>()
-                .HasOne(un => un.Usuario)
-                .WithMany(u => u.AnunciosRecebidos)
-                .HasForeignKey(un => un.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<UsuarioNotificacao>()
-                .HasOne(un => un.Notificacao)
-                .WithMany(n => n.UsuariosAlvo)
-                .HasForeignKey(un => un.NotificacaoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Premio>()

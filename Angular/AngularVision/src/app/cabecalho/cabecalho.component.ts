@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { NotificacaoService } from '../services/notificacao.service';
 
 @Component({
   selector: 'app-cabecalho',
@@ -12,10 +13,12 @@ export class CabecalhoComponent implements OnInit {
   usuario: any; // Substitua pelo tipo real de usuário que você está usando
   dropdownAberto = false;
   numeroDeNotificacoes: number|string = 99;
+  notificacoes: any[] = [];
   notificationDropdownAberto = false;
 
   constructor(public router: Router,
-    public userService: UserService
+    public userService: UserService,
+    private notificacaoService: NotificacaoService
   ) { }
 
   ngOnInit(): void {
@@ -25,6 +28,13 @@ export class CabecalhoComponent implements OnInit {
       this.usuario.imagemUrl = this.usuario.imagemUrl?.startsWith('http')
         ? this.usuario.imagemUrl
         : `http://localhost:5000/${this.usuario.imagemUrl}`;
+
+        this.notificacaoService.buscarNotificacoesDoUsuario(data.id).subscribe(notificacoes =>
+        {
+          this.notificacoes = notificacoes;
+          this.numeroDeNotificacoes = this.notificacoes.length <= 99 ? this.notificacoes.length : "+99";
+        }
+        );
     },
       error => {
         console.error("Erro ao carregar o usuário", error);

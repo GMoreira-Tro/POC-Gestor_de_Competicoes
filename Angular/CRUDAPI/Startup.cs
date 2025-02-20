@@ -34,7 +34,6 @@ namespace CRUDAPI
             services.AddScoped<InscricaoService>();
             services.AddScoped<NotificacaoService>();
             services.AddScoped<PremioService>();
-            services.AddScoped<UsuarioNotificacaoService>();
             services.AddScoped<UsuarioService>();
             services.AddScoped<EmailService>();
             services.AddScoped<JwtService>();
