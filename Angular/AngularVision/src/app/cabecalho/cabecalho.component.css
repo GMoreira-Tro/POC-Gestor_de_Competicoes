@@ -73,4 +73,29 @@
       margin-top: 10px;
     }
   }
-  
+  .notification-menu {
+    position: relative;
+    margin-left: 20px;
+  }
+
+  .notification-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+
+  .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2.5px 5px;
+    font-size: 12px;
+  }
+
+  .notification-menu .dropdown-menu {
+    top: 40px;
+    right: 0;
+  }

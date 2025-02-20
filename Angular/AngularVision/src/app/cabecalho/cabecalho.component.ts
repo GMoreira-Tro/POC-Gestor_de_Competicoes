@@ -11,6 +11,8 @@ export class CabecalhoComponent implements OnInit {
 
   usuario: any; // Substitua pelo tipo real de usuário que você está usando
   dropdownAberto = false;
+  numeroDeNotificacoes: number|string = 99;
+  notificationDropdownAberto = false;
 
   constructor(public router: Router,
     public userService: UserService
@@ -70,6 +72,10 @@ export class CabecalhoComponent implements OnInit {
 
   toggleDropdown(): void {
     this.dropdownAberto = !this.dropdownAberto;
+  }
+
+  toggleNotificationDropdown(): void {
+    this.notificationDropdownAberto = !this.notificationDropdownAberto;
   }
 
   logout(): void {

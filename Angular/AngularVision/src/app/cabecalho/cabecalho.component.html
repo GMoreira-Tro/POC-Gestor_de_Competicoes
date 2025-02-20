@@ -3,9 +3,18 @@
   <button (click)="cadastrarCompeticao()">{{ router.url !== '/cadastro-competicao' ? 'Cadastrar Competição' : 'Tela Inicial' }}</button>
   <button (click)="cadastrarCompetidores()">{{ router.url !== '/cadastro-competidores' ? 'Cadastrar Competidores' : 'Tela Inicial' }}</button>
 
+  <!-- Ícone de notificações -->
+  <div class="notification-menu" *ngIf="usuario">
+    <img src="../../assets/images/notification-icon.png" class="notification-icon" (click)="toggleNotificationDropdown()">
+    <span class="badge">{{ numeroDeNotificacoes }}</span>
+    <div class="dropdown-menu" *ngIf="notificationDropdownAberto">
+      <a routerLink="/notificacoes">Ver todas as notificações</a>
+    </div>
+  </div>
+
   <!-- Ícone do usuário logado -->
   <div class="user-menu" *ngIf="usuario">
-    <img [src]="usuario.imagemUrl || 'assets/default-user.png'" class="user-avatar" (click)="toggleDropdown()">
+    <img [src]="usuario.imagemUrl || '../../assets/images/imagem-padrao.jpg'" class="user-avatar" (click)="toggleDropdown()">
     <div class="dropdown-menu" *ngIf="dropdownAberto">
       <a routerLink="/perfil-usuario">Meu Perfil</a>
       <a routerLink="/meus-competidores">Meus Competidores</a>
