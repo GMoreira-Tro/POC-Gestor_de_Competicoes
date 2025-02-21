@@ -44,7 +44,7 @@ namespace CRUDAPI.Services
         public async Task<bool> EnviarInscricoesParaOrganizador(long[] inscricoesIds, string organizadorEmail, long IdOrganizador)
         {
             string confirmationLink = "";
-            
+
             // Obtém as informações das inscrições corretamente
             var inscricoesList = await _contexto.Inscricoes
             .Where(i => inscricoesIds.Contains(i.Id))
@@ -57,15 +57,15 @@ namespace CRUDAPI.Services
 
             var inscricoesInfoArray = new List<string>();
             var notificacoesArray = new List<Notificacao>();
+            var competicao = new Competicao();
             foreach (var inscricao in inscricoesList)
             {
                 var competidor = await _contexto.Competidores.FindAsync(inscricao.CompetidorId);
                 var categoria = await _contexto.Categorias.FindAsync(inscricao.CategoriaId);
-                var competicao = categoria != null ? await _contexto.Competicoes.FindAsync(categoria.CompeticaoId) : null;
+                competicao = categoria != null ? await _contexto.Competicoes.FindAsync(categoria.CompeticaoId) : null;
                 var usuario = competidor != null ? await _contexto.Usuarios.FindAsync(competidor.CriadorId) : null;
-                confirmationLink = $"http://localhost:4200/aprovar-inscricao/{competicao?.Id}";
 
-                inscricoesInfoArray.Add($"Competição: {competicao?.Titulo}, Competidor: {competidor?.Nome}, Categoria: {categoria?.Nome}, Email do solicitante: {usuario?.Email ?? "Não encontrado"}");
+                inscricoesInfoArray.Add($"Competidor: {competidor?.Nome}, Categoria: {categoria?.Nome}, Email do solicitante: {usuario?.Email ?? "Não encontrado"}");
 
                 var notificacao = new Notificacao
                 {
@@ -73,7 +73,7 @@ namespace CRUDAPI.Services
                     Titulo = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
                     Descricao = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
                     DataPublicacao = DateTime.Now,
-                    Link = confirmationLink,
+                    Link = $"http://localhost:4200/aprovar-inscricao/{competicao?.Id}",
                     TipoAnuncio = "Inscrição"
                 };
 
@@ -86,8 +86,9 @@ namespace CRUDAPI.Services
 
             string inscricoesInfo = string.Join("<br>", inscricoesInfoArray);
 
+            confirmationLink = $"http://localhost:4200/aprovar-inscricao/{competicao?.Id}";
             // Enviar e-mail com os dados das inscrições
-            await _emailService.SendEmailAsync(organizadorEmail, "Dados das Inscrições",
+            await _emailService.SendEmailAsync(organizadorEmail, $"Dados das Inscrições na Competição: {competicao?.Titulo}",
             $"Aqui estão os dados das inscrições:<br>{inscricoesInfo}<br><br>Acesse o sistema para aprovar ou recusar as inscrições.<br><br><a href='{confirmationLink}'>Confirmar Inscrições</a>");
 
             return true;

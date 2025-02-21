@@ -1,7 +1,7 @@
 <app-cabecalho></app-cabecalho>
 
 <div class="container">
-    <h2>Inscrições na competição</h2>
+    <h2>Inscrições na competição: {{ tituloCompeticao }}</h2>
     <tr *ngFor="let categoria of categorias | keyvalue">
     <h2>{{ categoria.value.nome }}</h2>
     <table class="table table-striped">

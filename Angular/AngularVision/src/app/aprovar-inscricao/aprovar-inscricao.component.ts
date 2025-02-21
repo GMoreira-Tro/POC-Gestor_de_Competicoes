@@ -12,6 +12,7 @@ import { CategoriaService } from '../services/categoria.service';
 })
 export class AprovarInscricaoComponent implements OnInit {
   competicaoId: number = 0;
+  tituloCompeticao: string = "";
   userId: number = 0;
   infoInscricoes: any[] = [];
   categorias: { [categoriaId: number]: any } = {};
@@ -37,6 +38,7 @@ export class AprovarInscricaoComponent implements OnInit {
             this.router.navigate(['/']);
             return;
           }
+          this.tituloCompeticao = competicao.titulo;
         }
         )
       },

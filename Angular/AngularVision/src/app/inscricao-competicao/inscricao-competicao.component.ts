@@ -166,8 +166,8 @@ export class InscricaoCompeticaoComponent implements OnInit {
     this.inscricaoService.enviarInscricoesParaOrganizador(inscricoesIds, this.emailOrganizador, this.idOrganizador).subscribe(ok =>
     {
       console.log(ok)
+      this.router.navigate(['/minhas-inscricoes']);
     }
     );
-    //this.router.navigate(['/minhas-inscricoes']);
   }
 }
