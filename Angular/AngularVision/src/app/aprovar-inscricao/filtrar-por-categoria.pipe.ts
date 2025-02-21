@@ -4,10 +4,10 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'filtrarPorCategoria'
 })
 export class FiltrarPorCategoriaPipe implements PipeTransform {
-  transform(items: any[], categoriaId: number): any[] {
+  transform(items: any[], categoriaId: string): any[] {
     if (!items || !categoriaId) {
       return items;
     }
-    return items.filter(item => item.categoriaId === categoriaId);
+    return items.filter(item => item.categoriaId === Number(categoriaId));
   }
 }

@@ -70,7 +70,7 @@ namespace CRUDAPI.Services
                 var notificacao = new Notificacao
                 {
                     NotificadoId = IdOrganizador,
-                    Titulo = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
+                    Titulo = $"Inscrição em {competicao?.Titulo} solicitada.",
                     Descricao = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
                     DataPublicacao = DateTime.Now,
                     Link = $"http://localhost:4200/aprovar-inscricao/{competicao?.Id}",

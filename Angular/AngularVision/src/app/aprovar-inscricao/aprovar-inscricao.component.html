@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let infoInscricao of infoInscricoes | filtrarPorCategoria: categoria.value.id">
+            <tr *ngFor="let infoInscricao of infoInscricoes | filtrarPorCategoria: categoria.key">
                 <td>{{ infoInscricao.nomeCompetidor }}</td>
                 <td>{{ infoInscricao.emailCompetidor }}</td>
                 <td>{{ infoInscricao.status === 0 ? "Pendente" : 
