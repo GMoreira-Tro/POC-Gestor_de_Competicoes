@@ -41,11 +41,10 @@ namespace CRUDAPI.Services
             return _contexto.Inscricoes.Any(e => e.Id == id);
         }
 
-        public async Task<bool> EnviarInscricoesParaOrganizador(long[] inscricoesIds, string organizadorEmail)
+        public async Task<bool> EnviarInscricoesParaOrganizador(long[] inscricoesIds, string organizadorEmail, long IdOrganizador)
         {
-            // Link de confirmação (substitua pelo domínio correto)
-            string confirmationLink = $"http://localhost:4200/confirmar-inscricoes";
-
+            string confirmationLink = "";
+            
             // Obtém as informações das inscrições corretamente
             var inscricoesList = await _contexto.Inscricoes
             .Where(i => inscricoesIds.Contains(i.Id))
@@ -53,19 +52,37 @@ namespace CRUDAPI.Services
 
             if (!inscricoesList.Any())
             {
-            throw new InvalidOperationException("Nenhuma inscrição encontrada com os IDs fornecidos.");
+                throw new InvalidOperationException("Nenhuma inscrição encontrada com os IDs fornecidos.");
             }
 
             var inscricoesInfoArray = new List<string>();
+            var notificacoesArray = new List<Notificacao>();
             foreach (var inscricao in inscricoesList)
             {
-            var competidor = await _contexto.Competidores.FindAsync(inscricao.CompetidorId);
-            var categoria = await _contexto.Categorias.FindAsync(inscricao.CategoriaId);
-            var competicao = categoria != null ? await _contexto.Competicoes.FindAsync(categoria.CompeticaoId) : null;
-            var usuario = competidor != null ? await _contexto.Usuarios.FindAsync(competidor.CriadorId) : null;
+                var competidor = await _contexto.Competidores.FindAsync(inscricao.CompetidorId);
+                var categoria = await _contexto.Categorias.FindAsync(inscricao.CategoriaId);
+                var competicao = categoria != null ? await _contexto.Competicoes.FindAsync(categoria.CompeticaoId) : null;
+                var usuario = competidor != null ? await _contexto.Usuarios.FindAsync(competidor.CriadorId) : null;
+                confirmationLink = $"http://localhost:4200/aprovar-inscricao/{competicao?.Id}";
 
-            inscricoesInfoArray.Add($"Competição: {competicao?.Titulo}, Competidor: {competidor?.Nome}, Categoria: {categoria?.Nome}, Email do solicitante: {usuario?.Email ?? "Não encontrado"}");
+                inscricoesInfoArray.Add($"Competição: {competicao?.Titulo}, Competidor: {competidor?.Nome}, Categoria: {categoria?.Nome}, Email do solicitante: {usuario?.Email ?? "Não encontrado"}");
+
+                var notificacao = new Notificacao
+                {
+                    NotificadoId = IdOrganizador,
+                    Titulo = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
+                    Descricao = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
+                    DataPublicacao = DateTime.Now,
+                    Link = confirmationLink,
+                    TipoAnuncio = "Inscrição"
+                };
+
+                notificacoesArray.Add(notificacao);
             }
+
+            // Adiciona as notificações ao contexto e salva as alterações
+            _contexto.Notificacoes.AddRange(notificacoesArray);
+            await _contexto.SaveChangesAsync();
 
             string inscricoesInfo = string.Join("<br>", inscricoesInfoArray);
 

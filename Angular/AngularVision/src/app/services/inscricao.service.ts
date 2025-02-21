@@ -44,8 +44,8 @@ export class InscricaoService {
     return this.http.get<Inscricao[]>(`${this.apiUrl}/categoria/${categoriaId}`);
   }
 
-  enviarInscricoesParaOrganizador(inscricoesIds: number[], emailOrganizador: string): Observable<any> {
-    const payload = { inscricoesIds, emailOrganizador };
+  enviarInscricoesParaOrganizador(inscricoesIds: number[], emailOrganizador: string, idOrganizador: number): Observable<any> {
+    const payload = { inscricoesIds, emailOrganizador, idOrganizador };
 
     return this.http.post(`${this.apiUrl}/enviar-inscricoes`, payload);
   }

@@ -31,6 +31,7 @@ export class InscricaoCompeticaoComponent implements OnInit {
   }[] = [];
   indexCategoria: number = 0;
   showSuccessMessage: boolean = false;
+  idOrganizador: number = 0;
   emailOrganizador: string= ""
   inscricoes: Inscricao[] = []
 
@@ -54,6 +55,7 @@ export class InscricaoCompeticaoComponent implements OnInit {
   {
     this.competicaoService.getCompeticao(this.competicaoId).subscribe(competicao => {
       this.userService.getUser(competicao.criadorUsuarioId).subscribe(organizador => {
+        this.idOrganizador = organizador.id;
         this.emailOrganizador = organizador.email
       });
     });
@@ -161,7 +163,7 @@ export class InscricaoCompeticaoComponent implements OnInit {
     const inscricoesIds = this.inscricoes.map(inscricao => inscricao.id);
     console.log(JSON.stringify({ inscricoes: this.inscricoes, emailOrganizador: this.emailOrganizador }));
 
-    this.inscricaoService.enviarInscricoesParaOrganizador(inscricoesIds, this.emailOrganizador).subscribe(ok =>
+    this.inscricaoService.enviarInscricoesParaOrganizador(inscricoesIds, this.emailOrganizador, this.idOrganizador).subscribe(ok =>
     {
       console.log(ok)
     }
