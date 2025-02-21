@@ -26,10 +26,7 @@ namespace CRUDAPI.Models
         public DateTime DataPublicacao { get; set; }
         public DateTime? DataExpiracao { get; set; }
 
-        /// <summary>
-        /// Imagem "rosto" da Notificação.
-        /// </summary>
-        public string? BannerImagem { get; set; }
+        public string Link { get; set; } = "";
 
         public string? TipoAnuncio { get; set; }
     }

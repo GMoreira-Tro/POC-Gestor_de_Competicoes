@@ -5,6 +5,6 @@ export interface Notificacao {
     dataPublicacao: Date;
     dataExpiracao?: Date;
     anuncianteId: number;
-    bannerImagem?: string;
+    link?: string;
     tipoAnuncio?: string;
 }

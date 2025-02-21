@@ -9,7 +9,7 @@
     <span class="badge">{{ numeroDeNotificacoes }}</span>
     <div class="dropdown-menu" *ngIf="notificationDropdownAberto">
       <div class="notification-list">
-        <a *ngFor="let notificacao of notificacoes" [routerLink]="['/notificacoes', notificacao.id]" class="notification-item">
+        <a *ngFor="let notificacao of notificacoes" [href]="notificacao.link" class="notification-item">
           {{ notificacao.titulo | slice:0:50 }}{{ notificacao.titulo.length > 50 ? '...' : '' }}
         </a>
       </div>
