@@ -1,0 +1,12 @@
+<app-cabecalho></app-cabecalho>
+
+<div class="container">
+    <h2>Fale Conosco</h2>
+    <form (ngSubmit)="enviarEmail()">
+        <input type="text" name="assunto" placeholder="Assunto (Opcional)" [(ngModel)]="assunto">
+        <textarea name="mensagem" placeholder="Sua Mensagem" required [(ngModel)]="mensagem"></textarea>
+        <button type="submit" (click)="enviarEmail()">Enviar</button>
+    </form>
+</div>
+
+<app-rodape></app-rodape>

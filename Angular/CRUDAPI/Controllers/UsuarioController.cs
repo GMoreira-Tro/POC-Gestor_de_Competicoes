@@ -16,11 +16,13 @@ namespace CRUDAPI.Controller
     {
         private readonly Contexto _contexto;
         private readonly UsuarioService _usuarioService;
+        private readonly EmailService _emailService;
 
-        public UsuarioController(Contexto contexto, UsuarioService usuarioService)
+        public UsuarioController(Contexto contexto, UsuarioService usuarioService, EmailService emailService)
         {
             _contexto = contexto;
             _usuarioService = usuarioService;
+            _emailService = emailService;
         }
 
         // GET: api/Usuario
@@ -187,5 +189,25 @@ namespace CRUDAPI.Controller
             return Ok(new { imagemUrl = usuario.ImagemUrl });
         }
 
+        [HttpPost("enviar-email-suporte/{id}")]
+        public async Task<IActionResult> EnviarEmailSuporte(long id, [FromBody] EmailConfirmacaoRequest request)
+        {
+            var usuario = await _contexto.Usuarios.FindAsync(id);
+            if (usuario == null) return NotFound("Usuário não encontrado");
+
+            var assunto = request.Assunto;
+            var mensagem = request.Mensagem;
+
+            // Adiciona o e-mail do usuário no corpo da mensagem
+            var mensagemCompleta = $"Usuário: {usuario.Email}\n\n{mensagem}";
+            await _emailService.SendEmailAsync(_emailService._emailFrom, assunto, mensagemCompleta);
+
+            return Ok("E-mail enviado com sucesso!");
+        }
+        public class EmailConfirmacaoRequest
+        {
+            public string Assunto { get; set; }
+            public string Mensagem { get; set; }
+        }
     }
 }
