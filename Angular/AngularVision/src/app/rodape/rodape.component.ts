@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rodape',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './rodape.component.css'
 })
 export class RodapeComponent {
+  constructor(private router: Router) {}
 
+  navigateToFaleConosco() {
+    this.router.navigate(['/fale-conosco']);
+  }
 }

@@ -41,7 +41,7 @@ export class UserService {
   }
 
   reenviarEmailConfirmacao(email: string): Observable<any> {
-      return this.http.get(`${this.baseUrl}/reenviar-email-confirmacao/${email}`);
+    return this.http.get(`${this.baseUrl}/reenviar-email-confirmacao/${email}`);
   }
 
   getUsuarioLogado(): Observable<Usuario> {
@@ -53,5 +53,8 @@ export class UserService {
     formData.append('imagem', imagem);
 
     return this.http.post<any>(`${this.baseUrl}/${id}/upload-imagem`, formData);
+  }
+  enviarEmailSuporte(userId: number, assunto: string, mensagem: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/enviar-email-suporte/${userId}`, { assunto, mensagem });
   }
 }

@@ -31,6 +31,7 @@ import { InscricaoCompeticaoComponent } from './inscricao-competicao/inscricao-c
 import { MinhasInscricoesComponent } from './minhas-inscricoes/minhas-inscricoes.component';
 import { AprovarInscricaoComponent } from './aprovar-inscricao/aprovar-inscricao.component';
 import { FiltrarPorCategoriaPipe } from './aprovar-inscricao/filtrar-por-categoria.pipe';
+import { FaleConoscoComponent } from './fale-conosco/fale-conosco.component';
 
 @NgModule({
   declarations: [
@@ -53,8 +54,10 @@ import { FiltrarPorCategoriaPipe } from './aprovar-inscricao/filtrar-por-categor
     MinhasInscricoesComponent,
     AprovarInscricaoComponent,
     FiltrarPorCategoriaPipe,
+    FaleConoscoComponent,
     CabecalhoComponent,
-    RodapeComponent
+    RodapeComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -66,6 +69,7 @@ import { FiltrarPorCategoriaPipe } from './aprovar-inscricao/filtrar-por-categor
     NgxCountryFlagModule,
     ModalModule.forRoot(),
     NgxMaskModule.forRoot(),
+
   ],
   providers: [UserService],
   bootstrap: [AppComponent],
