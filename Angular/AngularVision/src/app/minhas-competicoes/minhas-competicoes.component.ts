@@ -69,4 +69,9 @@ export class MinhasCompeticoesComponent implements OnInit {
         if (!confirm("Tem certeza que deseja excluir esta competição?")) return;
         await this.excluirCategorias(id);
     }
+
+    gerenciarInscricoes(id: number)
+    {
+        this.router.navigate(['/aprovar-inscricao', id]);
+    }
 }
