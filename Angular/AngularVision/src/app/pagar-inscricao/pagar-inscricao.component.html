@@ -1,0 +1,38 @@
+<app-cabecalho></app-cabecalho>
+
+<div class="container">
+    <h2>Pagamento da inscrição do torneio {{ infoInscricao.tituloCompeticao}}</h2>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Competidor</th>
+                    <th>E-mail</th>
+                    <th>Categoria</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ infoInscricao.nomeCompetidor }}</td>
+                    <td>{{ infoInscricao.emailCompetidor }}</td>
+                    <td>{{ infoInscricao.nomeCategoria }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="infoInscricao.status === 1">
+            <p>Escaneie o QR Code abaixo para realizar o pagamento:</p>
+            <img [src]="gerarQRCode(infoInscricao)" alt="QR Code para pagamento">
+        </div>
+        <div *ngIf="infoInscricao.status === 2" class="text-success">
+            <p>O pagamento já foi realizado.</p>
+        </div>
+        <div *ngIf="infoInscricao.status === 3" class="text-danger">
+            <p>A inscrição foi recusada.</p>
+        </div>
+        <div *ngIf="infoInscricao.status === 0" class="text-warning">
+            <p>A aprovação da inscrição está pendente.</p>
+        </div>
+    </div>
+</div>
+
+<app-rodape></app-rodape>
