@@ -23,8 +23,8 @@ export class FaleConoscoComponent implements OnInit {
   }
 
   enviarEmail(): void {
+    alert('E-mail enviado com sucesso!');
     this.userService.enviarEmailSuporte(this.userId, this.assunto, this.mensagem).subscribe(() => {
-      alert('E-mail enviado com sucesso!');
     }); 
   }
 }

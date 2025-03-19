@@ -68,14 +68,23 @@ export class AprovarInscricaoComponent implements OnInit {
 
   aprovarInscricao(infoInscricao: any)
   {
+    if (!confirm("Você tem certeza que deseja aprovar esta inscrição? Esta ação não pode ser desfeita.")) {
+      return;
+    }
+    
     infoInscricao.inscricao.status = 1;
+    infoInscricao.status = 1;
     this.inscricaoService.atualizarInscricao(infoInscricao.inscricao.id, infoInscricao.inscricao).subscribe();
     
   }
 
   recusarInscricao(infoInscricao: any)
   {
+    if (!confirm("Você tem certeza que deseja recusar esta inscrição? Esta ação não pode ser desfeita.")) {
+      return;
+    }
     infoInscricao.inscricao.status = 3;
+    infoInscricao.status = 3;
     this.inscricaoService.atualizarInscricao(infoInscricao.inscricao.id, infoInscricao.inscricao).subscribe();
   }
 }
