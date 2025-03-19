@@ -39,4 +39,8 @@ export class NotificacaoService {
   buscarNotificacoesDoUsuario(userId: number): Observable<Notificacao[]> {
     return this.http.get<Notificacao[]>(`${this.apiUrl}/buscar-do-usuario/${userId}`);
   }
+  
+  cadastrarNotificacaoDeInscricao(inscricaoId: number): Observable<Notificacao> {
+    return this.http.post<Notificacao>(`${this.apiUrl}/inscricao/${inscricaoId}`, {});
+  }
 }
