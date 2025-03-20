@@ -67,13 +67,16 @@ export class MinhasInscricoesComponent implements OnInit {
             emailCompetidor: ''
         };
 
-        this.inscricaoService.getInfoInscricao(id).subscribe(infoInscricao =>
-        {
+        this.inscricaoService.getInfoInscricao(id).subscribe(infoInscricao => {
             this.dadosInscricoes[id].tituloCompeticao = infoInscricao.tituloCompeticao;
             this.dadosInscricoes[id].nomeCategoria = infoInscricao.nomeCategoria;
             this.dadosInscricoes[id].nomeCompetidor = infoInscricao.nomeCompetidor;
             this.dadosInscricoes[id].emailCompetidor = infoInscricao.emailCompetidor;
         }
         );
+    }
+
+    pagarInscricao(id: number) {
+        this.router.navigate(['/pagar-inscricao', id]);
     }
 }
