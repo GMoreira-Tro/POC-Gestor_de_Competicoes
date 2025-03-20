@@ -9,6 +9,7 @@
                     <th>Competidor</th>
                     <th>E-mail</th>
                     <th>Categoria</th>
+                    <th>Valor da inscrição</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,12 +17,18 @@
                     <td>{{ infoInscricao.nomeCompetidor }}</td>
                     <td>{{ infoInscricao.emailCompetidor }}</td>
                     <td>{{ infoInscricao.nomeCategoria }}</td>
+                    <td>R$ {{ infoInscricao.valorCategoria | number:'1.2-2' }}</td>
                 </tr>
             </tbody>
         </table>
         <div *ngIf="infoInscricao.status === 1">
-            <p>Escaneie o QR Code abaixo para realizar o pagamento:</p>
-            <img [src]="gerarQRCode(infoInscricao)" alt="QR Code para pagamento">
+            <div *ngIf="paymentCompleted; else qrCodeSection" class="text-success">
+                <p>🎉 Pagamento realizado com sucesso! Obrigado por confirmar sua inscrição. 🎉</p>
+            </div>
+            <ng-template #qrCodeSection>
+                <p>Escaneie o QR Code abaixo para realizar o pagamento:</p>
+                <img [src]="qrCodeUrl" alt="QR Code para pagamento">
+            </ng-template>
         </div>
         <div *ngIf="infoInscricao.status === 2" class="text-success">
             <p>O pagamento já foi realizado.</p>
