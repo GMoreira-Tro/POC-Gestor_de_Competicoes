@@ -102,4 +102,11 @@ export class CabecalhoComponent implements OnInit {
   login(): void {
     this.router.navigate(['/login']);
   }
+
+  deletarNotificacao(id: number): void {
+    this.notificacaoService.deletarNotificacao(id).subscribe(() => {
+      this.notificacoes = this.notificacoes.filter(n => n.id !== id);
+      this.numeroDeNotificacoes = this.notificacoes.length <= 99 ? this.notificacoes.length : "+99";
+    });
+  }
 }

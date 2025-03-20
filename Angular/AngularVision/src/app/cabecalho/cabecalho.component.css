@@ -110,3 +110,46 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .delete-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    margin-left: auto;
+    display: inline-block;
+    vertical-align: middle;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+
+  .delete-icon:hover {
+    opacity: 1;
+  }
+
+  .notification-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+
+  .notification-item:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
