@@ -61,4 +61,13 @@ export class PaymentService {
   registerUserPayment(payment: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/payments/user`, payment);
   }
+
+  // Envia um pagamento PIX para um favorecido
+  sendPix(idEnvio: string, pixSent: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/envio/${idEnvio}`, pixSent);
+  }
+
+  receberEmailInscricao(idInscricao: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/receber-email-inscricao/${idInscricao}`, {});
+  }
 }

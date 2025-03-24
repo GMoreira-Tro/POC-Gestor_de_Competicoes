@@ -20,6 +20,7 @@ export class PagarInscricaoComponent implements OnInit {
   paymentCompleted: boolean = false;
   txid: string = ''; // ID da transação PIX
   inscricaoId: number = 0;
+  pixEnviadoAoOrganizador = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -112,13 +113,22 @@ export class PagarInscricaoComponent implements OnInit {
                 txid: this.txid,
                 pagadorId: this.user.id,
                 favorecidoId: this.infoInscricao.organizadorId,
+                infoPagamento: 'Inscrição em competição'
               }
-            );
-            this.inscricaoService.obterInscricao(this.inscricaoId).subscribe(inscricao => {
-              inscricao.status = 2;
-              this.inscricaoService.atualizarInscricao(inscricao.id, inscricao).subscribe();
+            ).subscribe((pagamento) =>
+            {
+              this.inscricaoService.obterInscricao(this.inscricaoId).subscribe(inscricao => {
+                inscricao.status = 2;
+                inscricao.pagamentoId = pagamento.id;
+                this.inscricaoService.atualizarInscricao(inscricao.id, inscricao).subscribe(() => {
+                  this.infoInscricao.status = 2;
+                  this.paymentService.receberEmailInscricao(this.inscricaoId).subscribe(() => {
+                    console.log('Email de inscrição recebido com sucesso!');
+                    alert('✅ Pagamento realizado com sucesso!'); // Exibe o alerta
+                  });
+                });
+              });
             });
-            alert('✅ Pagamento realizado com sucesso!'); // Exibe o alerta
           }
         },
         (error) => {
@@ -126,5 +136,41 @@ export class PagarInscricaoComponent implements OnInit {
         }
       );
     }, 5000); // Intervalo de 5 segundos
+  }
+
+  enviarPix() {
+    if (this.pixEnviadoAoOrganizador) return;
+
+    const chaveFavorecido = prompt('Digite a chave PIX do favorecido:');
+    const valor = "20.00";
+    if (!chaveFavorecido || !valor) {
+      alert('Chave PIX e valor são obrigatórios.');
+      return;
+    }
+
+    const pixSent = {
+      valor: parseFloat(valor).toFixed(2),
+      pagador: {
+        chave: 'a5d98ae0-2416-457f-86a1-c543e08c07a4', // Chave da sua conta Efi Bank
+        infoPagador: this.user.nome,
+      },
+      favorecido: {
+        chave: chaveFavorecido,
+      },
+    };
+
+    const idEnvio = `envio${Date.now()}`; // Gera um identificador único para o envio
+
+    this.paymentService.sendPix(idEnvio, pixSent).subscribe(
+      (response) => {
+        this.pixEnviadoAoOrganizador = true;
+        alert('✅ PIX enviado com sucesso!');
+        console.log('Resposta do envio:', response);
+      },
+      (error) => {
+        console.error('Erro ao enviar PIX:', error);
+        alert('❌ Erro ao enviar PIX.');
+      }
+    );
   }
 }
