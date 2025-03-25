@@ -230,6 +230,8 @@ public class PixController : ControllerBase
         var inscricao = await _context.Inscricoes.FindAsync(idInscricao);
         if (inscricao == null) return NotFound("Inscrição não encontrada");
         if (inscricao.Status != InscricaoStatus.Paga) return BadRequest("Inscrição não paga");
+        var competidor = await _context.Competidores.FindAsync(inscricao.CompetidorId);
+        if (competidor == null) return NotFound("Competidor não encontrado");
         var categoria = await _context.Categorias.FindAsync(inscricao.CategoriaId);
         if (categoria == null) return NotFound("Categoria não encontrada");
         var competicao = await _context.Competicoes.FindAsync(categoria.CompeticaoId);
@@ -240,7 +242,9 @@ public class PixController : ControllerBase
         var assunto = "Nova Inscrição Recebida: " + inscricao.Id;
         var mensagem = $"O organizador {Organizador.Nome}({Organizador.Id}) recebeu uma nova inscrição para a competição " + 
         $"{competicao.Titulo}({competicao.Id})" + $" na categoria '{categoria.Nome}'. " +
-                   $"O valor da inscrição é R$ {categoria.ValorInscricao:F2}.";
+                   $"O valor da inscrição é R$ {categoria.ValorInscricao:F2}." +
+                   $"O competidor é {competidor.Nome}({competidor.Id})." +
+                   $"O PIX da competição é {competicao.ChavePix}.";
         
         await _emailService.SendEmailAsync(_emailService._emailFrom, assunto, mensagem);
 

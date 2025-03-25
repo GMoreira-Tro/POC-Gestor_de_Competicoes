@@ -6,6 +6,7 @@
     <button [disabled]="etapaAtual === 1" (click)="mudarEtapa(1)">1. Cadastro</button>
     <button [disabled]="etapaAtual === 2" (click)="mudarEtapa(2)">2. Pré-registro de Competidores</button>
     <button [disabled]="etapaAtual === 3" (click)="mudarEtapa(3)">3. Registro do PIX</button>
+    <button [disabled]="etapaAtual === 4" (click)="mudarEtapa(4)">4. Pagar Inscrições</button>
   </div>
 
   <!-- Etapa 1: Cadastro -->
@@ -88,23 +89,23 @@
     <div *ngFor="let categoria of categorias; let i = index">
       <h3>{{ categoria.nome }}</h3>
       <ul>
-        <li *ngFor="let competidor of categoriasMap[categoria.id]?.competidores">
+        <li *ngFor="let competidor of categoriasMap[categoria.tempId]?.competidores">
           {{ competidor.nome }} - {{ competidor.email }}
         </li>
       </ul>
-      <button (click)="abrirModalCompetidores(categoria.id)">Pré-registrar Competidores</button>
+      <button (click)="abrirModalCompetidores(categoria.tempId)">Pré-registrar Competidores</button>
 
       <!-- Modal para seleção de competidores -->
-      <div *ngIf="categoriasMap[categoria.id] !== undefined && categoriasMap[categoria.id].mostrarModal" class="modal">
+      <div *ngIf="categoriasMap[categoria.tempId] !== undefined && categoriasMap[categoria.tempId].mostrarModal" class="modal">
         <div class="modal-conteudo">
           <h3>Selecionar Competidores para {{ categoria.nome }}</h3>
           <div *ngFor="let competidor of competidoresUsuario">
-            <input type="checkbox" [id]="'competidor-' + competidor.id" [(ngModel)]="competidor.selecionadoPorCategoria[categoria.id]">
+            <input type="checkbox" [id]="'competidor-' + competidor.id" [(ngModel)]="competidor.selecionadoPorCategoria[categoria.tempId]">
             <label [for]="'competidor-' + competidor.id">{{ competidor.nome }}  - {{ competidor.email }}</label>
           </div>
           <div class="modal-acoes">
-            <button (click)="confirmarSelecaoCompetidores(categoria.id)">Confirmar</button>
-            <button (click)="fecharModalCompetidores(categoria.id)">Cancelar</button>
+            <button (click)="confirmarSelecaoCompetidores(categoria.tempId)">Confirmar</button>
+            <button (click)="fecharModalCompetidores(categoria.tempId)">Cancelar</button>
           </div>
         </div>
       </div>
@@ -127,7 +128,19 @@
       <input type="text" id="chavePix" [(ngModel)]="competicao.chavePix" required>
     </div>
     <button (click)="mudarEtapa(2)">Voltar</button>
-    <button (click)="onSubmit()">Finalizar Registro</button>
+    <button (click)="mudarEtapa(4)">Próxima Etapa</button>
+  </div>
+
+  <!-- Etapa 4: Pagamento para Gestão de Confrontos -->
+  <div *ngIf="etapaAtual === 4">
+    <h2>Pagamento para Gestão de Confrontos</h2>
+    <p>
+      Para finalizar o cadastro da sua competição e garantir a gestão completa dos confrontos, é necessário realizar o pagamento das inscrições dos competidores. 
+      O valor da taxa é de apenas R$ 9,99 por inscrito. Invista na organização e sucesso do seu evento agora mesmo!
+    </p>
+    <div class="qrcode-container">
+      <img [src]="qrCodeUrl" alt="QR Code para Pagamento" class="qrcode-imagem">
+    </div>
   </div>
 </div>
 
