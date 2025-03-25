@@ -63,6 +63,11 @@ namespace CRUDAPI.Models
         
         [EnumDataType(typeof(StatusCompeticao))]
         public StatusCompeticao Status { get; set; }
+
+        /// <summary>
+        /// Chave Pix para receber pagamentos de inscrições.
+        /// </summary>
+        public string ChavePix { get; set; } = "";
         public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
     }
 }

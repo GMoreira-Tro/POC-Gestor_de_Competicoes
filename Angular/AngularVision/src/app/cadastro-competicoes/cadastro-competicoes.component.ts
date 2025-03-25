@@ -7,6 +7,7 @@ import { GeoNamesService } from '../services/geonames.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { CompetidorService } from '../services/competidor.service';
 
 @Component({
   selector: 'app-cadastro-competicoes',
@@ -28,10 +29,16 @@ export class CadastroCompeticoesComponent implements OnInit {
     dataInicio: new Date(),
     dataFim: new Date(),
     criadorUsuarioId: 0,  // Ajustar depois para o ID do usuário logado
-    status: 0
+    status: 0,
+    chavePix: ''
   };
   categorias: Categoria[] = [];
+  mostrarModal = false;
+  categoriasMap: { [key: number]: any } = {};
+  competidoresUsuario: any[] = [];
   imagemSelecionada: File | null = null;
+  etapaAtual = 1;
+  tempIdCategoria = 0;
 
   listaPaises: any;
   listaEstados: any;
@@ -41,6 +48,7 @@ export class CadastroCompeticoesComponent implements OnInit {
     private geonamesService: GeoNamesService,
     private router: Router,
     private userService: UserService,
+    private competidorService: CompetidorService,
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -52,6 +60,9 @@ export class CadastroCompeticoesComponent implements OnInit {
 
     this.userService.getUsuarioLogado().subscribe(usuario => {
       this.competicao.criadorUsuarioId = usuario.id;
+      this.competidorService.buscarCompetidoresDoUsuario(usuario.id).subscribe(competidores => {
+        this.competidoresUsuario = competidores;
+      });
     }
     );
 
@@ -66,21 +77,32 @@ export class CadastroCompeticoesComponent implements OnInit {
       });
   }
 
-  onSubmit(): void {
+  validarFormulario(): boolean {
     if (this.categorias.length === 0) {
       alert("A competição deve ter pelo menos uma categoria.");
-      return;
+      return false;
     }
     for (let i = 0; i < this.categorias.length; i++) {
       const categoria = this.categorias[i];
       if (categoria.nome === '') {
         alert('Todas as categorias devem conter um nome.');
-        return;
+        return false;
       }
       if (categoria.valorInscricao < 15.99) {
         alert('O valor de inscrição das categorias deve ser maior ou igual a R$ 15,99');
-        return;
+        return false;
       }
+    }
+
+    return true;
+  }
+
+  onSubmit(): void {
+    if (!this.validarFormulario()) return;
+    if (this.competicao.chavePix === '')
+    {
+      alert("Informe a chave PIX para inscrição na competição.");
+      return;
     }
 
     this.competicao.status = 1; // Ajusta o status para publicada
@@ -127,7 +149,7 @@ export class CadastroCompeticoesComponent implements OnInit {
 
   adicionarCategoria(): void {
     const novaCategoria: Categoria = {
-      id: 0,  // O backend deve gerar esse ID
+      id: this.tempIdCategoria++,  // O backend deve gerar esse ID
       nome: '',
       descricao: '',
       competicaoId: 0,
@@ -194,5 +216,36 @@ export class CadastroCompeticoesComponent implements OnInit {
         // Trate o erro conforme necessário
       }
     );
+  }
+
+  mudarEtapa(etapa: number): void {
+    //if (this.etapaAtual === 1 && !this.validarFormulario()) return;
+    this.etapaAtual = etapa;
+  }
+
+  abrirModalCompetidores(categoriaTempId: number): void {
+    if(this.categoriasMap[categoriaTempId] === undefined)
+      this.categoriasMap[categoriaTempId] = { mostrarModal: false, inscricoes: [] };
+    for (let i = 0; i < this.competidoresUsuario.length; i++) {
+      if(this.competidoresUsuario[i].selecionadoPorCategoria === undefined)
+        this.competidoresUsuario[i].selecionadoPorCategoria = {};
+      if(this.competidoresUsuario[i].selecionadoPorCategoria[categoriaTempId] === undefined)
+        this.competidoresUsuario[i].selecionadoPorCategoria[categoriaTempId] = false;
+    }
+    this.categoriasMap[categoriaTempId].mostrarModal = true;
+    console.log(categoriaTempId)
+  }
+
+  fecharModalCompetidores(categoriaTempId: number): void {
+    this.categoriasMap[categoriaTempId].mostrarModal = false;
+  }
+
+  confirmarSelecaoCompetidores(categoriaTempId: number): void {
+    const competidoresSelecionados = this.competidoresUsuario.filter(competidor => competidor.selecionadoPorCategoria[categoriaTempId]);
+    this.categoriasMap[categoriaTempId].inscricoes = competidoresSelecionados.map(competidor => ({
+      competidorId: competidor.id,
+      //categoriaId: categoria.id
+    }));
+    this.fecharModalCompetidores(categoriaTempId);
   }
 }
