@@ -89,6 +89,14 @@ export class CadastroCompeticoesComponent implements OnInit {
   }
 
   validarFormulario(): boolean {
+    if (this.competicao.titulo === '') {
+      alert('O título da competição é obrigatório.');
+      return false;
+    }
+    if (this.competicao.modalidade === '') {
+      alert('A modalidade da competição é obrigatória.');
+      return false;
+    }
     if (this.categorias.length === 0) {
       alert("A competição deve ter pelo menos uma categoria.");
       return false;
@@ -247,9 +255,26 @@ export class CadastroCompeticoesComponent implements OnInit {
       alert("Informe a chave PIX para inscrição na competição.");
       return;
     }
-    if(etapa === 4)
-    {
-      this.gerarQRCode();
+    if (etapa === 4) {
+      if (this.competicao.chavePix === '') {
+        alert("Registre a chave PIX para inscrição na competição.");
+        return;
+      }
+      clearInterval(this.pollingInterval); // Para o polling
+      let quantidadeInscricoes = 0;
+      Object.values(this.categoriasMap).forEach((categoria: any) => {
+        quantidadeInscricoes += categoria.competidores.length;
+      });
+      if (quantidadeInscricoes === 0) {
+        if (confirm("Nenhum competidor foi previamente inscrito. Deseja finalizar o cadastro da competição mesmo assim?")) {
+          this.onSubmit(0);
+        } else {
+          etapa = 2;
+        }
+        return;
+      }
+      else 
+        this.gerarQRCode(quantidadeInscricoes);
     }
 
     this.etapaAtual = etapa;
@@ -278,11 +303,8 @@ export class CadastroCompeticoesComponent implements OnInit {
     this.fecharModalCompetidores(categoriaTempId);
   }
 
-  gerarQRCode() {
-    let quantidadeInscricoes = 0;
-    Object.values(this.categoriasMap).forEach((categoria: any) => {
-      quantidadeInscricoes += categoria.competidores.length;
-    });
+  gerarQRCode(quantidadeInscricoes: number) {
+
     const valorOriginal = (9.99 * quantidadeInscricoes).toFixed(2);
 
     this.paymentService.generateQRCodeLocation({
@@ -342,8 +364,7 @@ export class CadastroCompeticoesComponent implements OnInit {
                 favorecidoId: this.usuario.id,
                 infoPagamento: 'Inscrição em competição de competidor próprio'
               }
-            ).subscribe((pagamento) =>
-            {
+            ).subscribe((pagamento) => {
               this.onSubmit(pagamento.id);
             });
           }
