@@ -87,6 +87,11 @@
     <h2>Pré-registro de Competidores</h2>
     <div *ngFor="let categoria of categorias; let i = index">
       <h3>{{ categoria.nome }}</h3>
+      <ul>
+        <li *ngFor="let competidor of categoriasMap[categoria.id]?.competidores">
+          {{ competidor.nome }} - {{ competidor.email }}
+        </li>
+      </ul>
       <button (click)="abrirModalCompetidores(categoria.id)">Pré-registrar Competidores</button>
 
       <!-- Modal para seleção de competidores -->
@@ -95,7 +100,7 @@
           <h3>Selecionar Competidores para {{ categoria.nome }}</h3>
           <div *ngFor="let competidor of competidoresUsuario">
             <input type="checkbox" [id]="'competidor-' + competidor.id" [(ngModel)]="competidor.selecionadoPorCategoria[categoria.id]">
-            <label [for]="'competidor-' + competidor.id">{{ competidor.nome }}</label>
+            <label [for]="'competidor-' + competidor.id">{{ competidor.nome }}  - {{ competidor.email }}</label>
           </div>
           <div class="modal-acoes">
             <button (click)="confirmarSelecaoCompetidores(categoria.id)">Confirmar</button>

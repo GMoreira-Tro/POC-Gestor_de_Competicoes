@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { CompetidorService } from '../services/competidor.service';
+import { Inscricao } from '../interfaces/Inscricao';
 
 @Component({
   selector: 'app-cadastro-competicoes',
@@ -99,8 +100,7 @@ export class CadastroCompeticoesComponent implements OnInit {
 
   onSubmit(): void {
     if (!this.validarFormulario()) return;
-    if (this.competicao.chavePix === '')
-    {
+    if (this.competicao.chavePix === '') {
       alert("Informe a chave PIX para inscrição na competição.");
       return;
     }
@@ -224,12 +224,12 @@ export class CadastroCompeticoesComponent implements OnInit {
   }
 
   abrirModalCompetidores(categoriaTempId: number): void {
-    if(this.categoriasMap[categoriaTempId] === undefined)
-      this.categoriasMap[categoriaTempId] = { mostrarModal: false, inscricoes: [] };
+    if (this.categoriasMap[categoriaTempId] === undefined)
+      this.categoriasMap[categoriaTempId] = { mostrarModal: false, competidores: [] };
     for (let i = 0; i < this.competidoresUsuario.length; i++) {
-      if(this.competidoresUsuario[i].selecionadoPorCategoria === undefined)
+      if (this.competidoresUsuario[i].selecionadoPorCategoria === undefined)
         this.competidoresUsuario[i].selecionadoPorCategoria = {};
-      if(this.competidoresUsuario[i].selecionadoPorCategoria[categoriaTempId] === undefined)
+      if (this.competidoresUsuario[i].selecionadoPorCategoria[categoriaTempId] === undefined)
         this.competidoresUsuario[i].selecionadoPorCategoria[categoriaTempId] = false;
     }
     this.categoriasMap[categoriaTempId].mostrarModal = true;
@@ -242,10 +242,7 @@ export class CadastroCompeticoesComponent implements OnInit {
 
   confirmarSelecaoCompetidores(categoriaTempId: number): void {
     const competidoresSelecionados = this.competidoresUsuario.filter(competidor => competidor.selecionadoPorCategoria[categoriaTempId]);
-    this.categoriasMap[categoriaTempId].inscricoes = competidoresSelecionados.map(competidor => ({
-      competidorId: competidor.id,
-      //categoriaId: categoria.id
-    }));
+    this.categoriasMap[categoriaTempId].competidores = competidoresSelecionados.map(competidor => competidor);
     this.fecharModalCompetidores(categoriaTempId);
   }
 }
