@@ -90,7 +90,7 @@
       <button (click)="abrirModalCompetidores(categoria.id)">Pré-registrar Competidores</button>
 
       <!-- Modal para seleção de competidores -->
-      <div *ngIf="categoriasMap[categoria.id].mostrarModal" class="modal">
+      <div *ngIf="categoriasMap[categoria.id] !== undefined && categoriasMap[categoria.id].mostrarModal" class="modal">
         <div class="modal-conteudo">
           <h3>Selecionar Competidores para {{ categoria.nome }}</h3>
           <div *ngFor="let competidor of competidoresUsuario">
