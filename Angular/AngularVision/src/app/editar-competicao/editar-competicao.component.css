@@ -1,81 +1,263 @@
+/* Estilos específicos para o componente de Cadastro de Competições */
 .formulario {
-  max-width: 600px;
-  margin: 0 auto;
+  background-color: #3e3e3e;
   padding: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  margin: 20px auto;
+  color: #f5f5f5;
 }
 
 .formulario h2 {
   text-align: center;
+  color: #1e90ff;
   margin-bottom: 20px;
 }
 
-.formulario .campo {
-  margin-bottom: 20px;
+.campo {
+  margin-bottom: 15px;
 }
 
-.formulario label {
+.campo label {
   display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.campo input,
+.campo textarea,
+.campo select {
+  width: 100%;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.campo textarea {
+  resize: vertical;
+}
+
+.campo button {
+  margin-top: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.campo button:hover {
+  background-color: #e60000;
+}
+
+.categoria-container {
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: #2e2e2e;
+}
+
+.categoria-container small.aviso {
+  color: #ffcc00;
+  font-size: 12px;
+}
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  background-color: #4caf50;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.usuario-imagem {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.upload-imagem input[type="file"] {
+  padding: 5px;
+  background-color: #2e2e2e;
+  border: none;
+  color: #f5f5f5;
+}
+
+select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23f5f5f5" d="M2 0L0 2h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+}
+
+select:focus {
+  background-color: #3e3e3e;
+}
+
+.navegacao-etapas {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.navegacao-etapas button {
+  background-color: #1e90ff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.navegacao-etapas button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.navegacao-etapas button:not(:disabled):hover {
+  background-color: #007acc;
+}
+
+.etapas h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e90ff;
+}
+
+button[type="button"] {
+  background-color: #1e90ff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+button[type="button"]:hover {
+  background-color: #007acc;
+}
+
+button[type="button"]:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.campo select {
+  padding: 8px;
+  background-color: #2e2e2e;
+  color: #f5f5f5;
+  border: 1px solid #555;
+}
+
+.campo input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.campo input[type="number"]::-webkit-inner-spin-button,
+.campo input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #3e3e3e;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal-conteudo {
+  color: #f5f5f5;
+}
+
+.modal h3 {
+  margin-bottom: 15px;
+  color: #1e90ff;
+}
+
+.modal-acoes {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-acoes button {
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-acoes button:first-child {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modal-acoes button:first-child:hover {
+  background-color: #45a049;
+}
+
+.modal-acoes button:last-child {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.modal-acoes button:last-child:hover {
+  background-color: #e60000;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+p {
+  color: #f5f5f5;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+p strong {
+  color: #1e90ff;
   font-weight: bold;
 }
 
-.formulario input[type="text"],
-.formulario input[type="file"],
-.formulario textarea {
-  width: calc(100% - 20px);
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+p em {
+  font-style: italic;
+  color: #ffcc00;
+  font-weight: 500;
 }
 
-.formulario textarea {
-  height: 100px;
+p span.highlight {
+  background-color: #2e2e2e;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #f5f5f5;
 }
-
-.formulario img {
-  display: block;
-  margin-top: 10px;
-  max-width: 100%;
-}
-
-.formulario .categorias {
-  display: flex;
-  align-items: center;
-}
-
-.formulario .categorias input[type="text"] {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.formulario .categorias button {
-  background-color: #3498db;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.formulario button[type="submit"] {
-  background-color: #3498db;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  display: block;
-  margin: 0 auto;
-}
-
-.formulario button[type="submit"]:hover,
-.formulario .categorias button:hover {
-  background-color: #2980b9;
-}
-
-/* Estilização adicional conforme necessário */

@@ -192,6 +192,7 @@ export class CadastroCompeticoesComponent implements OnInit {
 
   removerCategoria(index: number): void {
     this.categorias.splice(index, 1);
+    delete this.categoriasMap[this.categorias[index].tempId];
   }
 
   // Função que chama a API do GeoNames para buscar Estado e Cidade com base no País
