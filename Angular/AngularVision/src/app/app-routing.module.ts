@@ -18,6 +18,7 @@ import { MinhasInscricoesComponent } from './minhas-inscricoes/minhas-inscricoes
 import { AprovarInscricaoComponent } from './aprovar-inscricao/aprovar-inscricao.component';
 import { FaleConoscoComponent } from './fale-conosco/fale-conosco.component';
 import { PagarInscricaoComponent } from './pagar-inscricao/pagar-inscricao.component';
+import { GerenciarCompeticaoComponent } from './gerenciar-competicao/gerenciar-competicao.component';
 
 const routes: Routes = [
   { path: '', component: TelaInicialComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'editar-competicao/:id', component: EditarCompeticaoComponent },
   { path: 'editar-competidor/:id', component: EditarCompetidorComponent },
   { path: 'inscricao-competicao/:id', component: InscricaoCompeticaoComponent },
+  { path: 'gerenciar-competicao/:id', component: GerenciarCompeticaoComponent },
   { path: 'aprovar-inscricao/:id', component: AprovarInscricaoComponent },
   { path: 'pagar-inscricao/:id', component: PagarInscricaoComponent },
   { path: 'aguardando-confirmacao', component: AguardandoConfirmacaoComponent },

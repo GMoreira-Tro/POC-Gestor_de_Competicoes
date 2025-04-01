@@ -1,0 +1,89 @@
+/* Estilos gerais para o componente Gerenciar Competição */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #3e3e3e; /* Ajustado para combinar com o fundo dos inputs no global */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Mais escuro para combinar com o tema */
+}
+
+h1 {
+  font-size: 2rem;
+  color: #f5f5f5; /* Ajustado para combinar com a cor do texto global */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.categoria-select {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.categoria-select label {
+  font-size: 1rem;
+  color: #f5f5f5; /* Ajustado para combinar com a cor do texto global */
+}
+
+.categoria-select select {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #555; /* Ajustado para combinar com o estilo global */
+  border-radius: 4px;
+  background-color: #3e3e3e; /* Ajustado para combinar com o fundo dos inputs no global */
+  color: #f5f5f5; /* Ajustado para combinar com o texto global */
+  transition: border-color 0.3s ease;
+}
+
+.categoria-select select:focus {
+  border-color: #1e90ff; /* Mantido para consistência com o global */
+  outline: none;
+}
+
+.confrontos-container {
+  margin-top: 20px;
+}
+
+.confrontos-container h2 {
+  font-size: 1.5rem;
+  color: #f5f5f5; /* Ajustado para combinar com a cor do texto global */
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff; /* Mantido para contraste */
+  background-color: #4caf50; /* Ajustado para combinar com o botão global */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049; /* Ajustado para combinar com o botão hover global */
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+ul li {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #3e3e3e; /* Ajustado para combinar com o fundo dos inputs no global */
+  border: 1px solid #555; /* Ajustado para combinar com o estilo global */
+  border-radius: 4px;
+  color: #f5f5f5; /* Ajustado para combinar com o texto global */
+  transition: box-shadow 0.3s ease;
+}
+
+ul li:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Mais escuro para combinar com o tema */
+}
