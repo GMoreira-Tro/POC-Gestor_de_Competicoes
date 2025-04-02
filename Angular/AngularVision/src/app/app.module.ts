@@ -33,6 +33,8 @@ import { AprovarInscricaoComponent } from './aprovar-inscricao/aprovar-inscricao
 import { FiltrarPorCategoriaPipe } from './aprovar-inscricao/filtrar-por-categoria.pipe';
 import { FaleConoscoComponent } from './fale-conosco/fale-conosco.component';
 import { DetalhesCompeticaoComponent } from './detalhes-competicao/detalhes-competicao.component';
+import { PagarInscricaoComponent } from './pagar-inscricao/pagar-inscricao.component';
+import { GerenciarCompeticaoComponent } from './gerenciar-competicao/gerenciar-competicao.component';
 
 @NgModule({
   declarations: [
@@ -54,9 +56,11 @@ import { DetalhesCompeticaoComponent } from './detalhes-competicao/detalhes-comp
     InscricaoCompeticaoComponent,
     MinhasInscricoesComponent,
     AprovarInscricaoComponent,
+    PagarInscricaoComponent,
     FiltrarPorCategoriaPipe,
     FaleConoscoComponent,
     DetalhesCompeticaoComponent,
+    GerenciarCompeticaoComponent,
     CabecalhoComponent,
     RodapeComponent,
     

@@ -13,4 +13,5 @@ export interface Competicao {
     dataFim: Date;
     criadorUsuarioId: number;
     status: number;
+    chavePix: string;
   }

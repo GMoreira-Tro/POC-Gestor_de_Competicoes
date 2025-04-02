@@ -1,32 +1,37 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.banner {
+.container {
     text-align: center;
-    padding: 50px 0;
+    margin-top: 50px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.destaque {
-    font-weight: bold;
-    margin-top: 20px;
+h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
-.competicoes {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+p {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
 }
 
-.competicoes input[type="checkbox"] {
-    margin-right: 10px;
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
 }
 
-.logo {
-    width: 50px;
-    height: 50px;
-    vertical-align: middle;
-    margin-left: 20px;
+button:hover {
+    background-color: #0056b3;
 }

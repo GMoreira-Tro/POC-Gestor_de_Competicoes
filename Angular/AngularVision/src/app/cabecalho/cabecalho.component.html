@@ -9,9 +9,12 @@
     <span class="badge">{{ numeroDeNotificacoes }}</span>
     <div class="dropdown-menu" *ngIf="notificationDropdownAberto">
       <div class="notification-list">
-        <a *ngFor="let notificacao of notificacoes" [href]="notificacao.link" class="notification-item">
-          {{ notificacao.titulo | slice:0:50 }}{{ notificacao.titulo.length > 50 ? '...' : '' }}
-        </a>
+        <div *ngFor="let notificacao of notificacoes" class="notification-item">
+            <a [href]="notificacao.link" [title]="notificacao.titulo">
+            {{ notificacao.titulo | slice:0:50 }}{{ notificacao.titulo.length > 50 ? '...' : '' }}
+          </a>
+          <img src="../../assets/images/trash-icon.png" class="delete-icon" (click)="deletarNotificacao(notificacao.id)" alt="Deletar">
+        </div>
       </div>
     </div>
   </div>

@@ -199,10 +199,12 @@ namespace CRUDAPI.Controller
             var mensagem = request.Mensagem;
 
             // Adiciona o e-mail do usuário no corpo da mensagem
-            var mensagemCompleta = $"Usuário: {usuario.Email}\n\n{mensagem}";
+            var mensagemCompleta = $"Mensagem de suporte do usuário: {usuario.Nome} \n\n" +
+                                   $"E-mail: {usuario.Email}\n\n" +
+                                   $"Mensagem:\n{mensagem}";
             await _emailService.SendEmailAsync(_emailService._emailFrom, assunto, mensagemCompleta);
 
-            return Ok("E-mail enviado com sucesso!");
+            return Ok();
         }
         public class EmailConfirmacaoRequest
         {

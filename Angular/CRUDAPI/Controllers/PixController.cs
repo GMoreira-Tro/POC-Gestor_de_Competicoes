@@ -9,11 +9,13 @@ public class PixController : ControllerBase
 {
     private readonly GerencianetService _gerencianetService;
     private readonly Contexto _context;
+    private readonly EmailService _emailService;
 
-    public PixController(GerencianetService gerencianetService, Contexto context)
+    public PixController(GerencianetService gerencianetService, Contexto context, EmailService emailService)
     {
         _gerencianetService = gerencianetService;
         _context = context;
+        _emailService = emailService;
     }
 
     [HttpPost("generate")]
@@ -80,7 +82,7 @@ public class PixController : ControllerBase
             var refundResponse = await _gerencianetService.DevolverPixAsync(refundRequest, e2eId, transactionId);
             return Ok(refundResponse);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return StatusCode(500, $"Erro ao realizar devolução do Pix: {ex.Message}");
         }
@@ -94,7 +96,7 @@ public class PixController : ControllerBase
             var refundResponse = await _gerencianetService.ConsultarDevolverPixAsync(e2eId, transactionId);
             return Ok(refundResponse);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return StatusCode(500, $"Erro ao realizar devolução do Pix: {ex.Message}");
         }
@@ -210,16 +212,43 @@ public class PixController : ControllerBase
         try
         {
             payment = await _gerencianetService.ValidarPagamento(payment);
-            
+
             _context.Pagamentos.Add(payment);
             await _context.SaveChangesAsync();
-            
+
             return CreatedAtAction(nameof(GetPagamentos), new { id = payment.Id }, payment);
         }
         catch (Exception ex)
         {
             return BadRequest(new { error = ex.Message });
         }
+    }
+
+    [HttpPost("receber-email-inscricao/{idInscricao}")]
+    public async Task<IActionResult> ReceberEmailInscricao(long idInscricao)
+    {
+        var inscricao = await _context.Inscricoes.FindAsync(idInscricao);
+        if (inscricao == null) return NotFound("Inscrição não encontrada");
+        if (inscricao.Status != InscricaoStatus.Paga) return BadRequest("Inscrição não paga");
+        var competidor = await _context.Competidores.FindAsync(inscricao.CompetidorId);
+        if (competidor == null) return NotFound("Competidor não encontrado");
+        var categoria = await _context.Categorias.FindAsync(inscricao.CategoriaId);
+        if (categoria == null) return NotFound("Categoria não encontrada");
+        var competicao = await _context.Competicoes.FindAsync(categoria.CompeticaoId);
+        if (competicao == null) return NotFound("Competição não encontrada");
+        var Organizador = await _context.Usuarios.FindAsync(competicao.CriadorUsuarioId);
+        if (Organizador == null) return NotFound("Organizador não encontrado");
+
+        var assunto = "Nova Inscrição Recebida: " + inscricao.Id;
+        var mensagem = $"O organizador {Organizador.Nome}({Organizador.Id}) recebeu uma nova inscrição para a competição " + 
+        $"{competicao.Titulo}({competicao.Id})" + $" na categoria '{categoria.Nome}'. " +
+                   $"O valor da inscrição é R$ {categoria.ValorInscricao:F2}." +
+                   $"O competidor é {competidor.Nome}({competidor.Id})." +
+                   $"O PIX da competição é {competicao.ChavePix}.";
+        
+        await _emailService.SendEmailAsync(_emailService._emailFrom, assunto, mensagem);
+
+        return Ok();
     }
 
     [HttpGet("payments/user/{userId}")]

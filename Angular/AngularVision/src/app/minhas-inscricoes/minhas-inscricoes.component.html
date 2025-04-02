@@ -11,6 +11,9 @@
                 <p>Competidor: {{ dadosInscricoes[inscricao.id].nomeCompetidor }} - {{ dadosInscricoes[inscricao.id].emailCompetidor}} </p>
                 <p>Status: {{ inscricao.status === 0 ? 'Pendente' : inscricao.status === 1 ? 
                 'Aguardando Pagamento' : inscricao.status === 2 ? 'Paga' : 'Recusada' }}</p>
+                <button *ngIf="inscricao.status === 1" (click)="pagarInscricao(inscricao.id)">
+                    Pagar inscrição
+                </button>
             </div>
         </div>
     </div>

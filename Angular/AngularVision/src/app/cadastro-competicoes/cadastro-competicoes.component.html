@@ -1,73 +1,147 @@
 <app-cabecalho></app-cabecalho>
 
-<!-- Formulário de Cadastro de Competição -->
-<div class="formulario">
-  <h2>Cadastro de Competição</h2>
-
-  <div class="campo">
-    <label for="nome">Nome da Competição:</label>
-    <input type="text" id="nome" name="nome" [(ngModel)]="competicao.titulo" required>
+<div class="etapas">
+  <!-- Navegação entre etapas -->
+  <div class="navegacao-etapas">
+    <button [disabled]="etapaAtual === 1" (click)="mudarEtapa(1)">1. Cadastro</button>
+    <button [disabled]="etapaAtual === 2" (click)="mudarEtapa(2)">2. Pré-registro de Competidores</button>
+    <button [disabled]="etapaAtual === 3" (click)="mudarEtapa(3)">3. Registro do PIX</button>
+    <button [disabled]="etapaAtual === 4" (click)="mudarEtapa(4)">4. Pagar Inscrições</button>
   </div>
 
-  <div class="competicao-info">
-    <img [src]="competicao.bannerImagem || 'favicon.ico'" alt="Imagem do Usuário" class="usuario-imagem">
-
-    <!-- Upload de Imagem do Banner -->
-    <div class="campo upload-imagem">
-      <label for="banner">Imagem do Banner:</label>
-      <input type="file" id="banner" (change)="selecionarImagemBanner($event)">
-    </div>
-
-  <div class="campo">
-    <label for="descricao">Descrição:</label>
-    <textarea id="descricao" name="descricao" [(ngModel)]="competicao.descricao" required></textarea>
-  </div>
-
-  <!-- Modalidade -->
-  <div class="campo">
-    <label for="modalidade">Modalidade:</label>
-    <input type="text" id="modalidade" name="modalidade" [(ngModel)]="competicao.modalidade" required>
-  </div>
-
-  <!-- Seção de Categorias -->
-  <div class="campo">
-    <label>Categorias:</label>
-    <div *ngFor="let categoria of categorias; let i = index" class="categoria-container">
-      <input type="text" placeholder="Nome da Categoria" [(ngModel)]="categoria.nome" required>
-      <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
+  <!-- Etapa 1: Cadastro -->
+  <div *ngIf="etapaAtual === 1">
+    <h2>Cadastro de Competição</h2>
+    <!-- Formulário de Cadastro de Competição -->
+    <div class="formulario">
       <div class="campo">
-        <label for="valorInscricao">Valor da Inscrição:</label>
-        <input type="number" id="valorInscricao" name="valorInscricao" [(ngModel)]="categoria.valorInscricao" required>
-        <small *ngIf="categoria.valorInscricao < 15.99" class="aviso">A inscrição deve possuir um valor maior que a taxa mínima de 15,99R$</small>
+        <label for="nome">Nome da Competição:</label>
+        <input type="text" id="nome" name="nome" [(ngModel)]="competicao.titulo" required>
       </div>
-      <button type="button" (click)="removerCategoria(i)">-</button>
+
+      <div class="competicao-info">
+        <img [src]="competicao.bannerImagem || 'favicon.ico'" alt="Imagem do Banner" class="usuario-imagem">
+
+        <!-- Upload de Imagem do Banner -->
+        <div class="campo upload-imagem">
+          <label for="banner">Imagem do Banner:</label>
+          <input type="file" id="banner" (change)="selecionarImagemBanner($event)">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" [(ngModel)]="competicao.descricao" required></textarea>
+      </div>
+
+      <!-- Modalidade -->
+      <div class="campo">
+        <label for="modalidade">Modalidade:</label>
+        <input type="text" id="modalidade" name="modalidade" [(ngModel)]="competicao.modalidade" required>
+      </div>
+
+      <!-- Seção de Categorias -->
+      <div class="campo">
+        <label>Categorias:</label>
+        <div *ngFor="let categoria of categorias; let i = index" class="categoria-container">
+          <input type="text" placeholder="Nome da Categoria" [(ngModel)]="categoria.nome" required>
+          <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
+          <div class="campo">
+            <label for="valorInscricao">Valor da Inscrição:</label>
+            <input type="number" id="valorInscricao" name="valorInscricao" [(ngModel)]="categoria.valorInscricao" required>
+            <small *ngIf="categoria.valorInscricao < 15.99" class="aviso">A inscrição deve possuir um valor maior que a taxa mínima de 15,99R$</small>
+          </div>
+          <button type="button" (click)="removerCategoria(i)">-</button>
+        </div>
+        <button type="button" (click)="adicionarCategoria()">+ Adicionar Categoria</button>
+      </div>
+
+      <!-- Localização -->
+      <div class="campo">
+        <label for="pais">País:</label>
+        <select id="pais" name="pais" [(ngModel)]="competicao.pais" (change)="onCountryChange()">
+          <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="estado">Estado:</label>
+        <select id="estado" name="estado" [(ngModel)]="competicao.estado" (change)="onStateChange()">
+          <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="cidade">Cidade:</label>
+        <select id="cidade" name="cidade" [(ngModel)]="competicao.cidade">
+          <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
+        </select>
+      </div>
     </div>
-    <button type="button" (click)="adicionarCategoria()">+ Adicionar Categoria</button>
-  </div>
-  
-  <!-- Localização -->
-  <div class="campo">
-    <label for="pais">País:</label>
-    <select id="pais" name="pais" [(ngModel)]="competicao.pais" (change)="onCountryChange()">
-      <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
-    </select>
+    <div style="text-align: center;">
+      <button (click)="mudarEtapa(2)">Próxima Etapa</button>
+    </div>
   </div>
 
-  <div class="campo">
-    <label for="estado">Estado:</label>
-    <select id="estado" name="estado" [(ngModel)]="competicao.estado" (change)="onStateChange()">
-      <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
-    </select>
+  <!-- Etapa 2: Pré-registro de Competidores -->
+  <div *ngIf="etapaAtual === 2">
+    <h2>Pré-registro de Competidores</h2>
+    <div *ngFor="let categoria of categorias; let i = index">
+      <h3>{{ categoria.nome }}</h3>
+      <ul>
+        <li *ngFor="let competidor of categoriasMap[categoria.tempId]?.competidores">
+          {{ competidor.nome }} - {{ competidor.email }}
+        </li>
+      </ul>
+      <button (click)="abrirModalCompetidores(categoria.tempId)">Pré-registrar Competidores</button>
+
+      <!-- Modal para seleção de competidores -->
+      <div *ngIf="categoriasMap[categoria.tempId] !== undefined && categoriasMap[categoria.tempId].mostrarModal" class="modal">
+        <div class="modal-conteudo">
+          <h3>Selecionar Competidores para {{ categoria.nome }}</h3>
+          <div *ngFor="let competidor of competidoresUsuario">
+            <input type="checkbox" [id]="'competidor-' + competidor.id" [(ngModel)]="competidor.selecionadoPorCategoria[categoria.tempId]">
+            <label [for]="'competidor-' + competidor.id">{{ competidor.nome }}  - {{ competidor.email }}</label>
+          </div>
+          <div class="modal-acoes">
+            <button (click)="confirmarSelecaoCompetidores(categoria.tempId)">Confirmar</button>
+            <button (click)="fecharModalCompetidores(categoria.tempId)">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button (click)="mudarEtapa(1)">Voltar</button>
+    <button (click)="mudarEtapa(3)">Próxima Etapa</button>
   </div>
 
-  <div class="campo">
-    <label for="cidade">Cidade:</label>
-    <select id="cidade" name="cidade" [(ngModel)]="competicao.cidade">
-      <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
-    </select>
+  <!-- Etapa 3: Registro do PIX -->
+  <div *ngIf="etapaAtual === 3">
+    <h2>Registro do PIX</h2>
+    <p>
+      Por favor, registre a chave PIX para a qual você receberá os pagamentos das inscrições. 
+      Lembre-se de que os pagamentos serão processados em até 48 horas após o registro. 
+      Note que 20% do valor das inscrições será retido como taxa da plataforma, ou R$ 15,99, 
+      caso o valor da taxa mínima seja aplicável.
+    </p>
+    <div class="campo">
+      <label for="chavePix">Chave PIX:</label>
+      <input type="text" id="chavePix" [(ngModel)]="competicao.chavePix" required>
+    </div>
+    <button (click)="mudarEtapa(2)">Voltar</button>
+    <button (click)="mudarEtapa(4)">Próxima Etapa</button>
   </div>
 
-  <button type="submit" (click)="onSubmit()">Registrar Competição</button>
+  <!-- Etapa 4: Pagamento para Gestão de Confrontos -->
+  <div *ngIf="etapaAtual === 4">
+    <h2>Pagamento para Gestão de Confrontos</h2>
+    <p>
+      Para finalizar o cadastro da sua competição e garantir a gestão completa dos confrontos, é necessário realizar o pagamento das inscrições dos competidores. 
+      O valor da taxa é de apenas R$ 9,99 por inscrito. Invista na organização e sucesso do seu evento agora mesmo!
+    </p>
+    <div class="qrcode-container">
+      <img [src]="qrCodeUrl" alt="QR Code para Pagamento" class="qrcode-imagem">
+    </div>
+  </div>
 </div>
 
 <app-rodape></app-rodape>

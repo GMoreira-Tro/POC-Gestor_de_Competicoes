@@ -177,8 +177,10 @@ namespace CRUDAPI.Controllers
             {
                 TituloCompeticao = competicao.Titulo,
                 NomeCategoria = categoria.Nome,
+                ValorCategoria = categoria.ValorInscricao,
                 NomeCompetidor = competidor.Nome,
-                EmailCompetidor = competidor.Email
+                EmailCompetidor = competidor.Email,
+                OrganizadorId = competicao.CriadorUsuarioId
             };
 
             return infoInscricao;
@@ -187,7 +189,9 @@ namespace CRUDAPI.Controllers
         public class InfoInscricao
         {
             public string TituloCompeticao { get; set; } = "";
+            public long OrganizadorId { get; set; }
             public string NomeCategoria { get; set; } = "";
+            public decimal ValorCategoria { get; set; }
             public string NomeCompetidor { get; set; } = "";
             public string EmailCompetidor { get; set; } = "";
         }

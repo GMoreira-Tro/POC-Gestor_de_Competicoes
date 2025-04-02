@@ -9,7 +9,10 @@ body {
 .banner {
     text-align: center;
     padding: 40px 20px;
-    background-color: #007bff;
+    background-color: #34383b;
+    background-image: url('../../assets/images/Imagens_TOC_borrada.jpg');
+    background-size: cover; 
+    background-position: center;
     color: #fff;
 }
 

@@ -55,6 +55,11 @@ namespace CRUDAPI.Services
                 }
             }
 
+            if (string.IsNullOrWhiteSpace(competicao.ChavePix))
+            {
+                throw new CampoObrigatorioException("Chave Pix é obrigatória.");
+            }
+
             competicao.Categorias ??= [];
 
             return competicao;

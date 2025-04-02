@@ -7,6 +7,10 @@ import { GeoNamesService } from '../services/geonames.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { CompetidorService } from '../services/competidor.service';
+import { Inscricao } from '../interfaces/Inscricao';
+import { InscricaoService } from '../services/inscricao.service';
+import { PaymentService } from '../services/payment.service';
 
 @Component({
   selector: 'app-cadastro-competicoes',
@@ -28,10 +32,21 @@ export class CadastroCompeticoesComponent implements OnInit {
     dataInicio: new Date(),
     dataFim: new Date(),
     criadorUsuarioId: 0,  // Ajustar depois para o ID do usuário logado
-    status: 0
+    status: 0,
+    chavePix: ''
   };
-  categorias: Categoria[] = [];
+  categorias: any[] = [];
+  mostrarModal = false;
+  categoriasMap: { [key: number]: any } = {};
+  competidoresUsuario: any[] = [];
   imagemSelecionada: File | null = null;
+  etapaAtual = 1;
+  tempIdCategoria = 0;
+  qrCodeUrl = '';
+  usuario: any;
+  txid: string = ''; // ID da transação PIX
+  pollingInterval: any; // Armazena o intervalo do polling
+  paymentCompleted: boolean = false;
 
   listaPaises: any;
   listaEstados: any;
@@ -41,6 +56,9 @@ export class CadastroCompeticoesComponent implements OnInit {
     private geonamesService: GeoNamesService,
     private router: Router,
     private userService: UserService,
+    private competidorService: CompetidorService,
+    private inscricaoService: InscricaoService,
+    private paymentService: PaymentService,
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -52,6 +70,10 @@ export class CadastroCompeticoesComponent implements OnInit {
 
     this.userService.getUsuarioLogado().subscribe(usuario => {
       this.competicao.criadorUsuarioId = usuario.id;
+      this.usuario = usuario;
+      this.competidorService.buscarCompetidoresDoUsuario(usuario.id).subscribe(competidores => {
+        this.competidoresUsuario = competidores;
+      });
     }
     );
 
@@ -66,23 +88,35 @@ export class CadastroCompeticoesComponent implements OnInit {
       });
   }
 
-  onSubmit(): void {
+  validarFormulario(): boolean {
+    if (this.competicao.titulo === '') {
+      alert('O título da competição é obrigatório.');
+      return false;
+    }
+    if (this.competicao.modalidade === '') {
+      alert('A modalidade da competição é obrigatória.');
+      return false;
+    }
     if (this.categorias.length === 0) {
       alert("A competição deve ter pelo menos uma categoria.");
-      return;
+      return false;
     }
     for (let i = 0; i < this.categorias.length; i++) {
       const categoria = this.categorias[i];
       if (categoria.nome === '') {
         alert('Todas as categorias devem conter um nome.');
-        return;
+        return false;
       }
       if (categoria.valorInscricao < 15.99) {
         alert('O valor de inscrição das categorias deve ser maior ou igual a R$ 15,99');
-        return;
+        return false;
       }
     }
 
+    return true;
+  }
+
+  onSubmit(idPagamento: number): void {
     this.competicao.status = 1; // Ajusta o status para publicada
 
     this.competicaoService.createCompeticao(this.competicao).subscribe(
@@ -91,9 +125,27 @@ export class CadastroCompeticoesComponent implements OnInit {
         await this.uploadImagem();
 
         this.categorias.forEach(async categoria => {
+          const categoriaMap = this.categoriasMap[categoria.tempId];
+          delete categoria.tempId;
           categoria.competicaoId = novaCompeticao.id;
           await this.categoriaService.createCategoria(categoria).subscribe(
-            () => {
+            (categoriaCriada) => {
+              if (categoriaMap.competidores && categoriaMap.competidores.length > 0) {
+                categoriaMap.competidores.forEach((competidor: any) => {
+                  const inscricao: Inscricao = {
+                    id: 0, // O backend deve gerar esse ID
+                    competidorId: competidor.id,
+                    categoriaId: categoriaCriada.id,
+                    status: 2, // Ajuste o status conforme necessário
+                    pagamentoId: idPagamento,
+                    posicao: 0,
+                    wo: false,
+                    premioResgatavelId: null
+                  };
+
+                  this.inscricaoService.cadastrarInscricao(inscricao).subscribe();
+                });
+              }
             },
             error => console.log("Erro ao criar categoria: ", error)
           );
@@ -126,8 +178,9 @@ export class CadastroCompeticoesComponent implements OnInit {
   }
 
   adicionarCategoria(): void {
-    const novaCategoria: Categoria = {
-      id: 0,  // O backend deve gerar esse ID
+    const novaCategoria: any = {
+      id: 0, // O backend deve gerar esse ID
+      tempId: this.tempIdCategoria++, // ID temporário para identificar a categoria
       nome: '',
       descricao: '',
       competicaoId: 0,
@@ -139,6 +192,7 @@ export class CadastroCompeticoesComponent implements OnInit {
 
   removerCategoria(index: number): void {
     this.categorias.splice(index, 1);
+    delete this.categoriasMap[this.categorias[index].tempId];
   }
 
   // Função que chama a API do GeoNames para buscar Estado e Cidade com base no País
@@ -194,5 +248,132 @@ export class CadastroCompeticoesComponent implements OnInit {
         // Trate o erro conforme necessário
       }
     );
+  }
+
+  mudarEtapa(etapa: number): void {
+    if (this.etapaAtual === 1 && !this.validarFormulario()) return;
+    if (this.etapaAtual === 3 && this.competicao.chavePix === '') {
+      alert("Informe a chave PIX para inscrição na competição.");
+      return;
+    }
+    if (etapa === 4) {
+      if (this.competicao.chavePix === '') {
+        alert("Registre a chave PIX para inscrição na competição.");
+        return;
+      }
+      clearInterval(this.pollingInterval); // Para o polling
+      let quantidadeInscricoes = 0;
+      Object.values(this.categoriasMap).forEach((categoria: any) => {
+        quantidadeInscricoes += categoria.competidores.length;
+      });
+      if (quantidadeInscricoes === 0) {
+        if (confirm("Nenhum competidor foi previamente inscrito. Deseja finalizar o cadastro da competição mesmo assim?")) {
+          this.onSubmit(0);
+        } else {
+          etapa = 2;
+        }
+        return;
+      }
+      else 
+        this.gerarQRCode(quantidadeInscricoes);
+    }
+
+    this.etapaAtual = etapa;
+  }
+
+  abrirModalCompetidores(categoriaTempId: number): void {
+    if (this.categoriasMap[categoriaTempId] === undefined)
+      this.categoriasMap[categoriaTempId] = { mostrarModal: false, competidores: [] };
+    for (let i = 0; i < this.competidoresUsuario.length; i++) {
+      if (this.competidoresUsuario[i].selecionadoPorCategoria === undefined)
+        this.competidoresUsuario[i].selecionadoPorCategoria = {};
+      if (this.competidoresUsuario[i].selecionadoPorCategoria[categoriaTempId] === undefined)
+        this.competidoresUsuario[i].selecionadoPorCategoria[categoriaTempId] = false;
+    }
+    this.categoriasMap[categoriaTempId].mostrarModal = true;
+    console.log(categoriaTempId)
+  }
+
+  fecharModalCompetidores(categoriaTempId: number): void {
+    this.categoriasMap[categoriaTempId].mostrarModal = false;
+  }
+
+  confirmarSelecaoCompetidores(categoriaTempId: number): void {
+    const competidoresSelecionados = this.competidoresUsuario.filter(competidor => competidor.selecionadoPorCategoria[categoriaTempId]);
+    this.categoriasMap[categoriaTempId].competidores = competidoresSelecionados.map(competidor => competidor);
+    this.fecharModalCompetidores(categoriaTempId);
+  }
+
+  gerarQRCode(quantidadeInscricoes: number) {
+
+    const valorOriginal = (9.99 * quantidadeInscricoes).toFixed(2);
+
+    this.paymentService.generateQRCodeLocation({
+      "calendario": {
+        "expiracao": 36000
+      },
+      "devedor": {
+        "cpf": this.usuario.cpfCnpj,
+        "nome": this.usuario.nome,
+      },
+      "valor": {
+        "original": valorOriginal
+      },
+      "chave": "a5d98ae0-2416-457f-86a1-c543e08c07a4",
+      "solicitacaoPagador": "Informe o número ou identificador do pedido."
+    }).subscribe(
+      (response) => {
+        try {
+          const parsedResponse = JSON.parse(response.qrCodeUrl);
+          console.log('Resposta do QR Code:', parsedResponse);
+          this.txid = parsedResponse.txid; // Armazena o ID da transação PIX
+
+          this.paymentService.generateQRCodeBase64(parsedResponse.loc.id).subscribe(
+            (response) => {
+              console.log(response);
+              const base64Response = JSON.parse(response.base64QrCode);
+              this.qrCodeUrl = base64Response.imagemQrcode;
+
+              // Inicia a verificação periódica do pagamento
+              this.checkPixStatusPeriodically();
+            }
+          );
+        } catch (e) {
+          console.error('Erro ao processar resposta do QR Code:', e);
+        }
+      },
+      (error) => {
+        console.error('Erro ao gerar QR Code:', error);
+      }
+    );
+  }
+
+  checkPixStatusPeriodically() {
+    this.pollingInterval = setInterval(() => {
+      this.paymentService.getPixPaymentByTxid(this.txid).subscribe(
+        (response) => {
+          const parsedResponse = JSON.parse(response.message);
+          console.log('Resposta do pagamento:', parsedResponse);
+          console.log('Status do pagamento:', parsedResponse.status);
+          if (parsedResponse && parsedResponse.status === 'CONCLUIDA') {
+            clearInterval(this.pollingInterval); // Para o polling
+            this.paymentCompleted = true;
+            this.paymentService.registerUserPayment(
+              {
+                txid: this.txid,
+                pagadorId: this.usuario.id,
+                favorecidoId: this.usuario.id,
+                infoPagamento: 'Inscrição em competição de competidor próprio'
+              }
+            ).subscribe((pagamento) => {
+              this.onSubmit(pagamento.id);
+            });
+          }
+        },
+        (error) => {
+          console.error('Erro ao verificar status do pagamento:', error);
+        }
+      );
+    }, 5000); // Intervalo de 5 segundos
   }
 }
