@@ -1,0 +1,79 @@
+<app-cabecalho></app-cabecalho>
+
+<div class="detalhes-container" *ngIf="competicao">
+    <!-- Banner e Informações Básicas -->
+    <div class="banner-section">
+        <img [src]="competicao.bannerImagem || 'assets/images/default-banner.jpg'" alt="Banner da competição" class="banner-image">
+        <div class="competicao-header">
+            <h1>{{ competicao.titulo }}</h1>
+            <div class="organizador-controls" *ngIf="isOrganizador">
+                <label class="switch">
+                    <input type="checkbox" [(ngModel)]="bracketsPublicos" (change)="toggleBracketsPublicos()">
+                    <span class="slider"></span>
+                    <span class="label">Tornar chaves públicas</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informações Detalhadas -->
+    <div class="info-section">
+        <div class="info-card">
+            <h2>Informações Gerais</h2>
+            <p><strong>Nome da Competição:</strong> {{ competicao.titulo }}</p>
+            <p><strong>Modalidade:</strong> {{ competicao.modalidade }}</p>
+            <p><strong>Descrição:</strong> {{ competicao.descricao }}</p>
+            <p><strong>Localização:</strong>
+                <span *ngIf="!competicao.pais">Não informado</span>
+                <span *ngIf="competicao.pais">{{ competicao.pais }}</span>
+                <span *ngIf="competicao.estado">, {{ competicao.estado }}</span>
+                <span *ngIf="competicao.cidade">, {{ competicao.cidade }}</span>
+            </p>
+            <p><strong>Período:</strong> {{ competicao.dataInicio | date:'dd/MM/yyyy' }} - {{ competicao.dataFim | date:'dd/MM/yyyy' }}</p>
+        </div>
+
+        <!-- Categorias -->
+        <div class="categorias-section">
+            <h2>Categorias</h2>
+            <div class="categorias-grid">
+                <div class="categoria-card" *ngFor="let categoria of categorias">
+                    <h3>{{ categoria.nome }}</h3>
+                    <p>{{ categoria.descricao }}</p>
+                    <p><strong>Valor da Inscrição:</strong> {{ categoria.valorInscricao | currency:'BRL' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sistema de Chaves -->
+        <div class="brackets-section" *ngIf="podeVerBrackets()">
+            <h2>Sistema de Chaves</h2>
+            <div class="brackets-container" *ngFor="let bracket of brackets | keyvalue">
+                <h3>{{ bracket.key }}</h3>
+                <div class="bracket-tree">
+                    <div class="round" *ngFor="let round of getUniqueRounds(bracket.value)">
+                        <div class="round-label">Rodada {{ round }}</div>
+                        <div class="matches">
+                            <div class="match" *ngFor="let match of getMatchesByRound(bracket.value, round)">
+                                <div class="match-content">
+                                    <div class="player">{{ match.player1 || 'Aguardando' }}</div>
+                                    <div class="vs">vs</div>
+                                    <div class="player">{{ match.player2 || 'Aguardando' }}</div>
+                                    <div class="winner" *ngIf="match.winner">
+                                        <strong>Vencedor:</strong> {{ match.winner }}
+                                    </div>
+                                </div>
+                                <div class="match-connector" *ngIf="match.nextMatchId"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="brackets-section" *ngIf="!podeVerBrackets()">
+            <h2>Sistema de Chaves</h2>
+            <p class="brackets-private">As chaves desta competição ainda não foram publicadas pelo organizador.</p>
+        </div>
+    </div>
+</div>
+
+<app-rodape></app-rodape>

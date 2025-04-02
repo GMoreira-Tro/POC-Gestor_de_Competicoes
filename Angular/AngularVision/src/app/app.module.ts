@@ -32,6 +32,7 @@ import { MinhasInscricoesComponent } from './minhas-inscricoes/minhas-inscricoes
 import { AprovarInscricaoComponent } from './aprovar-inscricao/aprovar-inscricao.component';
 import { FiltrarPorCategoriaPipe } from './aprovar-inscricao/filtrar-por-categoria.pipe';
 import { FaleConoscoComponent } from './fale-conosco/fale-conosco.component';
+import { DetalhesCompeticaoComponent } from './detalhes-competicao/detalhes-competicao.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { FaleConoscoComponent } from './fale-conosco/fale-conosco.component';
     AprovarInscricaoComponent,
     FiltrarPorCategoriaPipe,
     FaleConoscoComponent,
+    DetalhesCompeticaoComponent,
     CabecalhoComponent,
     RodapeComponent,
     

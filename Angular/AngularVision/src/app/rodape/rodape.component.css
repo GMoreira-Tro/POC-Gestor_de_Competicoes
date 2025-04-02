@@ -1,16 +1,30 @@
-/* Rodapé */
-.footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
+/* Certifique-se de que o corpo ocupa todo o espaço disponível */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  
+  /* Estilo para o container principal */
+  .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Configura o conteúdo principal para crescer conforme necessário */
+  .main-content {
+    flex: 1;
+  }
+  
+  /* Fixa o rodapé no final da página */
+  footer {
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
-}
-
-.footer a {
-    color: #fff;
-    text-decoration: none;
-    margin-right: 20px;
-}
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 10px;
+  }
+  

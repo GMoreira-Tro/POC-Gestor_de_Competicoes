@@ -17,6 +17,7 @@ import { InscricaoCompeticaoComponent } from './inscricao-competicao/inscricao-c
 import { MinhasInscricoesComponent } from './minhas-inscricoes/minhas-inscricoes.component';
 import { AprovarInscricaoComponent } from './aprovar-inscricao/aprovar-inscricao.component';
 import { FaleConoscoComponent } from './fale-conosco/fale-conosco.component';
+import { DetalhesCompeticaoComponent } from './detalhes-competicao/detalhes-competicao.component';  // Suponha que você tenha um componente para os detalhes da competição
 
 const routes: Routes = [
   { path: '', component: TelaInicialComponent },
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'email-confirmado/:token', component: EmailConfirmadoComponent }, // Adicione a rota para a confirmação de e-mail
   { path: 'perfil-usuario', component: PerfilUsuarioComponent },
   { path: 'fale-conosco', component: FaleConoscoComponent },
+  { path: 'informacoes/:id', component: DetalhesCompeticaoComponent }, // Adicione a rota para os detalhes da competição  
   { path: '', redirectTo: '/register', pathMatch: 'full' }, // Defina uma rota padrão
   { path: '**', redirectTo: '/register' } // Redireciona para o registro se a rota não for encontrada
 ];

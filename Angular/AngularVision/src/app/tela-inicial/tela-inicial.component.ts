@@ -73,4 +73,8 @@ export class TelaInicialComponent implements OnInit {
   inscreverCompeticao(id: number): void {
     this.router.navigate([`/inscricao-competicao/${id}`]);
   }
+
+  verInformacoes(id: number): void {
+    this.router.navigate([`/informacoes/${id}`]);
+  }
 }
