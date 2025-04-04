@@ -1,6 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
 }
@@ -9,9 +8,10 @@ body {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #3e3e3e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
+    color: #f5f5f5;
 }
 
 /* Banner Section */
@@ -20,7 +20,7 @@ body {
     margin-bottom: 40px;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .banner-image {
@@ -35,8 +35,8 @@ body {
     left: 0;
     right: 0;
     padding: 20px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    color: white;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    color: #f5f5f5;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -74,7 +74,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #555;
     transition: .4s;
     border-radius: 34px;
 }
@@ -86,13 +86,13 @@ body {
     width: 26px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
+    background-color: #f5f5f5;
     transition: .4s;
     border-radius: 50%;
 }
 
 input:checked + .slider {
-    background-color: #007bff;
+    background-color: #4caf50;
 }
 
 input:checked + .slider:before {
@@ -100,7 +100,7 @@ input:checked + .slider:before {
 }
 
 .label {
-    color: white;
+    color: #f5f5f5;
     margin-left: 10px;
 }
 
@@ -111,16 +111,17 @@ input:checked + .slider:before {
 }
 
 .info-card {
-    background: white;
+    background: #2e2e2e;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #f5f5f5;
 }
 
 .info-card h2 {
     margin-top: 0;
-    color: #333;
-    border-bottom: 2px solid #eee;
+    color: #f5f5f5;
+    border-bottom: 2px solid #555;
     padding-bottom: 10px;
 }
 
@@ -131,10 +132,10 @@ input:checked + .slider:before {
 
 /* Categorias Section */
 .categorias-section {
-    background: white;
+    background: #2e2e2e;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .categorias-grid {
@@ -145,23 +146,24 @@ input:checked + .slider:before {
 }
 
 .categoria-card {
-    background: #f8f9fa;
+    background: #3e3e3e;
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid #eee;
+    border: 1px solid #555;
+    color: #f5f5f5;
 }
 
 .categoria-card h3 {
     margin-top: 0;
-    color: #007bff;
+    color: #4caf50;
 }
 
 /* Brackets Section */
 .brackets-section {
-    background: white;
+    background: #2e2e2e;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .brackets-container {
@@ -169,7 +171,7 @@ input:checked + .slider:before {
 }
 
 .brackets-container h3 {
-    color: #007bff;
+    color: #4caf50;
     margin-bottom: 20px;
 }
 
@@ -188,7 +190,7 @@ input:checked + .slider:before {
 
 .round-label {
     font-weight: bold;
-    color: #666;
+    color: #f5f5f5;
     text-align: center;
     margin-bottom: 10px;
 }
@@ -204,33 +206,34 @@ input:checked + .slider:before {
 }
 
 .match-content {
-    background: #f8f9fa;
+    background: #3e3e3e;
     padding: 15px;
     border-radius: 8px;
-    border: 1px solid #eee;
+    border: 1px solid #555;
     min-width: 200px;
 }
 
 .player {
     padding: 8px;
-    background: white;
+    background: #2e2e2e;
     border-radius: 4px;
     margin: 5px 0;
     text-align: center;
+    color: #f5f5f5;
 }
 
 .vs {
     text-align: center;
-    color: #666;
+    color: #f5f5f5;
     margin: 5px 0;
 }
 
 .winner {
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #555;
     text-align: center;
-    color: #007bff;
+    color: #4caf50;
 }
 
 .match-connector {
@@ -239,7 +242,7 @@ input:checked + .slider:before {
     top: 50%;
     width: 40px;
     height: 2px;
-    background: #ccc;
+    background: #555;
 }
 
 .match-connector::after {
@@ -249,16 +252,16 @@ input:checked + .slider:before {
     top: -4px;
     width: 10px;
     height: 10px;
-    background: #ccc;
+    background: #555;
     border-radius: 50%;
 }
 
 .brackets-private {
     text-align: center;
-    color: #666;
+    color: #f5f5f5;
     font-style: italic;
     padding: 20px;
-    background: #f8f9fa;
+    background: #3e3e3e;
     border-radius: 8px;
 }
 

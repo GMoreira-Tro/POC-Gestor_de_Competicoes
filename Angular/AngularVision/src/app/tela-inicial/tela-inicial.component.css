@@ -1,19 +1,20 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #2e2e2e;
     margin: 0;
     padding: 0;
+    color: #f5f5f5;
 }
 
 /* Banner */
 .banner {
     text-align: center;
     padding: 40px 20px;
-    background-color: #34383b;
+    background-color: #2e2e2e;
     background-image: url('../../assets/images/Imagens_TOC_borrada.jpg');
     background-size: cover; 
     background-position: center;
-    color: #fff;
+    color: #f5f5f5;
 }
 
 .banner .logo {
@@ -30,15 +31,15 @@ body {
 .conteudo {
     max-width: 1200px;
     margin: 20px auto;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #3e3e3e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
 }
 
 .conteudo .destaque {
     text-align: center;
-    color: #333;
+    color: #f5f5f5;
     margin-bottom: 20px;
 }
 
@@ -50,9 +51,11 @@ body {
 
 .filtros-competicoes select {
     padding: 10px;
-    border: 1px solid #ccc;
+    background-color: #2e2e2e;
+    border: 1px solid #555;
     border-radius: 5px;
     font-size: 14px;
+    color: #f5f5f5;
 }
 
 /* Lista de competições */
@@ -65,55 +68,60 @@ body {
 
 .competicao-card {
     position: relative;
-    width: calc(33.333% - 20px); /* Três cards por linha */
+    width: calc(33.333% - 20px);
     margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden;
     background-size: cover;
     background-position: center;
-    color: #000;
+    color: #f5f5f5;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    border: 1px solid #555;
+    background-color: #2e2e2e;
 }
 
 /* Ajustes para dispositivos móveis */
 @media (max-width: 768px) {
     .competicao-card {
-        width: calc(50% - 20px); /* Dois cards por linha */
+        width: calc(50% - 20px);
     }
 }
 
 @media (max-width: 480px) {
     .competicao-card {
-        width: 100%; /* Um card por linha */
+        width: 100%;
     }
 }
 
 .competicao-info {
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(46, 46, 46, 0.9);
     border-radius: 8px;
 }
 
 .competicao-info h3 {
     margin-top: 0;
     font-size: 24px;
+    color: #f5f5f5;
 }
+
 .competicao-info.com-banner {
-    background-color: transparent;
+    background-color: rgba(46, 46, 46, 0.8);
 }
 
 .competicao-info p {
     margin: 5px 0;
+    color: #f5f5f5;
 }
 
 button {
     margin-top: 10px;
     padding: 10px 15px;
     font-size: 14px;
-    color: #fff;
-    background-color: #28a745;
+    color: #f5f5f5;
+    background-color: #4caf50;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -121,5 +129,5 @@ button {
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #45a049;
 }

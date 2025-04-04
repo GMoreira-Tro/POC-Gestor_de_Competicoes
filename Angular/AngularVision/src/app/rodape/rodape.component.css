@@ -3,28 +3,78 @@ html, body {
     margin: 0;
     padding: 0;
     min-height: 100%;
-  }
+    background-color: #2e2e2e;
+    color: #f5f5f5;
+    font-family: 'Roboto', sans-serif;
+}
   
-  /* Estilo para o container principal */
-  .container {
+/* Estilo para o container principal */
+.container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
+}
   
-  /* Configura o conteúdo principal para crescer conforme necessário */
-  .main-content {
+/* Configura o conteúdo principal para crescer conforme necessário */
+.main-content {
     flex: 1;
-  }
+}
   
-  /* Fixa o rodapé no final da página */
-  footer {
+/* Fixa o rodapé no final da página */
+footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #f1f1f1;
+    background-color: #2e2e2e;
+    border-top: 2px solid #555;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
     text-align: center;
-    padding: 10px;
-  }
+    padding: 20px;
+    color: #f5f5f5;
+    font-weight: 400;
+}
+
+footer p {
+    margin: 0 0 15px 0;
+}
+
+.btn-contato {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: #f5f5f5;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: transform 0.2s, background 0.3s;
+}
+
+.btn-contato:hover {
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+    transform: scale(1.05);
+    text-decoration: none;
+}
+
+/* Adiciona um espaço para evitar que o conteúdo fique escondido atrás do footer */
+.footer-spacer {
+    height: 80px; /* Aumentado para acomodar o botão */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    footer {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+    
+    .footer-spacer {
+        height: 70px;
+    }
+
+    .btn-contato {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+}
   

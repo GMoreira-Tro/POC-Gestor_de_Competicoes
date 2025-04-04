@@ -6,139 +6,172 @@ body {
 }
 
 /* Formulário de busca */
-.search-form {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+.page-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    padding: 20px;
+    background-color: #1a1a1a;
 }
 
-.search-form input,
-.search-form select,
-.search-form button {
+.search-container {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    text-align: center;
+    color: #f5f5f5;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.search-form {
+    background-color: #2a2a2a;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    background-color: #333333;
+    color: #ffffff;
 }
 
-.search-form button {
-    background-color: #007bff;
-    color: #fff;
+.button-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-.search-form button:hover {
-    background-color: #0056b3;
+button:hover {
+    background-color: #45a049;
 }
 
 /* Lista de competições */
 .competition-list {
+    width: 100%;
     max-width: 1200px;
-    margin: 20px auto;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    margin-top: 30px;
 }
 
 .competicoes-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
-    justify-content: center;
+    padding: 20px;
 }
 
 .competicao-card {
-    position: relative;
-    width: calc(33.333% - 20px);
-    /* Três cards por linha */
-    margin-bottom: 20px;
+    background-color: #2a2a2a;
     border-radius: 8px;
     overflow: hidden;
-    background-size: cover;
-    background-position: center;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    background-color: transparent !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Ajustes para dispositivos móveis */
-@media (max-width: 768px) {
-    .competicao-card {
-        width: calc(50% - 20px);
-        /* Dois cards por linha */
-    }
-}
-
-@media (max-width: 480px) {
-    .competicao-card {
-        width: 100%;
-        /* Um card por linha */
-    }
+.competicao-banner {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
 }
 
 .competicao-info {
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-}
-
-.competicao-info.com-banner {
-    background-color: transparent;
+    color: #ffffff;
 }
 
 .competicao-info h3 {
-    margin-top: 0;
-    font-size: 24px;
+    margin: 0 0 10px 0;
+    color: #f5f5f5;
+    font-size: 18px;
 }
 
 .competicao-info p {
     margin: 5px 0;
-}
-
-button {
-    margin-top: 10px;
-    padding: 10px 15px;
+    color: #f5f5f5;
     font-size: 14px;
-    color: #fff;
-    background-color: #28a745;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #218838;
+.competicao-actions {
+    padding: 15px;
+    border-top: 1px solid #555;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.competicao-actions button {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.no-results {
+    text-align: center;
+    padding: 20px;
+    color: #f5f5f5;
+    font-size: 16px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .search-container {
+        width: 95%;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
 }
 
 /* Ícone para carregar mais competições */
 .load-more {
     text-align: center;
-    margin: 20px 0;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .load-more button {
     padding: 10px 20px;
     font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #4caf50;
+    color: #f5f5f5;
 }
 
 .load-more button:hover {
-    background-color: #0056b3;
+    background-color: #45a049;
 }
