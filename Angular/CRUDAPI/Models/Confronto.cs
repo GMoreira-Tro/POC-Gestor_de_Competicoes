@@ -12,6 +12,10 @@ namespace CRUDAPI.Models
     {
         [Key]
         public long Id { get; set; }
+        
+        [ForeignKey("Chaveamentos")]
+        public long? ChaveamentoId { get; set; }
+        public virtual Chaveamento? Chaveamento { get; set; }
 
         public DateTime? DataInicio { get; set; }
 

@@ -17,6 +17,7 @@ namespace CRUDAPI.Models
         public DbSet<Notificacao> Notificacoes { get; set; }
         public DbSet<Premio> Premios { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
+        public DbSet<Chaveamento> Chaveamentos { get; set; }
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {

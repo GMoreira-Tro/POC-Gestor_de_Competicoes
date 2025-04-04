@@ -5,7 +5,7 @@
 
   <div class="categoria-select">
     <label for="categoria">Selecione a Categoria:</label>
-    <select id="categoria" [(ngModel)]="categoriaSelecionada">
+    <select id="categoria" [(ngModel)]="categoriaSelecionada" (change)="onCategoriaSelecionada()">
       <option value="">-- Escolha uma categoria --</option>
       <option *ngFor="let categoria of categorias" [value]="categoria.id">
         {{ categoria.nome }}
@@ -13,20 +13,30 @@
     </select>
   </div>
 
-  <div class="confrontos-container" style="display: none;">
+  <div class="confrontos-container" *ngIf="categoriaSelecionada">
     <h2>Chaveamentos</h2>
-    <div class="chaveamentos"></div>
+    <div class="chaveamentos">
+      <ul>
+        <li *ngFor="let chaveamento of chaveamentos">
+          {{ chaveamento.nome }}
+          <ul>
+            <li *ngFor="let confronto of chaveamento.confrontos">
+              {{ confronto.dataInicio }} - {{ confronto.dataTermino }} - {{ confronto.local }}
+              {{confronto.confrontoInscricoes[0]}} vs {{confronto.confrontoInscricoes[1]}}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
     <button (click)="criarChaveamento()">Criar Novo Chaveamento</button>
-    <ul id="lista-chaveamentos">
-      <!-- Chaveamentos serão listados aqui -->
-    </ul>
 
-    <h2>Confrontos Avulsos</h2>
-    <div class="confrontos-avulsos"></div>
-    <button (click)="criarConfronto()">Criar Novo Confronto</button>
-    <ul id="lista-confrontos">
-      <!-- Confrontos serão listados aqui -->
-    </ul>
+    <!-- <h2>Confrontos Avulsos</h2>
+    <div class="confrontos-avulsos">
+      <ul>
+        <li *ngFor="let confronto of confrontos">{{ confronto.descricao }}</li>
+      </ul>
+    </div>
+    <button (click)="criarConfronto()">Criar Novo Confronto</button> -->
   </div>
 </div>
 
