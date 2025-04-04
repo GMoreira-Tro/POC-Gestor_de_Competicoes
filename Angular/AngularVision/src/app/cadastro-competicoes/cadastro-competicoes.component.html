@@ -46,16 +46,25 @@
           <div class="form-group">
             <label>Categorias:</label>
             <div *ngFor="let categoria of categorias; let i = index" class="categoria-container">
-              <input type="text" placeholder="Nome da Categoria" [(ngModel)]="categoria.nome" required>
-              <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
               <div class="form-group">
-                <label for="valorInscricao">Valor da Inscrição:</label>
-                <input type="number" id="valorInscricao" name="valorInscricao" [(ngModel)]="categoria.valorInscricao" required>
-                <small *ngIf="categoria.valorInscricao < 15.99" class="aviso">A inscrição deve possuir um valor maior que a taxa mínima de 15,99R$</small>
+                <label for="nomeCategoria{{i}}">Nome da Categoria:</label>
+                <input type="text" id="nomeCategoria{{i}}" [(ngModel)]="categoria.nome" name="nomeCategoria{{i}}" required>
               </div>
-              <button type="button" (click)="removerCategoria(i)">-</button>
+
+              <div class="form-group">
+                <label for="descricaoCategoria{{i}}">Descrição:</label>
+                <textarea id="descricaoCategoria{{i}}" [(ngModel)]="categoria.descricao" name="descricaoCategoria{{i}}" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="valorInscricao{{i}}">Valor da Inscrição:</label>
+                <input type="number" id="valorInscricao{{i}}" [(ngModel)]="categoria.valorInscricao" name="valorInscricao{{i}}" required>
+                <small *ngIf="categoria.valorInscricao < 15.99" class="aviso">A inscrição deve possuir um valor maior que a taxa mínima de R$ 15,99</small>
+              </div>
+
+              <button type="button" (click)="removerCategoria(i)" title="Remover Categoria">-</button>
             </div>
-            <button type="button" (click)="adicionarCategoria()">+ Adicionar Categoria</button>
+            <button type="button" (click)="adicionarCategoria()">Adicionar Categoria</button>
           </div>
 
           <!-- Localização -->
