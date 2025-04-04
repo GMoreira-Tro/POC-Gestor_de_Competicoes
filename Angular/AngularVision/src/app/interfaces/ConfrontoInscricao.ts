@@ -3,5 +3,4 @@ export interface ConfrontoInscricao {
     confrontoId: number;
     inscricaoId: number;
     confrontoInscricaoPaiId?: number;
-    confrontoInscricaoPai?: ConfrontoInscricao;
 }

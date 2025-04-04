@@ -3,6 +3,10 @@ import { CompeticaoService } from '../services/competicao.service';
 import { CategoriaService } from '../services/categoria.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { ConfrontoService } from '../services/confronto.service';
+import { ChaveamentoService } from '../services/chaveamento.service';
+import { InscricaoService } from '../services/inscricao.service';
+import { ConfrontoInscricaoService } from '../services/confrontoInscricao.service';
 
 @Component({
   selector: 'app-gerenciar-competicao',
@@ -10,22 +14,23 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./gerenciar-competicao.component.css']
 })
 export class GerenciarCompeticaoComponent implements OnInit {
-criarConfronto() {
-throw new Error('Method not implemented.');
-}
-
   competicao: any = {};
   categorias: any[] = [];
-  categoriaSelecionada: any = {};
-  confrontos: any[] = [];
+  categoriaSelecionada: any = undefined;
   chaveamentos: any[] = [];
-  novoConfronto: any = { equipeA: '', equipeB: '', data: '', local: '' };
+  inscricoes: any[] = [];
+  novoConfronto: any = { equipeA: '', equipeB: '', dataInicio: '', local: '' };
   novoChaveamento: any = { nome: '', etapas: [] };
+  competicaoId!: number;
 
   constructor(
     private competicaoService: CompeticaoService,
     private categoriaService: CategoriaService,
     private userService: UserService,
+    private confrontoService: ConfrontoService,
+    private confrontoInscricaoService: ConfrontoInscricaoService,
+    private chaveamentoService: ChaveamentoService,
+    private inscricaoService: InscricaoService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -33,17 +38,14 @@ throw new Error('Method not implemented.');
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.carregarCompeticao(Number(id));
+      this.competicaoId = Number(id);
+      this.carregarCompeticao(this.competicaoId);
     }
-
-    this.carregarConfrontos();
-    this.carregarChaveamentos();
   }
 
   carregarCompeticao(id: number): void {
     this.competicaoService.getCompeticao(id).subscribe(
       competicao => {
-        console.log(competicao);
         this.userService.getUsuarioLogado().subscribe(usuario => {
           const userId = usuario.id;
           if (competicao.criadorUsuarioId !== userId) {
@@ -51,9 +53,7 @@ throw new Error('Method not implemented.');
             this.router.navigate(['/']);
             return;
           }
-
-        }
-        );
+        });
         this.competicao = competicao;
       },
       error => console.log('Erro ao carregar competição:', error)
@@ -67,31 +67,75 @@ throw new Error('Method not implemented.');
     );
   }
 
-  carregarConfrontos(): void {
-    // Simulação de carregamento de confrontos (substituir por chamada de API)
-    this.confrontos = [
-      { equipeA: 'Equipe 1', equipeB: 'Equipe 2', data: '2023-10-01', local: 'Estádio A' },
-      { equipeA: 'Equipe 3', equipeB: 'Equipe 4', data: '2023-10-02', local: 'Estádio B' }
-    ];
+  onCategoriaSelecionada(): void {
+    if (!this.categoriaSelecionada?.id) return;
+
+    console.log('Categoria selecionada:', this.categoriaSelecionada.id);
+    this.inscricaoService.getInscricoesPorCategoria(this.categoriaSelecionada.id).subscribe(
+      inscricoes => {
+        this.inscricoes = inscricoes;
+        console.log('Inscrições:', inscricoes);
+      },
+      error => console.error('Erro ao carregar inscrições:', error)
+    );
+
+    this.chaveamentoService.getChaveamentosPorCategoria(this.categoriaSelecionada.id).subscribe(
+      chaveamentos => {
+        this.chaveamentos = chaveamentos;
+        console.log('Chaveamentos:', chaveamentos);
+        for (const chaveamento of this.chaveamentos) {
+          this.confrontoService.getConfrontosPorChaveamento(chaveamento.id).subscribe(
+            confrontos => {
+              chaveamento.confrontos = confrontos;
+              console.log('Confrontos:', confrontos);
+              for (const confronto of chaveamento.confrontos) {
+                this.confrontoInscricaoService.getConfrontoInscricoesPorConfronto(confronto.id).subscribe(
+                  confrontoInscricoes => {
+                    confronto.confrontoInscricoes = confrontoInscricoes;
+                  },
+                  error => console.error('Erro ao carregar inscrições de confronto:', error)
+                );
+              }
+            },
+            error => console.error('Erro ao carregar confrontos:', error)
+          );
+        }
+      },
+      error => console.error('Erro ao carregar chaveamentos:', error)
+    );
   }
 
   carregarChaveamentos(): void {
-    // Simulação de carregamento de chaveamentos (substituir por chamada de API)
+    // Placeholder por enquanto
     this.chaveamentos = [
       { nome: 'Chave Principal', etapas: [{ nome: 'Quartas de Final', confrontos: [] }] }
     ];
   }
 
-  adicionarConfronto(): void {
-    if (this.novoConfronto.equipeA && this.novoConfronto.equipeB && this.novoConfronto.data && this.novoConfronto.local) {
-      this.confrontos.push({ ...this.novoConfronto });
-      this.novoConfronto = { equipeA: '', equipeB: '', data: '', local: '' };
+  criarConfronto(): void {
+    if (this.novoConfronto.equipeA && this.novoConfronto.equipeB && this.novoConfronto.dataInicio && this.novoConfronto.local) {
+      const confrontoParaSalvar = {
+        dataInicio: this.novoConfronto.dataInicio,
+        local: this.novoConfronto.local,
+        confrontoInscricoes: [
+          { inscricaoId: this.novoConfronto.equipeA },
+          { inscricaoId: this.novoConfronto.equipeB }
+        ]
+      };
+
+      // this.confrontoService.createConfronto(confrontoParaSalvar).subscribe(
+      //   confrontoSalvo => {
+      //     this.confrontos.push(confrontoSalvo);
+      //     this.novoConfronto = { equipeA: '', equipeB: '', dataInicio: '', local: '' };
+      //   },
+      //   error => console.error('Erro ao criar confronto:', error)
+      // );
     }
   }
 
-  removerConfronto(index: number): void {
-    this.confrontos.splice(index, 1);
-  }
+  // removerConfronto(index: number): void {
+  //   this.confrontos.splice(index, 1);
+  // }
 
   criarChaveamento(): void {
     if (this.novoChaveamento.nome) {
@@ -107,7 +151,7 @@ throw new Error('Method not implemented.');
   }
 
   adicionarConfrontoNaEtapa(chaveamentoIndex: number, etapaIndex: number, confronto: any): void {
-    if (confronto.equipeA && confronto.equipeB && confronto.data && confronto.local) {
+    if (confronto.equipeA && confronto.equipeB && confronto.dataInicio && confronto.local) {
       this.chaveamentos[chaveamentoIndex].etapas[etapaIndex].confrontos.push({ ...confronto });
     }
   }
