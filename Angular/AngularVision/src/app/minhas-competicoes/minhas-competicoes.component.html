@@ -1,25 +1,30 @@
 <!-- Cabeçalho -->
 <app-cabecalho></app-cabecalho>
 
-<!-- Lista de competições -->
-<div class="minhas-competicoes">
-    <h2>Minhas Competições</h2>
-    <div class="competicoes-container">
-        <div *ngFor="let competicao of minhasCompeticoes" class="competicao-card"
-            [ngStyle]="{'background-image': 'url(' + (competicao.bannerImagem ? competicao.bannerImagem : 'none') + ')'}">
-            <div [ngClass]="{'competicao-info': true, 'com-banner': competicao.bannerImagem !== null}">
-                <h3>{{ competicao.titulo }}</h3>
-                <p><strong>Modalidade:</strong> {{ competicao.modalidade }}</p>
-                <p><strong>Descrição:</strong> {{ competicao.descricao }}</p>
-                <p><strong>Localização:</strong>
-                    <span *ngIf="!competicao.pais"> Não informado</span>
-                    <span *ngIf="competicao.pais">{{ competicao.pais }}</span>
-                    <span *ngIf="competicao.estado">, {{ competicao.estado }}</span>
-                    <span *ngIf="competicao.cidade">, {{ competicao.cidade }}</span>
-                </p>
-                <button (click)="editarCompeticao(competicao.id)">Editar</button>
-                <button (click)="excluirCompeticao(competicao.id)">Excluir</button>
-                <button (click)="gerenciarInscricoes(competicao.id)">Gerenciar Inscrições</button>
+<div class="page-container">
+    <div class="content-container">
+        <div class="minhas-competicoes">
+            <h2>Minhas Competições</h2>
+            <div class="competicoes-container">
+                <div *ngFor="let competicao of minhasCompeticoes" class="competicao-card"
+                    [ngStyle]="{'background-image': 'url(' + (competicao.bannerImagem ? competicao.bannerImagem : 'none') + ')'}">
+                    <div [ngClass]="{'competicao-info': true, 'com-banner': competicao.bannerImagem !== null}">
+                        <h3>{{ competicao.titulo }}</h3>
+                        <p><strong>Modalidade:</strong> {{ competicao.modalidade }}</p>
+                        <p><strong>Descrição:</strong> {{ competicao.descricao }}</p>
+                        <p><strong>Localização:</strong>
+                            <span *ngIf="!competicao.pais"> Não informado</span>
+                            <span *ngIf="competicao.pais">{{ competicao.pais }}</span>
+                            <span *ngIf="competicao.estado">, {{ competicao.estado }}</span>
+                            <span *ngIf="competicao.cidade">, {{ competicao.cidade }}</span>
+                        </p>
+                        <div class="button-container">
+                            <button style="margin-right: 8px;" (click)="editarCompeticao(competicao.id)">Editar</button>
+                            <button style="margin-right: 8px;" (click)="excluirCompeticao(competicao.id)">Excluir</button>
+                            <button (click)="gerenciarInscricoes(competicao.id)">Gerenciar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

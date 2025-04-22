@@ -1,32 +1,49 @@
 <!-- Cabeçalho -->
 <app-cabecalho></app-cabecalho>
 
-<!-- Formulário de busca -->
-<div class="search-form">
-    <input type="text" placeholder="Nome da Competição" [(ngModel)]="filtro.titulo">
-    <input type="text" placeholder="Modalidade" [(ngModel)]="filtro.modalidade">
-    <input type="text" placeholder="Descrição" [(ngModel)]="filtro.descricao">
-    
-    <select [(ngModel)]="filtro.pais" (change)="onCountryChange()">
-        <option value="">Selecione o país</option>
-        <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
-    </select>
+<div class="page-container">
+  <div class="search-container">
+    <!-- Formulário de busca -->
+    <div class="search-form">
+      <div class="form-group">
+        <input type="text" placeholder="Nome da Competição" [(ngModel)]="filtro.titulo">
+      </div>
+      <div class="form-group">
+        <input type="text" placeholder="Modalidade" [(ngModel)]="filtro.modalidade">
+      </div>
+      <div class="form-group">
+        <input type="text" placeholder="Descrição" [(ngModel)]="filtro.descricao">
+      </div>
+      
+      <div class="form-group">
+        <select [(ngModel)]="filtro.pais" (change)="onCountryChange()">
+          <option value="">Selecione o país</option>
+          <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
+        </select>
+      </div>
 
-    <select [(ngModel)]="filtro.estado" (change)="onStateChange()">
-        <option value="">Selecione o estado</option>
-        <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
-    </select>
+      <div class="form-group">
+        <select [(ngModel)]="filtro.estado" (change)="onStateChange()">
+          <option value="">Selecione o estado</option>
+          <option *ngFor="let estado of listaEstados?.geonames" [value]="estado.name">{{ estado.name }}</option>
+        </select>
+      </div>
 
-    <select [(ngModel)]="filtro.cidade">
-        <option value="">Selecione a cidade</option>
-        <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
-    </select>
+      <div class="form-group">
+        <select [(ngModel)]="filtro.cidade">
+          <option value="">Selecione a cidade</option>
+          <option *ngFor="let cidade of listaCidades?.geonames" [value]="cidade.name">{{ cidade.name }}</option>
+        </select>
+      </div>
 
-    <button (click)="buscarCompeticoes()">Buscar</button>
-</div>
+      <div class="button-container">
+        <button (click)="buscarCompeticoes()">Buscar</button>
+      </div>
+    </div>
+  </div>
 
-<!-- Lista de competições -->
-<div class="competition-list">
+  <!-- Lista de competições -->
+  <div class="competition-list">
     <div class="competicoes-container">
         <div *ngFor="let competicao of competicoes" class="competicao-card" [ngStyle]="{'background-image': 'url(' + (competicao.bannerImagem ? competicao.bannerImagem : 'none') + ')'}">
             <div [ngClass]="{'competicao-info': true, 'com-banner': competicao.bannerImagem !== null}">
@@ -43,11 +60,12 @@
             </div>
         </div>
     </div>
-</div>
+  </div>
 
-<!-- Ícone para carregar mais competições -->
-<div class="load-more">
+  <!-- Ícone para carregar mais competições -->
+  <div class="load-more">
     <button (click)="carregarMais()">Carregar mais</button>
+  </div>
 </div>
 
 <app-rodape></app-rodape>
