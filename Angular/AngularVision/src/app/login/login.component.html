@@ -4,14 +4,14 @@
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" [(ngModel)]="userData.email" required
-          [ngClass]="{ 'error-border': form.controls['email']?.errors?.['required'] && form.controls['email'].touched }">
+          [ngClass]="{ 'error-border': form.controls['email'].errors?.['required'] && form.controls['email'].touched }">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
         <label for="senha">Senha:</label>
         <input type="password" id="senha" name="senha" [(ngModel)]="userData.senha" required
-          [ngClass]="{ 'error-border': form.controls['senha']?.errors?.['required'] && form.controls['senha'].touched }">
+          [ngClass]="{ 'error-border': form.controls['senha'].errors?.['required'] && form.controls['senha'].touched }">
       </div>
     </div>
     <button type="submit">Login</button>

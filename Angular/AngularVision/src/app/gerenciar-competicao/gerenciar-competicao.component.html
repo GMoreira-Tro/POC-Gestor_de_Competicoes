@@ -22,7 +22,7 @@
           <ul>
             <li *ngFor="let confronto of chaveamento.confrontos">
               {{ confronto.dataInicio }} - {{ confronto.dataTermino }} - {{ confronto.local }}
-              {{confronto.confrontoInscricoes[0]}} vs {{confronto.confrontoInscricoes[1]}}
+              {{confronto.confrontoInscricoes[0].competidor.nome}} vs {{confronto.confrontoInscricoes[1].competidor.nome}}
             </li>
           </ul>
         </li>

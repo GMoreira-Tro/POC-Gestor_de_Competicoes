@@ -7,6 +7,7 @@ import { ConfrontoService } from '../services/confronto.service';
 import { ChaveamentoService } from '../services/chaveamento.service';
 import { InscricaoService } from '../services/inscricao.service';
 import { ConfrontoInscricaoService } from '../services/confrontoInscricao.service';
+import { CompetidorService } from '../services/competidor.service';
 
 @Component({
   selector: 'app-gerenciar-competicao',
@@ -31,9 +32,10 @@ export class GerenciarCompeticaoComponent implements OnInit {
     private confrontoInscricaoService: ConfrontoInscricaoService,
     private chaveamentoService: ChaveamentoService,
     private inscricaoService: InscricaoService,
+    private competidorService: CompetidorService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -68,10 +70,14 @@ export class GerenciarCompeticaoComponent implements OnInit {
   }
 
   onCategoriaSelecionada(): void {
-    if (!this.categoriaSelecionada?.id) return;
+    console.log('Categoria selecionada:', this.categoriaSelecionada);
+    if (!this.categoriaSelecionada) {
+      console.log('Nenhuma categoria selecionada. Carregando chaveamentos...');
+      return;
+    }
 
-    console.log('Categoria selecionada:', this.categoriaSelecionada.id);
-    this.inscricaoService.getInscricoesPorCategoria(this.categoriaSelecionada.id).subscribe(
+    console.log('Categoria selecionada:', this.categoriaSelecionada);
+    this.inscricaoService.getInscricoesPorCategoria(this.categoriaSelecionada).subscribe(
       inscricoes => {
         this.inscricoes = inscricoes;
         console.log('Inscrições:', inscricoes);
@@ -79,7 +85,7 @@ export class GerenciarCompeticaoComponent implements OnInit {
       error => console.error('Erro ao carregar inscrições:', error)
     );
 
-    this.chaveamentoService.getChaveamentosPorCategoria(this.categoriaSelecionada.id).subscribe(
+    this.chaveamentoService.getChaveamentosPorCategoria(this.categoriaSelecionada).subscribe(
       chaveamentos => {
         this.chaveamentos = chaveamentos;
         console.log('Chaveamentos:', chaveamentos);
@@ -92,8 +98,15 @@ export class GerenciarCompeticaoComponent implements OnInit {
                 this.confrontoInscricaoService.getConfrontoInscricoesPorConfronto(confronto.id).subscribe(
                   confrontoInscricoes => {
                     confronto.confrontoInscricoes = confrontoInscricoes;
+                    for (const confrontoInscricao of confronto.confrontoInscricoes) {
+                      this.competidorService.obterCompetidorPorInscricao(confrontoInscricao.inscricaoId).subscribe(
+                        competidor => {
+                          confrontoInscricao.competidor = competidor;
+                        }
+                      );
+                    }
                   },
-                  error => console.error('Erro ao carregar inscrições de confronto:', error)
+                  error => console.error('Erro ao carregar confronto de inscrições de confronto:', error)
                 );
               }
             },
