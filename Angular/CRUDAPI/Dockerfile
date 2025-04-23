@@ -1,21 +1,26 @@
-# Usando a imagem oficial do .NET como base
+# Etapa base para execução
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 10000
 
-# Usando a imagem do SDK do .NET para compilar o aplicativo
+# Etapa de build
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Angular/CRUDAPI.csproj", "CRUDAPI/"]
-RUN dotnet restore "Angular/CRUDAPI.csproj"
+
+# Copia o .csproj e restaura dependências
+COPY ["Angular/CRUDAPI/CRUDAPI.csproj", "Angular/CRUDAPI/"]
+RUN dotnet restore "Angular/CRUDAPI/CRUDAPI.csproj"
+
+# Copia o restante do código e compila
 COPY . .
-WORKDIR "/src/CRUDAPI"
+WORKDIR "/src/Angular/CRUDAPI"
 RUN dotnet build "CRUDAPI.csproj" -c Release -o /app/build
 
+# Etapa de publicação
 FROM build AS publish
 RUN dotnet publish "CRUDAPI.csproj" -c Release -o /app/publish
 
-# Copiar o aplicativo compilado para o contêiner
+# Etapa final de execução
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
