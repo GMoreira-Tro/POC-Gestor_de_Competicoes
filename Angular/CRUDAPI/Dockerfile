@@ -8,7 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copia o projeto
-COPY ./CRUDAPI ./CRUDAPI
+COPY CRUDAPI CRUDAPI
 
 # Entra na pasta e restaura
 WORKDIR /src/CRUDAPI
