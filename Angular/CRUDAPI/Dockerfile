@@ -7,15 +7,19 @@ EXPOSE 10000
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY CRUDAPI.csproj .
+# Copia todos os arquivos primeiro
+COPY . .
+
+# Restaura na pasta correta onde está o .csproj
+WORKDIR /src/CRUDAPI
 RUN dotnet restore "CRUDAPI.csproj"
 
-COPY . .
-WORKDIR "/src/CRUDAPI"
+# Build
 RUN dotnet build "CRUDAPI.csproj" -c Release -o /app/build
 
 # Etapa de publicação
 FROM build AS publish
+WORKDIR /src/CRUDAPI
 RUN dotnet publish "CRUDAPI.csproj" -c Release -o /app/publish
 
 # Etapa final
