@@ -7,7 +7,7 @@ EXPOSE 10000
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY ["CRUDAPI.csproj", "CRUDAPI/"]
+COPY CRUDAPI.csproj .
 RUN dotnet restore "CRUDAPI.csproj"
 
 COPY . .
