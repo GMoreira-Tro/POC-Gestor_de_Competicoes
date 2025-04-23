@@ -7,11 +7,11 @@ EXPOSE 10000
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY ["Angular/CRUDAPI/CRUDAPI.csproj", "Angular/CRUDAPI/"]
-RUN dotnet restore "Angular/CRUDAPI/CRUDAPI.csproj"
+COPY ["CRUDAPI.csproj", "CRUDAPI/"]
+RUN dotnet restore "CRUDAPI.csproj"
 
 COPY . .
-WORKDIR "/src/Angular/CRUDAPI"
+WORKDIR "/src/CRUDAPI"
 RUN dotnet build "CRUDAPI.csproj" -c Release -o /app/build
 
 # Etapa de publicação
