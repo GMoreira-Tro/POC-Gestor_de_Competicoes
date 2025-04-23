@@ -110,5 +110,21 @@ namespace CRUDAPI.Controllers
 
             return NoContent();
         }
+
+        // GET: api/ConfrontoInscricao/buscar-de-confronto/5
+        [HttpGet("buscar-de-confronto/{idConfronto}")]
+        public async Task<ActionResult<IEnumerable<ConfrontoInscricao>>> GetConfrontoInscricoesPorConfronto(long idConfronto)
+        {
+            var confrontoInscricoes = await _contexto.ConfrontoInscricoes
+                .Where(ci => ci.ConfrontoId == idConfronto)
+                .ToListAsync();
+
+            if (confrontoInscricoes == null || !confrontoInscricoes.Any())
+            {
+                return NotFound();
+            }
+
+            return confrontoInscricoes;
+        }
     }
 }

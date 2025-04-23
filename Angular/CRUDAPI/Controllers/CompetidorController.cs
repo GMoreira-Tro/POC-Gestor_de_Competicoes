@@ -144,5 +144,23 @@ namespace CRUDAPI.Controller
 
             return Ok(new { imagemUrl = competidor.ImagemUrl });
         }
+
+        [HttpGet("por-inscricao/{inscricaoId}")]
+        public async Task<ActionResult<Competidor>> ObterCompetidorPorInscricao(long inscricaoId)
+        {
+            var inscricao = await _contexto.Inscricoes.FindAsync(inscricaoId);
+            if (inscricao == null)
+            {
+                return NotFound("Inscrição não encontrada.");
+            }
+            var competidor = await _contexto.Competidores.FirstOrDefaultAsync(c => c.Id == inscricao.CompetidorId);
+
+            if (competidor == null)
+            {
+                return NotFound("Competidor não encontrado para a inscrição fornecida.");
+            }
+
+            return Ok(competidor);
+        }
     }
 }
