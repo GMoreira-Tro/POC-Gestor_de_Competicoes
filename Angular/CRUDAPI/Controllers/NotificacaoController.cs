@@ -14,12 +14,15 @@ namespace CRUDAPI.Controllers
         private readonly Contexto _contexto;
         private readonly NotificacaoService _NotificacaoService;
         private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public NotificacaoController(Contexto contexto, NotificacaoService NotificacaoService, EmailService emailService)
+        public NotificacaoController(Contexto contexto, NotificacaoService NotificacaoService, EmailService emailService,
+            IConfiguration configuration)
         {
             _contexto = contexto;
             _NotificacaoService = NotificacaoService;
             _emailService = emailService;
+            _configuration = configuration;
         }
 
         // GET: api/Notificacao
@@ -164,7 +167,7 @@ namespace CRUDAPI.Controllers
                         $"do competidor {competidor.Nome} " +
                         $"foi aceita! Aguardando pagamento.",
                         DataPublicacao = DateTime.Now,
-                        Link = $"http://localhost:4200/pagar-inscricao/{inscricaoId}",
+                        Link = $"{_configuration["Configuration:BaseUrl"]}/pagar-inscricao/{inscricaoId}",
                         TipoAnuncio = "Inscrição"
                     };
 
@@ -174,7 +177,7 @@ namespace CRUDAPI.Controllers
                         var body = $"Olá {usuario.Nome},\n\n" +
                                    $"Sua inscrição no evento {competicao.Titulo} do competidor {competidor.Nome} foi aceita! " +
                                    $"Aguardando pagamento. Acesse o link para realizar o pagamento: " +
-                                   $"http://localhost:4200/pagar-inscricao/{inscricaoId}\n\n" +
+                                   $"{_configuration["Configuration:BaseUrl"]}/pagar-inscricao/{inscricaoId}\n\n" +
                                    "Atenciosamente,\nEquipe ConectaCompetição";
 
                         await _emailService.SendEmailAsync(usuario.Email, subject, body);
@@ -190,7 +193,7 @@ namespace CRUDAPI.Controllers
                         $"do competidor {competidor.Nome} " +
                         $"foi recusada!",
                         DataPublicacao = DateTime.Now,
-                        Link = $"http://localhost:4200/pagar-inscricao/{inscricaoId}",
+                        Link = $"{_configuration["Configuration:BaseUrl"]}/pagar-inscricao/{inscricaoId}",
                         TipoAnuncio = "Inscrição"
                     };
 

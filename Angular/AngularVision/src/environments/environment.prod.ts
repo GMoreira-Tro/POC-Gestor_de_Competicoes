@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiBaseUrl: 'https://conectacompeticao.fly.dev' // ou o domínio final
+    apiBaseUrl: process.env['NG_ENV_API_URL'] || 'https://conectacompeticao.fly.dev'
   };
   

@@ -7,11 +7,14 @@ namespace CRUDAPI.Services
     {
         private readonly Contexto _contexto;
         private readonly EmailService _emailService;
-        public InscricaoService(Contexto contexto, EmailService emailService)
+        private readonly IConfiguration _configuration;
+        public InscricaoService(Contexto contexto, EmailService emailService, IConfiguration configuration)
         {
+            _configuration = configuration;
             _contexto = contexto;
             _emailService = emailService;
         }
+
         public async Task<Inscricao> ValidarInscricao(Inscricao inscricao)
         {
             // Verifica se já existe uma inscrição com o mesmo TimeID e CategoriaID
@@ -73,7 +76,7 @@ namespace CRUDAPI.Services
                     Titulo = $"Inscrição em {competicao?.Titulo} solicitada.",
                     Descricao = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
                     DataPublicacao = DateTime.Now,
-                    Link = $"http://localhost:4200/aprovar-inscricao/{competicao?.Id}",
+                    Link = $"{_configuration["Configuration:BaseUrl"]}/aprovar-inscricao/{competicao?.Id}",
                     TipoAnuncio = "Inscrição"
                 };
 
@@ -86,7 +89,7 @@ namespace CRUDAPI.Services
 
             string inscricoesInfo = string.Join("<br>", inscricoesInfoArray);
 
-            confirmationLink = $"http://localhost:4200/aprovar-inscricao/{competicao?.Id}";
+            confirmationLink = $"{_configuration["Configuration:BaseUrl"]}/aprovar-inscricao/{competicao?.Id}";
             // Enviar e-mail com os dados das inscrições
             await _emailService.SendEmailAsync(organizadorEmail, $"Dados das Inscrições na Competição: {competicao?.Titulo}",
             $"Aqui estão os dados das inscrições:<br>{inscricoesInfo}<br><br>Acesse o sistema para aprovar ou recusar as inscrições.<br><br><a href='{confirmationLink}'>Confirmar Inscrições</a>");

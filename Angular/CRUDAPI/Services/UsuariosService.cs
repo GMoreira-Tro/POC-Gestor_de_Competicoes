@@ -18,12 +18,15 @@ namespace CRUDAPI.Services
         private readonly GeoNamesService _geonamesService;
         private const string GeoNamesBaseUrl = "http://api.geonames.org";
         private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public UsuarioService(Contexto contexto, GeoNamesService geonamesService, EmailService emailService)
+        public UsuarioService(Contexto contexto, GeoNamesService geonamesService, EmailService emailService,
+            IConfiguration configuration)
         {
             _contexto = contexto;
             _geonamesService = geonamesService;
             _emailService = emailService;
+            _configuration = configuration;
         }
 
         public async Task<Usuario> ValidarUsuario(Usuario usuario)
@@ -130,7 +133,7 @@ namespace CRUDAPI.Services
         {
             // Envia e-mail de confirmação
             //TODO: Substituir pelo seu domínio
-            string confirmationLink = $"http://localhost:4200/email-confirmado/{tokenConfirmacao}";
+            string confirmationLink = $"{_configuration["Configuration:BaseUrl"]}/email-confirmado/{tokenConfirmacao}";
             await _emailService.SendEmailAsync(email, "Confirme seu e-mail", 
                 $"Clique no link para confirmar seu e-mail: <a href='{confirmationLink}'>Confirmar</a>");
 
