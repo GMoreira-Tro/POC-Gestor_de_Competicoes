@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-confirmacao-email',
@@ -21,7 +22,7 @@ export class ConfirmacaoEmailComponent implements OnInit {
 
     if (token) {
       ///TODO: Substituir a URL abaixo pela URL correta do backend
-      this.http.get(`http://localhost:5000/api/confirmar-email?token=${token}`).subscribe(
+      this.http.get(`${environment.apiBaseUrl}/api/confirmar-email?token=${token}`).subscribe(
         () => {
           this.mensagem = "E-mail confirmado com sucesso! Você pode fazer login.";
         },

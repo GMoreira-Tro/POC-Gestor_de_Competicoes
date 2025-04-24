@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Competidor } from '../interfaces/Competidor';
 import { CompetidorService } from '../services/competidor.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-editar-competidor',
@@ -31,7 +32,7 @@ export class EditarCompetidorComponent implements OnInit {
         this.competidor = competidor;
         this.competidor.imagemUrl = this.competidor.imagemUrl?.startsWith('http')
           ? this.competidor.imagemUrl
-          : `http://localhost:5000/${this.competidor.imagemUrl}`;
+          : `${environment.apiBaseUrl}/${this.competidor.imagemUrl}`;
       },
       error => console.log('Erro ao carregar competidor:', error)
     );
@@ -67,7 +68,7 @@ export class EditarCompetidorComponent implements OnInit {
 
         this.competidor.imagemUrl = this.competidor.imagemUrl?.startsWith('http')
           ? this.competidor.imagemUrl
-          : `http://localhost:5000/${this.competidor.imagemUrl}`;
+          : `${environment.apiBaseUrl}/${this.competidor.imagemUrl}`;
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);

@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Usuario } from '../interfaces/Usuario';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = 'http://localhost:5000/api/Usuario'; // Substitua pela URL correta do seu backend
+  private baseUrl = `${environment.apiBaseUrl}/api/Usuario`; // Substitua pela URL correta do seu backend
 
   constructor(private http: HttpClient) { }
 

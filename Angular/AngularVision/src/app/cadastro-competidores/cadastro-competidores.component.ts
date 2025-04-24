@@ -3,6 +3,7 @@ import { Competidor } from '../interfaces/Competidor';
 import { UserService } from '../services/user.service';
 import { CompetidorService } from '../services/competidor.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-cadastrar-competidores',
@@ -42,7 +43,7 @@ export class CadastroCompetidoresComponent {
 
         this.competidor.imagemUrl = this.competidor.imagemUrl?.startsWith('http')
           ? this.competidor.imagemUrl
-          : `http://localhost:5000/${this.competidor.imagemUrl}`;
+          : `${environment.apiBaseUrl}/${this.competidor.imagemUrl}`;
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);

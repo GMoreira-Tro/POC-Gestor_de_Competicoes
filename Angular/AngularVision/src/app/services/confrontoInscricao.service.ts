@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConfrontoInscricao } from '../interfaces/ConfrontoInscricao';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConfrontoInscricaoService {
-    private baseUrl = 'http://localhost:5000/api/ConfrontoInscricao'; // Substitua pela URL correta do seu backend
+    private baseUrl = `${environment.apiBaseUrl}/api/ConfrontoInscricao`; // Substitua pela URL correta do seu backend
 
     constructor(private http: HttpClient) { }
 

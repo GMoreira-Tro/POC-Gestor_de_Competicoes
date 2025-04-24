@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Confronto } from '../interfaces/Confronto';
+import { environment } from '../../environments/environment.prod';
 
 // filepath: c:\Users\winck\OneDrive\Área de Trabalho\Guilherme\POC-Gestor_de_Competicoes\Angular\AngularVision\src\app\services\confronto.service.ts
 
@@ -9,7 +10,7 @@ import { Confronto } from '../interfaces/Confronto';
     providedIn: 'root'
 })
 export class ConfrontoService {
-    private baseUrl = 'http://localhost:5000/api/Confronto'; // Substitua pela URL correta do seu backend
+    private baseUrl = `${environment.apiBaseUrl}/api/Confronto`; // Substitua pela URL correta do seu backend
 
     constructor(private http: HttpClient) { }
 

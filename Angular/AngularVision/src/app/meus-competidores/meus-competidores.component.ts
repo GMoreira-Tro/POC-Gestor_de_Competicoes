@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CompetidorService } from '../services/competidor.service';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
     selector: 'app-meus-competidores',
@@ -32,7 +33,7 @@ export class MeusCompetidoresComponent implements OnInit {
                 if (competidor.imagemUrl !== null) {
                     competidor.imagemUrl = competidor.imagemUrl?.startsWith('http')
                         ? competidor.imagemUrl
-                        : `http://localhost:5000/${competidor.imagemUrl}`;
+                        : `${environment.apiBaseUrl}/${competidor.imagemUrl}`;
                 }
             }
             );

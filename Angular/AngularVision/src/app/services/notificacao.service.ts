@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Notificacao } from '../interfaces/Notificacao'; // Certifique-se de que a interface Notificacao está definida
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificacaoService {
-  private apiUrl = 'http://localhost:5000/api/Notificacao'; // Substitua pela URL correta do seu backend
+  private apiUrl = `${environment.apiBaseUrl}/api/Notificacao`; // Substitua pela URL correta do seu backend
 
   constructor(private http: HttpClient) {}
 

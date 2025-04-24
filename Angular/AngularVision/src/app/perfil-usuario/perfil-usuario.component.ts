@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../services/user.service';
 import { GeoNamesService } from '../services/geonames.service';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -80,7 +81,7 @@ export class PerfilUsuarioComponent implements OnInit {
       this.usuario = data;
       this.usuario.imagemUrl = this.usuario.imagemUrl?.startsWith('http')
         ? this.usuario.imagemUrl
-        : `http://localhost:5000/${this.usuario.imagemUrl}`;
+        : `${environment.apiBaseUrl}/${this.usuario.imagemUrl}`;
     },
       error => {
         console.error("Erro ao carregar o usuário", error);
@@ -110,7 +111,7 @@ export class PerfilUsuarioComponent implements OnInit {
 
         this.usuario.imagemUrl = this.usuario.imagemUrl?.startsWith('http')
           ? this.usuario.imagemUrl
-          : `http://localhost:5000/${this.usuario.imagemUrl}`;
+          : `${environment.apiBaseUrl}/${this.usuario.imagemUrl}`;
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);

@@ -1,25 +1,21 @@
 # Etapa base
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 10000
+EXPOSE 8080
 
 # Etapa de build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copia o projeto
-COPY CRUDAPI CRUDAPI
-
-# Entra na pasta e restaura
-WORKDIR /src/CRUDAPI
+COPY CRUDAPI.csproj ./
 RUN dotnet restore "CRUDAPI.csproj"
 
-# Build
+COPY . .
+WORKDIR "/src"
 RUN dotnet build "CRUDAPI.csproj" -c Release -o /app/build
 
-# Publicação
+# Etapa de publicação
 FROM build AS publish
-WORKDIR /src/CRUDAPI
 RUN dotnet publish "CRUDAPI.csproj" -c Release -o /app/publish
 
 # Etapa final

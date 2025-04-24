@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PixCharge } from '../interfaces/PixCharge';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PaymentService {
 
-  private apiUrl = 'http://localhost:5000/api/Pix'; // URL do seu backend
+  private apiUrl = `${environment.apiBaseUrl}/api/Pix`; // URL do seu backend
 
   constructor(private http: HttpClient) { }
 

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Competidor } from '../interfaces/Competidor'; // Certifique-se de que a interface Competidor está definida
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompetidorService {
-  private apiUrl = 'http://localhost:5000/api/Competidor'; // Substitua pela URL correta do seu backend
+  private apiUrl = `${environment.apiBaseUrl}/api/Competidor`; // Substitua pela URL correta do seu backend
 
   constructor(private http: HttpClient) {}
 

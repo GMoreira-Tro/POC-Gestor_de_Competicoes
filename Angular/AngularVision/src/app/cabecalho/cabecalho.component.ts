@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { NotificacaoService } from '../services/notificacao.service';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-cabecalho',
@@ -27,7 +28,7 @@ export class CabecalhoComponent implements OnInit {
       this.usuario = data;
       this.usuario.imagemUrl = this.usuario.imagemUrl?.startsWith('http')
         ? this.usuario.imagemUrl
-        : `http://localhost:5000/${this.usuario.imagemUrl}`;
+        : `${environment.apiBaseUrl}/${this.usuario.imagemUrl}`;
 
         this.notificacaoService.buscarNotificacoesDoUsuario(data.id).subscribe(notificacoes =>
         {

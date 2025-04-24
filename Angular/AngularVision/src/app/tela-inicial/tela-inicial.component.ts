@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { CompeticaoService } from '../services/competicao.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment.prod';
 
 interface Competicao {
   nome: string;
@@ -63,7 +64,7 @@ export class TelaInicialComponent implements OnInit {
         if (competicao.bannerImagem !== null) {
           competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
             ? competicao.bannerImagem
-            : `http://localhost:5000/${competicao.bannerImagem}`;
+            : `${environment.apiBaseUrl}/${competicao.bannerImagem}`;
         }
       });
     }, error => console.log("Erro ao buscar competições: ", error));

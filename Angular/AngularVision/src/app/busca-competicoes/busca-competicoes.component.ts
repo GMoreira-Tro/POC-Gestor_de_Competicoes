@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CompeticaoService } from '../services/competicao.service';
 import { GeoNamesService } from '../services/geonames.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-buscar-competicoes',
@@ -65,7 +66,7 @@ export class BuscaCompeticoesComponent implements OnInit {
 
             competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
               ? competicao.bannerImagem
-              : `http://localhost:5000/${competicao.bannerImagem}`;
+              : `${environment.apiBaseUrl}/${competicao.bannerImagem}`;
           }
         });
       },

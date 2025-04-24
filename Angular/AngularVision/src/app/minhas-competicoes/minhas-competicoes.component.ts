@@ -3,6 +3,7 @@ import { CompeticaoService } from '../services/competicao.service';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { CategoriaService } from '../services/categoria.service';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
     selector: 'app-minhas-competicoes',
@@ -34,7 +35,7 @@ export class MinhasCompeticoesComponent implements OnInit {
                 if (competicao.bannerImagem !== null) {
                     competicao.bannerImagem = competicao.bannerImagem?.startsWith('http')
                         ? competicao.bannerImagem
-                        : `http://localhost:5000/${competicao.bannerImagem}`;
+                        : `${environment.apiBaseUrl}/${competicao.bannerImagem}`;
                 }
             }
             );

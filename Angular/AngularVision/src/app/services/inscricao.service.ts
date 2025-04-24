@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Inscricao } from '../interfaces/Inscricao'; // Certifique-se de que a interface Inscricao está definida
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InscricaoService {
-  private apiUrl = 'http://localhost:5000/api/Inscricao'; // Substitua pela URL correta do seu backend
+  private apiUrl = `${environment.apiBaseUrl}/api/Inscricao`; // Substitua pela URL correta do seu backend
 
   constructor(private http: HttpClient) {}
 

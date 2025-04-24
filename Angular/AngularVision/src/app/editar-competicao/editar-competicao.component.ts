@@ -11,6 +11,7 @@ import { PaymentService } from '../services/payment.service';
 import { InscricaoService } from '../services/inscricao.service';
 import { Inscricao } from '../interfaces/Inscricao';
 import { CompetidorService } from '../services/competidor.service';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-editar-competicao',
@@ -121,7 +122,7 @@ export class EditarCompeticaoComponent implements OnInit {
         if (competicao.bannerImagem) {
           this.competicao.bannerImagem = this.competicao.bannerImagem?.startsWith('http')
             ? this.competicao.bannerImagem
-            : `http://localhost:5000/${this.competicao.bannerImagem}`;
+            : `${environment.apiBaseUrl}/${this.competicao.bannerImagem}`;
         }
         this.onCountryChange();
       },
