@@ -1,6 +1,6 @@
 {
     "/api/*": {
-      "target": "https://conectacompeticao.fly.dev",
+      "target": "https://conectacompeticao-proud-mountain-2821.fly.dev",
       "secure": false,
       "logLevel": "debug"
     }
