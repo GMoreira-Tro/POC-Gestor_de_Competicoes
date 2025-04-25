@@ -1,13 +1,15 @@
 {
-    "version": 2,
     "builds": [
-      { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist/angular-vision" } }
+      {
+        "src": "dist/browser/**/*",
+        "use": "@vercel/static"
+      }
     ],
-  "env": {
-    "npm_config_legacy_peer_deps": "true"
-  },
     "routes": [
-      { "src": "/(.*)", "dest":  "/dist/browser/$1" }
+      {
+        "src": "/(.*)",
+        "dest": "/dist/browser/$1"
+      }
     ]
   }
   
