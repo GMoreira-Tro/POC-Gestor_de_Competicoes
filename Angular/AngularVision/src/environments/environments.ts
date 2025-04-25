@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
-    apiBaseUrl: 'http://localhost:5000'
+    production: true,
+    apiBaseUrl: 'https://conectacompeticao-proud-mountain-2821.fly.dev'
   };
   
   /*
