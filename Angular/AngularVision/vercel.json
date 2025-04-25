@@ -1,7 +1,7 @@
 {
     "version": 2,
     "builds": [
-      { "src": "angular.json", "use": "@vercel/static-build", "config": { "distDir": "dist/angular-vision" } }
+      { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist/angular-vision" } }
     ],
     "routes": [
       { "src": "/(.*)", "dest": "/index.html" }
