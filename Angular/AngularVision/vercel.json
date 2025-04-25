@@ -7,7 +7,7 @@
     "npm_config_legacy_peer_deps": "true"
   },
     "routes": [
-      { "src": "/(.*)", "dest": "/dist/angular-vision/index.html" }
+      { "src": "/(.*)", "dest": "/dist/angular-vision/src/index.html" }
     ]
   }
   
