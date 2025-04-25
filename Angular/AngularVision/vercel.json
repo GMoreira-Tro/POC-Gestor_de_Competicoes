@@ -3,6 +3,9 @@
     "builds": [
       { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist/angular-vision" } }
     ],
+  "env": {
+    "npm_config_legacy_peer_deps": "true"
+  },
     "routes": [
       { "src": "/(.*)", "dest": "/index.html" }
     ]
