@@ -46,7 +46,14 @@ export class UserService {
   }
 
   getUsuarioLogado(): Observable<Usuario> {
-    return this.getUser(Number(localStorage.getItem('userId')));
+    return this.getUser(Number(localStorage.getItem('userId'))).pipe(
+      catchError(error => {
+      if (error.status === 404) {
+        window.location.href = '/register'; // Adjust the route as needed
+      }
+      return throwError(error);
+      })
+    );
   }
 
   uploadImagem(id: number, imagem: File): Observable<any> {
