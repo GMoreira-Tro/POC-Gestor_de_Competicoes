@@ -1,31 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeoNamesService {
-  private apiUrl = 'https://api.geonames.org';
+  private apiUrl = `${environment.apiBaseUrl}/api/Geonames`;
   private username = 'Guiru'; // Substitua 'your_username' pelo seu nome de usuário da GeoNames
 
   constructor(private http: HttpClient) { }
 
   getAllCountries() {
-    const url = `${this.apiUrl}/countryInfoJSON?username=${this.username}`;
+    const url = `${this.apiUrl}/countries`;
     return this.http.get(url);
   }
 
-  // Método para obter os estados ou províncias de um país específico
   getStatesByCountry(geonameID: string) {
-    const maxRows = 10000;
-    const url = `${this.apiUrl}/childrenJSON?geonameId=${geonameID}&username=${this.username}&maxRows=${maxRows}`;
-    console.log(url)
+    const url = `${this.apiUrl}/states/${geonameID}`;
     return this.http.get(url);
   }
 
   getCitiesByState(geonameID: string) {
-    const maxRows = 10000;
-    const url = `${this.apiUrl}/childrenJSON?geonameId=${geonameID}&username=${this.username}&maxRows=${maxRows}`;
+    const url = `${this.apiUrl}/cities/${geonameID}`;
     return this.http.get(url);
   }
 }
