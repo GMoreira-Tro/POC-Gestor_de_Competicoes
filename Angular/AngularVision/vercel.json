@@ -9,6 +9,9 @@
     }
   ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/Angular/AngularVision/dist/angular-vision/index.html"
+    }
   ]
 }
