@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Usuario } from '../interfaces/Usuario';
 import { environment } from '../../environments/environment.prod';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { environment } from '../../environments/environment.prod';
 export class UserService {
   private baseUrl = `${environment.apiBaseUrl}/api/Usuario`; // Substitua pela URL correta do seu backend
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public router: Router) { }
 
   getUsers(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(`${this.baseUrl}`);
@@ -49,7 +50,7 @@ export class UserService {
     return this.getUser(Number(localStorage.getItem('userId'))).pipe(
       catchError(error => {
       if (error.status === 404) {
-        window.location.href = '/register'; // Adjust the route as needed
+        this.router.navigate(['/register']); // Adjust the route as needed
       }
       return throwError(error);
       })
