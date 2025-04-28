@@ -8,10 +8,11 @@
       }
     }
   ],
-  "rewrites": [
+  "routes": [
     {
       "source": "/(.*)",
-      "destination": "/Angular/AngularVision/dist/angular-vision/index.html"
+      "destination": "/index.html"
     }
-  ]
+  ],
+  "cleanUrls": true
 }
