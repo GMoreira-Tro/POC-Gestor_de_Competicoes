@@ -1,15 +1,5 @@
 {
-    "builds": [
-      {
-        "src": "dist/browser/**/*",
-        "use": "@vercel/static"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/dist/angular-vision/browser/$1"
-      }
-    ]
-  }
-  
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
