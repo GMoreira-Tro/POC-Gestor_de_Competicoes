@@ -8,7 +8,7 @@
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "/dist/browser/$1"
+        "dest": "/dist/angular-vision/browser/$1"
       }
     ]
   }
