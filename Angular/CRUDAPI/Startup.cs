@@ -40,7 +40,7 @@ namespace CRUDAPI
 
             // Configuração do CORS
             // Define as origens permitidas
-            string[] allowedOrigins = ["http://localhost:4200", "https://conectacompeticao.vercel.app/"];
+            string[] allowedOrigins = ["http://localhost:4200", "https://conectacompeticao.vercel.app"];
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -85,7 +85,7 @@ namespace CRUDAPI
                     {
                         Name = "Guilherme dos Santos Moreira",
                         Email = "guilherme.dsmoreira@gmail.com",
-                        Url = new Uri("https://seusite.com")
+                        Url = new Uri("https://conectacompeticao.vercel.app")
                     },
                     License = new OpenApiLicense
                     {
