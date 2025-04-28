@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GeoNamesService {
-  private apiUrl = 'http://api.geonames.org';
+  private apiUrl = 'https://api.geonames.org';
   private username = 'Guiru'; // Substitua 'your_username' pelo seu nome de usuário da GeoNames
 
   constructor(private http: HttpClient) { }

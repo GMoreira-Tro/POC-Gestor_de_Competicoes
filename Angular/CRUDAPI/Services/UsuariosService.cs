@@ -16,7 +16,7 @@ namespace CRUDAPI.Services
     {
         private readonly Contexto _contexto;
         private readonly GeoNamesService _geonamesService;
-        private const string GeoNamesBaseUrl = "http://api.geonames.org";
+        private const string GeoNamesBaseUrl = "https://api.geonames.org";
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
 

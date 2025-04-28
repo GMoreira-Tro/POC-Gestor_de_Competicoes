@@ -12,7 +12,7 @@ namespace CRUDAPI.Services
     /// </summary>
     public class GeoNamesService
     {
-        private const string GeoNamesBaseUrl = "http://api.geonames.org";
+        private const string GeoNamesBaseUrl = "https://api.geonames.org";
 
         private readonly HttpClient _httpClient;
 
