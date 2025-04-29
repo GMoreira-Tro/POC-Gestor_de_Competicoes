@@ -4,6 +4,7 @@ import { CompeticaoService } from '../services/competicao.service';
 import { GeoNamesService } from '../services/geonames.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.prod';
+import { countriesDict } from '../utils/paisesDict';
 
 @Component({
   selector: 'app-buscar-competicoes',
@@ -40,6 +41,10 @@ export class BuscaCompeticoesComponent implements OnInit {
     this.geonamesService.getAllCountries().subscribe(
       paises => {
         this.listaPaises = paises;
+        for (let i = 0; i < this.listaPaises.geonames.length; i++) {
+          this.listaPaises.geonames[i].countryName = countriesDict[this.listaPaises.geonames[i].countryName] ||
+            this.listaPaises.geonames[i].countryName;
+        }
         this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos países
       },
       error => {
@@ -51,6 +56,10 @@ export class BuscaCompeticoesComponent implements OnInit {
   buscarEstadoCidade(): void {
     this.geonamesService.getAllCountries().subscribe(paises => {
       this.listaPaises = paises;
+      for (let i = 0; i < this.listaPaises.geonames.length; i++) {
+        this.listaPaises.geonames[i].countryName = countriesDict[this.listaPaises.geonames[i].countryName] ||
+          this.listaPaises.geonames[i].countryName;
+      }
     });
   }
 

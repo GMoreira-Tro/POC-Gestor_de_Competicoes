@@ -1,16 +1,18 @@
 /* Estilos para o formulário de login */
 .beautiful-form {
     max-width: 400px;
-    background-color: #3498db;
+    background-color: #3e3e3e; /* Consistente com o fundo dos inputs globais */
     margin: 0 auto;
     padding: 50px;
     width: 50vw;
-    border: 1px solid #ccc;
+    border: 1px solid #555; /* Consistente com a borda dos inputs globais */
     border-radius: 5px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    color: #f5f5f5; /* Consistente com a cor global */
+    font-family: Arial, sans-serif; /* Consistente com a fonte global */
 }
 
 /* Estilos para os campos de entrada */
@@ -21,6 +23,7 @@
 .beautiful-form label {
     display: block;
     font-weight: bold;
+    color: #f5f5f5; /* Consistente com a cor global */
 }
 
 .beautiful-form input[type="email"],
@@ -28,13 +31,22 @@
     width: calc(100% - 20px);
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    background-color: #3e3e3e; /* Consistente com os inputs globais */
+    color: #f5f5f5; /* Consistente com os inputs globais */
+    border: 1px solid #555; /* Consistente com os inputs globais */
     border-radius: 5px;
 }
 
+.beautiful-form input[type="email"]:focus,
+.beautiful-form input[type="password"]:focus {
+    border-color: #1e90ff; /* Consistente com o foco global */
+    outline: none;
+}
+
 /* Estilos para o botão de login */
-.beautiful-form button[type="submit"] {
-    background-color: #ff7f50;
+.beautiful-form button[type="submit"],
+.beautiful-form button[type="button"] {
+    background-color: #4caf50; /* Consistente com o botão global */
     color: white;
     padding: 10px 20px;
     border: none;
@@ -42,8 +54,9 @@
     cursor: pointer;
 }
 
-.beautiful-form button[type="submit"]:hover {
-    background-color: #0056b3;
+.beautiful-form button[type="submit"]:hover,
+.beautiful-form button[type="button"]:hover {
+    background-color: #45a049; /* Consistente com o hover do botão global */
 }
 
 /* Estilos para realce de erro nos campos de entrada */
@@ -74,35 +87,36 @@
     width: calc(100% - 20px);
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    background-color: #3e3e3e; /* Consistente com os inputs globais */
+    color: #f5f5f5; /* Consistente com os inputs globais */
+    border: 1px solid #555; /* Consistente com os inputs globais */
     border-radius: 5px;
 }
 
 .country-input:focus {
     outline: none;
-    border-color: #0056b3;
+    border-color: #1e90ff; /* Consistente com o foco global */
 }
 
 .country-input::placeholder {
     color: #999;
 }
 
-.beautiful-form button[type="submit"],
+/* Estilos para o link de "Esqueci minha senha" */
 .beautiful-form a {
-    display: block;
-    margin: 20px auto;
-    text-align: center;
+    color: #1e90ff; /* Consistente com os links globais */
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 10px;
 }
 
-.beautiful-form button[type="submit"] {
-    background-color: #ff7f50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.beautiful-form a:hover {
+    text-decoration: underline;
+    color: #ff7f50; /* Destaque adicional */
 }
 
-.beautiful-form button[type="submit"]:hover {
-    background-color: #0056b3;
+/* Adicionando espaçamento entre os botões */
+.beautiful-form button {
+    margin-right: 10px; /* Espaçamento horizontal entre os botões */
 }

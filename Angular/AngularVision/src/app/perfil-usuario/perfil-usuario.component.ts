@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from '../services/user.service';
 import { GeoNamesService } from '../services/geonames.service';
 import { environment } from '../../environments/environment.prod';
+import { countriesDict } from '../utils/paisesDict';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -41,6 +42,10 @@ export class PerfilUsuarioComponent implements OnInit {
     this.geonamesService.getAllCountries().subscribe(
       paises => {
         this.listaPaises = paises;
+        for (let i = 0; i < this.listaPaises.geonames.length; i++) {
+          this.listaPaises.geonames[i].countryName = countriesDict[this.listaPaises.geonames[i].countryName] ||
+            this.listaPaises.geonames[i].countryName;
+        }
         if (this.usuario.pais) {
           const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.usuario.pais);
           if (pais) {
@@ -123,6 +128,10 @@ export class PerfilUsuarioComponent implements OnInit {
   buscarEstadoCidade(): void {
     this.geonamesService.getAllCountries().subscribe(paises => {
       this.listaPaises = paises;
+      for (let i = 0; i < this.listaPaises.geonames.length; i++) {
+        this.listaPaises.geonames[i].countryName = countriesDict[this.listaPaises.geonames[i].countryName] ||
+          this.listaPaises.geonames[i].countryName;
+      }
     });
   }
 

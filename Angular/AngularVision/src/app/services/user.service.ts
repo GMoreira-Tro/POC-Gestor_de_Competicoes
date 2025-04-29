@@ -47,10 +47,14 @@ export class UserService {
   }
 
   getUsuarioLogado(): Observable<Usuario> {
+    if(localStorage.getItem('userId') === null) {
+      this.router.navigate(['/login']); // Redireciona para a página de login se o ID do usuário não estiver no localStorage
+    }
+
     return this.getUser(Number(localStorage.getItem('userId'))).pipe(
       catchError(error => {
       if (error.status === 404) {
-        this.router.navigate(['/register']); // Adjust the route as needed
+        this.router.navigate(['/login']); // Adjust the route as needed
       }
       return throwError(error);
       })

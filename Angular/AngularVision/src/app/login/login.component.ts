@@ -60,4 +60,8 @@ export class LoginComponent implements AfterViewInit {
       this.submitForm();
     }
   }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
+  }
 }

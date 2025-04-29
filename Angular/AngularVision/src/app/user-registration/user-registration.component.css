@@ -1,23 +1,19 @@
 /* Estilos para o formulário */
 .beautiful-form {
   max-width: 400px;
-  background-color: #3498db;
+  background-color: #1e90ff; /* Ajustado para combinar com o link global */
   margin: 0 auto;
-  /* Margem superior e inferior automáticas, centralizando horizontalmente */
   padding: 50px;
   width: 50vw;
-  border: 1px solid #ccc;
+  border: 1px solid #555; /* Consistente com os inputs globais */
   border-radius: 5px;
   position: absolute;
-  /* Define a posição absoluta para permitir a centralização vertical */
   top: 50%;
-  /* Posiciona o topo do formulário no meio da tela */
   left: 50%;
-  /* Posiciona a esquerda do formulário no meio da tela */
   transform: translate(-50%, -50%);
-  /* Move o formulário de volta 50% da sua própria altura e largura, centralizando vertical e horizontalmente */
+  color: #f5f5f5; /* Cor do texto consistente com o global */
+  font-family: Arial, sans-serif; /* Fonte global */
 }
-
 
 /* Estilos para os campos de entrada */
 .beautiful-form .form-group {
@@ -27,6 +23,7 @@
 .beautiful-form label {
   display: block;
   font-weight: bold;
+  color: #f5f5f5; /* Cor consistente com o global */
 }
 
 .beautiful-form input[type="text"],
@@ -35,13 +32,22 @@
   width: calc(100% - 20px);
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  background-color: #3e3e3e; /* Consistente com os inputs globais */
+  color: #f5f5f5; /* Cor do texto consistente */
+  border: 1px solid #555; /* Consistente com os inputs globais */
   border-radius: 5px;
+}
+
+.beautiful-form input[type="text"]:focus,
+.beautiful-form input[type="email"]:focus,
+.beautiful-form input[type="password"]:focus {
+  border-color: #1e90ff; /* Consistente com o foco global */
+  outline: none;
 }
 
 /* Estilos para o botão de cadastro */
 .beautiful-form button[type="submit"] {
-  background-color: #ff7f50;
+  background-color: #4caf50; /* Consistente com o botão global */
   color: white;
   padding: 10px 20px;
   border: none;
@@ -50,49 +56,47 @@
 }
 
 .beautiful-form button[type="submit"]:hover {
-  background-color: #0056b3;
+  background-color: #45a049; /* Consistente com o hover global */
 }
 
 .beautiful-form input[type="text"].error-border,
 .beautiful-form input[type="email"].error-border,
 .beautiful-form input[type="password"].error-border {
   border: 2px solid red;
-  /* Substitui a propriedade border apenas para os inputs com a classe error-border */
 }
 
+/* Estilo para a imagem de fundo */
 .background-image {
   background-image: url("../../assets/images/background.jpg");
-  /* Substitua 'background.jpg' pelo nome do seu arquivo de imagem */
   height: 100vh;
   width: 100vw;
   background-repeat: no-repeat;
   background-size: cover;
-  /* Para garantir que a imagem cubra todo o elemento */
-  /* Adicione outras propriedades de estilo conforme necessário */
 }
 
+/* Estilo para inputs na mesma linha */
 .same-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 5%
+  gap: 5%;
 }
 
 .country-input {
   width: calc(100% - 20px);
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  background-color: #3e3e3e; /* Consistente com os inputs globais */
+  color: #f5f5f5; /* Cor do texto consistente */
+  border: 1px solid #555; /* Consistente com os inputs globais */
   border-radius: 5px;
 }
 
 .country-input:focus {
   outline: none;
-  border-color: #0056b3;
-  /* Cor da borda quando o input está em foco */
+  border-color: #1e90ff; /* Consistente com o foco global */
 }
 
 .country-input::placeholder {
   color: #999;
-  /* Cor do texto de placeholder */
 }

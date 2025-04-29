@@ -11,6 +11,7 @@ import { CompetidorService } from '../services/competidor.service';
 import { Inscricao } from '../interfaces/Inscricao';
 import { InscricaoService } from '../services/inscricao.service';
 import { PaymentService } from '../services/payment.service';
+import { countriesDict } from '../utils/paisesDict';
 
 @Component({
   selector: 'app-cadastro-competicoes',
@@ -81,6 +82,10 @@ export class CadastroCompeticoesComponent implements OnInit {
     this.geonamesService.getAllCountries().subscribe(
       paises => {
         this.listaPaises = paises;
+        for (let i = 0; i < this.listaPaises.geonames.length; i++) {
+          this.listaPaises.geonames[i].countryName = countriesDict[this.listaPaises.geonames[i].countryName] ||
+            this.listaPaises.geonames[i].countryName;
+        }
         this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos países
       },
       error => {
@@ -199,6 +204,10 @@ export class CadastroCompeticoesComponent implements OnInit {
   buscarEstadoCidade(): void {
     this.geonamesService.getAllCountries().subscribe(paises => {
       this.listaPaises = paises;
+      for (let i = 0; i < this.listaPaises.geonames.length; i++) {
+        this.listaPaises.geonames[i].countryName = countriesDict[this.listaPaises.geonames[i].countryName] ||
+          this.listaPaises.geonames[i].countryName;
+      }
     });
   }
 
@@ -274,7 +283,7 @@ export class CadastroCompeticoesComponent implements OnInit {
         }
         return;
       }
-      else 
+      else
         this.gerarQRCode(quantidadeInscricoes);
     }
 

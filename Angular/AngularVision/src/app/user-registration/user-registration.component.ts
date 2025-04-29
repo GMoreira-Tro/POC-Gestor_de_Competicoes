@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { GeoNamesService } from '../services/geonames.service';
 import { validarCpfCnpj } from '../utils/validarCpfCnpj';
+import { countriesDict } from '../utils/paisesDict';
 
 @Component({
   selector: 'app-user-registration',
@@ -48,6 +49,11 @@ export class UserRegistrationComponent implements AfterViewInit {
     this.geonamesService.getAllCountries().subscribe(
       paises => {
         this.paisesDoMundo = paises;
+        for(let i = 0; i < this.paisesDoMundo.geonames.length; i++)
+        {
+          this.paisesDoMundo.geonames[i].countryName = countriesDict[this.paisesDoMundo.geonames[i].countryName] || 
+          this.paisesDoMundo.geonames[i].countryName;
+        }
         this.cdr.detectChanges(); // Detecta as alterações manualmente após a obtenção dos países
       },
       error => {

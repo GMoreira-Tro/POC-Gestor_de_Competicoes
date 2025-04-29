@@ -12,6 +12,7 @@ import { InscricaoService } from '../services/inscricao.service';
 import { Inscricao } from '../interfaces/Inscricao';
 import { CompetidorService } from '../services/competidor.service';
 import { environment } from '../../environments/environment.prod';
+import { countriesDict } from '../utils/paisesDict';
 
 @Component({
   selector: 'app-editar-competicao',
@@ -63,6 +64,10 @@ export class EditarCompeticaoComponent implements OnInit {
     this.geonamesService.getAllCountries().subscribe(
       paises => {
         this.listaPaises = paises;
+        for (let i = 0; i < this.listaPaises.geonames.length; i++) {
+          this.listaPaises.geonames[i].countryName = countriesDict[this.listaPaises.geonames[i].countryName] ||
+            this.listaPaises.geonames[i].countryName;
+        }
         if (this.competicao.pais) {
           const pais = this.listaPaises?.geonames.find((country: any) => country.countryCode === this.competicao.pais);
           if (pais) {
