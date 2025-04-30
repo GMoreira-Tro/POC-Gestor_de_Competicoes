@@ -23,7 +23,7 @@ namespace CRUDAPI.Controllers
         {
             var user = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == loginRequest.Email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(loginRequest.Senha, user.SenhaHash))
+            if (user == null || !user.EmailConfirmado || !BCrypt.Net.BCrypt.Verify(loginRequest.Senha, user.SenhaHash))
             {
                 return Unauthorized(new CredenciaisInvalidasException().Message);
             }
