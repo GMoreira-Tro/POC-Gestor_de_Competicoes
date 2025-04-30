@@ -62,12 +62,14 @@ namespace CRUDAPI.Controller
             {
                 usuario = await _usuarioService.ValidarUsuario(usuario);
 
+                Console.WriteLine("Usuário validado com sucesso!");
                 // Se todas as validações passaram, salva o usuário no banco de dados
                 // Gera token de confirmação
                 usuario.TokenConfirmacao = _usuarioService.GenerateToken(usuario.Email);
                 _contexto.Usuarios.Add(usuario);
                 await _contexto.SaveChangesAsync();
 
+                Console.WriteLine($"Token de confirmação: {usuario.TokenConfirmacao}");
                 await _usuarioService.EnviarTokenConfirmacao(usuario.TokenConfirmacao, usuario.Email);
 
                 return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
