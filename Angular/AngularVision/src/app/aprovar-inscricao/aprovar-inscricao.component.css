@@ -2,39 +2,41 @@
   margin: 20px auto;
   padding: 20px;
   max-width: 800px;
-  background-color: #f9f9f9;
+  background-color: #3e3e3e; /* Ajustado para combinar com o fundo dos inputs */
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Mais escuro para combinar com o tema */
 }
 
 h2 {
   text-align: center;
-  color: #333;
+  color: #f5f5f5; /* Ajustado para combinar com a cor do texto global */
   margin-bottom: 20px;
+  font-family: Arial, sans-serif; /* Para manter a consistência */
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  color: #f5f5f5; /* Ajustado para combinar com o texto global */
 }
 
 .table th, .table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #555; /* Ajustado para combinar com os inputs */
 }
 
 .table th {
-  background-color: #f2f2f2;
-  color: #333;
+  background-color: #2e2e2e; /* Ajustado para combinar com o fundo global */
+  color: #f5f5f5; /* Texto claro para contraste */
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
+  background-color: #3e3e3e; /* Ajustado para combinar com o tema */
 }
 
 .btn-success {
-  background-color: #28a745;
+  background-color: #4caf50; /* Cor do botão global */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -58,5 +60,5 @@ h2 {
 }
 
 .btn-success:hover {
-  background-color: #218838;
+  background-color: #45a049; /* Ajustado para combinar com o hover global */
 }
