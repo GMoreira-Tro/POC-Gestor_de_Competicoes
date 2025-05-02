@@ -26,7 +26,7 @@ export class FaleConoscoComponent implements OnInit {
     alert('E-mail enviado com sucesso!');
     this.userService.enviarEmailSuporte(this.userId, this.assunto, this.mensagem).subscribe(() => {
       // Redirecionar para a página inicial após o envio do e-mail
-      this.router.navigate(['/tela-inicial']);
+      this.router.navigate(['/']);
     }); 
   }
 }
