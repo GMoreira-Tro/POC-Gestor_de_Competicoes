@@ -170,8 +170,6 @@ export class EditarCompeticaoComponent implements OnInit {
     this.competicaoService.updateCompeticao(this.competicao.id, this.competicao).subscribe(
       async competicaoAtualizada => {
 
-        await this.uploadImagem();
-
         this.categorias.forEach(async categoria => {
           const categoriaMap = this.categoriasMap[categoria.tempId];
           delete categoria.tempId;
@@ -234,8 +232,7 @@ export class EditarCompeticaoComponent implements OnInit {
           }
         });
 
-        alert("Competição atualizada com sucesso!");
-        this.router.navigate(['/minhas-competicoes']);
+        await this.uploadImagem()
       },
       error => {
         console.log('Erro ao atualizar competição:', error);
@@ -253,6 +250,8 @@ export class EditarCompeticaoComponent implements OnInit {
     if (!this.imagemSelecionada) return;
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
       () => {
+        alert("Competição atualizada com sucesso!");
+        this.router.navigate(['/minhas-competicoes']);
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);

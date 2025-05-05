@@ -11,6 +11,7 @@ export class FaleConoscoComponent implements OnInit {
   userId: number = 0; 
   assunto: string = '';
   mensagem: string = '';
+  loading: boolean = false; // Variável para controlar o estado de carregamento
   constructor(public router: Router,
     public userService: UserService
   ) { }
@@ -23,6 +24,8 @@ export class FaleConoscoComponent implements OnInit {
   }
 
   enviarEmail(): void {
+    if(this.loading) return; // Evita múltiplos cliques no botão de envio
+    this.loading = true; // Inicia o carregamento
     alert('E-mail enviado com sucesso!');
     this.userService.enviarEmailSuporte(this.userId, this.assunto, this.mensagem).subscribe(() => {
       // Redirecionar para a página inicial após o envio do e-mail

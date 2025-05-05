@@ -127,8 +127,6 @@ export class CadastroCompeticoesComponent implements OnInit {
     this.competicaoService.createCompeticao(this.competicao).subscribe(
       async novaCompeticao => {
 
-        await this.uploadImagem();
-
         this.categorias.forEach(async categoria => {
           const categoriaMap = this.categoriasMap[categoria.tempId];
           delete categoria.tempId;
@@ -156,8 +154,7 @@ export class CadastroCompeticoesComponent implements OnInit {
           );
         });
 
-        this.router.navigate(['/minhas-competicoes']);
-        alert("Competição criada com sucesso!");
+        await this.uploadImagem();
       },
       error => {
         console.log("Erro ao criar competição: ", error);
@@ -175,6 +172,8 @@ export class CadastroCompeticoesComponent implements OnInit {
     if (!this.imagemSelecionada) return;
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
       () => {
+        this.router.navigate(['/minhas-competicoes']);
+        alert("Competição criada com sucesso!");
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);

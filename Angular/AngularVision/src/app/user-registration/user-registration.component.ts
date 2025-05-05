@@ -33,6 +33,7 @@ export class UserRegistrationComponent implements AfterViewInit {
   paisesDoMundo: any;
   estados: any;
   cidades: any;
+  loading: boolean = false; // Variável para controlar o estado de carregamento
 
   constructor(public userService: UserService, private router: Router, private geonamesService: GeoNamesService,
     private cdr: ChangeDetectorRef) { }
@@ -72,70 +73,82 @@ export class UserRegistrationComponent implements AfterViewInit {
   }
 
   submitForm() {
+    if(this.loading) return; // Evita múltiplos envios do formulário
+    this.loading = true; // Define o estado de carregamento como verdadeiro
+
     this.highlightRequiredFields(); // Certifica-se de que os campos obrigatórios são destacados antes de enviar o formulário
 
     // Verifica se o formulário é válido antes de enviar
     if(this.userData.nome === '')
     {
       alert("O campo nome é obrigatório");
+      this.loading = false;
       return;
     }
     if(this.userData.sobrenome === '')
     {
       alert("O campo sobrenome é obrigatório");
+      this.loading = false;
       return;
     }
     if(this.userData.email === '')
     {
       alert("O campo e-mail é obrigatório");
+      this.loading = false;
       return;
     }
     if(this.userData.senhaHash === '')
     {
       alert("O campo senha é obrigatório");
+      this.loading = false;
       return;
     }
     if(this.userData.pais === '')
     {
       alert("O campo país é obrigatório");
+      this.loading = false;
       return;
     }
     if(this.userData.estado === '')
     {
       alert("O campo estado é obrigatório");
+      this.loading = false;
       return;
     }
     if(this.userData.cidade === '')
     {
       alert("O campo cidade é obrigatório");
+      this.loading = false;
       return;
     }
     if(validarCpfCnpj(this.userData.cpfCnpj) === false)
     {
       alert("CPF/CNPJ inválido");
+      this.loading = false;
       return;
     }
     this.userService.getUserByEmail(this.userData.email).subscribe(
       (usuario) => {
         if (usuario) {
           alert("E-mail já cadastrado");
+          this.loading = false;
           return;
         }
+        console.log('Enviando formulário:', this.userData);
+        this.userService.createUser(this.userData).subscribe(
+          response => {
+            alert('Usuário cadastrado com sucesso:');
+            this.router.navigate(['/aguardando-confirmacao']);
+            
+          },
+          error => {
+            console.error('Erro ao cadastrar usuário:', error);
+            alert(error.error || 'Erro ao cadastrar usuário. Por favor, tente novamente.');
+          }
+        );
       }
     );    
 
-    console.log('Enviando formulário:', this.userData);
-    this.userService.createUser(this.userData).subscribe(
-      response => {
-        alert('Usuário cadastrado com sucesso:');
-        this.router.navigate(['/aguardando-confirmacao']);
-        
-      },
-      error => {
-        console.error('Erro ao cadastrar usuário:', error);
-        alert(error.error || 'Erro ao cadastrar usuário. Por favor, tente novamente.');
-      }
-    );
   }
 
   // Função chamada quando o país selecionado é alterado

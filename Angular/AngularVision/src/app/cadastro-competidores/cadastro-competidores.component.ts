@@ -44,6 +44,8 @@ export class CadastroCompetidoresComponent {
         this.competidor.imagemUrl = this.competidor.imagemUrl?.startsWith('http')
           ? this.competidor.imagemUrl
           : `${environment.apiBaseUrl}/${this.competidor.imagemUrl}`;
+          this.router.navigate(['/meus-competidores']);
+          alert('Competidor cadastrado com sucesso!');
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);
@@ -58,8 +60,6 @@ export class CadastroCompetidoresComponent {
     this.competidorService.cadastrarCompetidor(this.competidor).subscribe(async competidor => {
 
       await this.uploadImagem();
-      this.router.navigate(['/meus-competidores']);
-      alert('Competidor cadastrado com sucesso!');
     },
       error => {
         if (typeof error.error === 'string') {

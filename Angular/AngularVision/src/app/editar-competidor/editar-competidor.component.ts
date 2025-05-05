@@ -45,8 +45,6 @@ export class EditarCompetidorComponent implements OnInit {
     this.competidorService.atualizarCompetidor(this.competidor.id, this.competidor).subscribe(
       async () => {
         await this.uploadImagem();
-        alert('Competidor atualizado com sucesso!');
-        this.router.navigate(['/meus-competidores']);
       },
       error => {
         console.log('Erro ao atualizar competidor:', error);
@@ -69,6 +67,9 @@ export class EditarCompetidorComponent implements OnInit {
         this.competidor.imagemUrl = this.competidor.imagemUrl?.startsWith('http')
           ? this.competidor.imagemUrl
           : `${environment.apiBaseUrl}/${this.competidor.imagemUrl}`;
+          
+          alert('Competidor atualizado com sucesso!');
+          this.router.navigate(['/meus-competidores']);
       },
       (error) => {
         console.error("Erro ao fazer upload da imagem", error);
