@@ -4,14 +4,14 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/angular-vision/browser"
+        "distDir": "dist/angular-vision"
       }
     }
   ],
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/browser/index.html"
     }
   ],
   "cleanUrls": true
