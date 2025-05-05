@@ -14,5 +14,6 @@
       "destination": "/index.html"
     }
   ],
-  "cleanUrls": true
+  "cleanUrls": true,
+  "trailingSlash": false
 }
