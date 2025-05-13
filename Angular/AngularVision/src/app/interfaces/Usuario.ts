@@ -10,7 +10,7 @@ export interface Usuario {
     pais: string;
     estado: string;
     cidade: string;
-    dataNascimento: Date;
+    dataNascimento: string;
     cpfCnpj: string;
     role: number
   }

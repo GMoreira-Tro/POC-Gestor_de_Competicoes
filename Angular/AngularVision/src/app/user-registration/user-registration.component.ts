@@ -25,7 +25,7 @@ export class UserRegistrationComponent implements AfterViewInit {
     pais: '',
     estado: '',
     cidade: '',
-    dataNascimento: new Date(1900, 0, 1),
+    dataNascimento: '1900-01-01T19:20:19.614Z',
     cpfCnpj: '',
     role: 0
   };
@@ -127,6 +127,8 @@ export class UserRegistrationComponent implements AfterViewInit {
       this.loading = false;
       return;
     }
+
+    this.userData.dataNascimento = new Date(this.userData.dataNascimento).toISOString();
     this.userService.getUserByEmail(this.userData.email).subscribe(
       (usuario) => {
         if (usuario) {
