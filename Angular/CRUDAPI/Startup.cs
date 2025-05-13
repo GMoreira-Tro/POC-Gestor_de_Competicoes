@@ -38,9 +38,12 @@ namespace CRUDAPI
             services.AddScoped<EmailService>();
             services.AddScoped<JwtService>();
 
-            // Configuração do CORS
-            // Define as origens permitidas
-            string[] allowedOrigins = ["http://localhost:4200", "https://conectacompeticao.vercel.app"];
+            // ✅ CORS corrigido
+            var allowedOrigins = new[] {
+                "http://localhost:4200",
+                "https://conectacompeticao.vercel.app"
+            };
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -48,11 +51,10 @@ namespace CRUDAPI
                     policy.WithOrigins(allowedOrigins)
                           .AllowAnyMethod()
                           .AllowAnyHeader()
-                          .AllowCredentials();
+                          .AllowCredentials(); // Pode manter, pois as origens estão explicitadas
                 });
             });
 
-            // Configuração de Autenticação JWT
             var key = Encoding.UTF8.GetBytes(Configuration["Jwt:Secret"]);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -73,7 +75,6 @@ namespace CRUDAPI
 
             services.AddControllers();
 
-            // Configuração do Swagger com suporte a autenticação JWT
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -94,7 +95,6 @@ namespace CRUDAPI
                     }
                 });
 
-                // Adiciona suporte ao JWT no Swagger
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -130,29 +130,27 @@ namespace CRUDAPI
             }
 
             app.UseStaticFiles();
-            // Configura a pasta "uploads" para servir arquivos
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.WebRootPath, "uploads")),
                 RequestPath = "/uploads"
             });
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
-            // Aplicando a política de CORS corretamente
             app.UseCors("AllowSpecificOrigin");
 
-            // Configuração da autenticação e autorização
-            app.UseAuthentication();  // ⬅️ Agora autenticamos os usuários
-            app.UseAuthorization();   // ⬅️ Agora aplicamos as permissões
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            // Configuração do Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
