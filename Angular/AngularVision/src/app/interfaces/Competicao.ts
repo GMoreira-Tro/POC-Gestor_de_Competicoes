@@ -9,8 +9,8 @@ export interface Competicao {
     estado: string;
     cidade: string;
     bannerImagem: File|null;
-    dataInicio: Date;
-    dataFim: Date;
+    dataInicio: string;
+    dataFim: string;
     criadorUsuarioId: number;
     status: number;
     chavePix: string;

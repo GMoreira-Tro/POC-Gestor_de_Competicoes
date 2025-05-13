@@ -3,6 +3,6 @@ export interface UsuarioNotificacao {
     usuarioId: number;
     notificacaoId: number;
     lida: boolean;
-    dataCriacao: Date;
-    dataLeitura?: Date;
+    dataCriacao: string;
+    dataLeitura?: string;
 }

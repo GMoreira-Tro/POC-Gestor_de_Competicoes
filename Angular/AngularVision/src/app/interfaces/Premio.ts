@@ -2,6 +2,6 @@ export interface Premio {
     id: number;
     nome: string;
     descricao?: string;
-    dataEntrega: Date;
+    dataEntrega: string;
     pagamentoId?: number;
 }

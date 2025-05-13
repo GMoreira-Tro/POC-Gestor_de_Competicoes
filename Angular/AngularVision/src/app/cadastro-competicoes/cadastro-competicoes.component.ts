@@ -30,8 +30,8 @@ export class CadastroCompeticoesComponent implements OnInit {
     cidade: '',
     bannerImagem: null,
     id: 0,
-    dataInicio: new Date(),
-    dataFim: new Date(),
+    dataInicio: "1900-01-01T00:00:00",
+    dataFim: "1900-01-01T00:00:00",
     criadorUsuarioId: 0,  // Ajustar depois para o ID do usuário logado
     status: 0,
     chavePix: ''

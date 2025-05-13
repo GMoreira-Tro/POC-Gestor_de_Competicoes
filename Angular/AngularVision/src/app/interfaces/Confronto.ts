@@ -3,7 +3,7 @@ import { ConfrontoInscricao } from "./ConfrontoInscricao";
 export interface Confronto {
     id: number;
     chaveamentoId: number;
-    dataInicio?: Date;
-    dataTermino?: Date;
+    dataInicio?: string;
+    dataTermino?: string;
     local: string;
 }
