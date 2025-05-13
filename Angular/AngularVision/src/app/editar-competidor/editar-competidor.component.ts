@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment.prod';
 export class EditarCompetidorComponent implements OnInit {
   competidor: any = {};
   imagemSelecionada: File | null = null;
+  isLoading: boolean = false;
 
   constructor(
     private competidorService: CompetidorService,
@@ -39,6 +40,10 @@ export class EditarCompetidorComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.isLoading) {
+      return;
+    }
+    this.isLoading = true;
     if (!this.competidor) return;
 
     this.competidor.tipo = Number(this.competidor.tipo);
@@ -47,6 +52,7 @@ export class EditarCompetidorComponent implements OnInit {
         await this.uploadImagem();
       },
       error => {
+        this.isLoading = false;
         console.log('Erro ao atualizar competidor:', error);
         alert('Erro ao atualizar o competidor. Tente novamente.');
       }
@@ -71,11 +77,12 @@ export class EditarCompetidorComponent implements OnInit {
         this.competidor.imagemUrl = this.competidor.imagemUrl?.startsWith('http')
           ? this.competidor.imagemUrl
           : `${environment.apiBaseUrl}/${this.competidor.imagemUrl}`;
-          
-          alert('Competidor atualizado com sucesso!');
-          this.router.navigate(['/meus-competidores']);
+
+        alert('Competidor atualizado com sucesso!');
+        this.router.navigate(['/meus-competidores']);
       },
       (error) => {
+        this.isLoading = false;
         console.error("Erro ao fazer upload da imagem", error);
       }
     );

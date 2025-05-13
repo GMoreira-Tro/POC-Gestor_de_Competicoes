@@ -14,6 +14,7 @@ export class CadastroCompetidoresComponent {
   competidor: any = {}
   imagemSelecionada: File | null = null;
   userId: number = 0;
+  isLoading: boolean = false;
 
   constructor(private userService: UserService,
     private router: Router,
@@ -59,6 +60,11 @@ export class CadastroCompetidoresComponent {
   }
 
   onSubmit() {
+    if (this.isLoading) 
+    {
+      return;
+    }
+    this.isLoading = true;
     this.competidor.criadorId = this.userId;
     this.competidor.tipo = Number(this.competidor.tipo);
     console.log(this.competidor)
@@ -67,6 +73,7 @@ export class CadastroCompetidoresComponent {
       await this.uploadImagem();
     },
       error => {
+        this.isLoading = false;
         if (typeof error.error === 'string') {
           alert(error.error);
         } else {

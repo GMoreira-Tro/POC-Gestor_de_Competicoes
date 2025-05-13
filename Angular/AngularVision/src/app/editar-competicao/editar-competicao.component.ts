@@ -40,6 +40,7 @@ export class EditarCompeticaoComponent implements OnInit {
   txid: string = ''; // ID da transação PIX
   pollingInterval: any; // Armazena o intervalo do polling
   paymentCompleted: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private competicaoService: CompeticaoService,
@@ -146,10 +147,15 @@ export class EditarCompeticaoComponent implements OnInit {
   }
 
   onSubmit(idPagamento: number): void {
+    if (this.isLoading) {
+      return;
+    }
+    this.isLoading = true;
     if (!this.competicao) return;
 
     if (this.categorias.length === 0) {
       alert('A competição deve ter pelo menos uma categoria.');
+      this.isLoading = false;
       return;
     }
 
@@ -157,10 +163,12 @@ export class EditarCompeticaoComponent implements OnInit {
       const categoria = this.categorias[i];
       if (categoria.nome === '') {
         alert('Todas as categorias devem conter um nome.');
+        this.isLoading = false;
         return;
       }
       if (categoria.valorInscricao < 15.99) {
         alert('O valor de inscrição das categorias deve ser maior ou igual a R$ 15,99');
+        this.isLoading = false;
         return;
       }
     }
@@ -194,7 +202,10 @@ export class EditarCompeticaoComponent implements OnInit {
                   });
                 }
               },
-              error => console.log("Erro ao criar categoria: ", error)
+              error => {
+                console.log("Erro ao criar categoria: ", error);
+                this.isLoading = false;
+              }
             )
           }
           else {
@@ -217,7 +228,10 @@ export class EditarCompeticaoComponent implements OnInit {
                   });
                 }
               },
-              error => console.log("Erro ao atualizar categoria: ", error)
+              error => {
+                console.log("Erro ao atualizar categoria: ", error);
+                this.isLoading = false;
+              }
             )
           };
         });
@@ -227,7 +241,10 @@ export class EditarCompeticaoComponent implements OnInit {
             await this.categoriaService.deleteCategoria(id).subscribe(
               () => {
               },
-              error => console.log("Erro ao deletar categoria: ", error)
+              error => {
+                console.log("Erro ao deletar categoria: ", error);
+                this.isLoading = false;
+              }
             );
           }
         });
@@ -235,6 +252,7 @@ export class EditarCompeticaoComponent implements OnInit {
         await this.uploadImagem()
       },
       error => {
+        this.isLoading = false;
         console.log('Erro ao atualizar competição:', error);
         alert('Erro ao atualizar a competição. Tente novamente.');
       }
@@ -258,6 +276,7 @@ export class EditarCompeticaoComponent implements OnInit {
         this.router.navigate(['/minhas-competicoes']);
       },
       (error) => {
+        this.isLoading = false;
         console.error("Erro ao fazer upload da imagem", error);
       }
     );

@@ -48,6 +48,7 @@ export class CadastroCompeticoesComponent implements OnInit {
   txid: string = ''; // ID da transação PIX
   pollingInterval: any; // Armazena o intervalo do polling
   paymentCompleted: boolean = false;
+  isLoading: boolean = false;
 
   listaPaises: any;
   listaEstados: any;
@@ -122,6 +123,10 @@ export class CadastroCompeticoesComponent implements OnInit {
   }
 
   onSubmit(idPagamento: number): void {
+    if (this.isLoading) {
+      return;
+    }
+    this.isLoading = true;
     this.competicao.status = 1; // Ajusta o status para publicada
 
     this.competicaoService.createCompeticao(this.competicao).subscribe(
@@ -150,13 +155,17 @@ export class CadastroCompeticoesComponent implements OnInit {
                 });
               }
             },
-            error => console.log("Erro ao criar categoria: ", error)
+            error => {
+              this.isLoading = false;
+              console.log("Erro ao criar categoria: ", error);
+            }
           );
         });
 
         await this.uploadImagem();
       },
       error => {
+        this.isLoading = false;
         console.log("Erro ao criar competição: ", error);
         alert("Erro ao criar a competição. Tente novamente.");
       }
@@ -180,6 +189,7 @@ export class CadastroCompeticoesComponent implements OnInit {
         alert("Competição criada com sucesso!");
       },
       (error) => {
+        this.isLoading = false;
         console.error("Erro ao fazer upload da imagem", error);
       }
     );
