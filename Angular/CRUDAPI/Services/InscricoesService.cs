@@ -75,7 +75,7 @@ namespace CRUDAPI.Services
                     NotificadoId = IdOrganizador,
                     Titulo = $"Inscrição em {competicao?.Titulo} solicitada.",
                     Descricao = $"Uma nova inscrição foi recebida para a competição {competicao?.Titulo}.",
-                    DataPublicacao = DateTime.Now,
+                    DataPublicacao = DateTime.UtcNow,
                     Link = $"{_configuration["Configuration:BaseUrl"]}/aprovar-inscricao/{competicao?.Id}",
                     TipoAnuncio = "Inscrição"
                 };

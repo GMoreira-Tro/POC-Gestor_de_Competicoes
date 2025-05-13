@@ -166,7 +166,7 @@ namespace CRUDAPI.Controllers
                         Descricao = $"Sua inscrição no evento {competicao.Titulo} " +
                         $"do competidor {competidor.Nome} " +
                         $"foi aceita! Aguardando pagamento.",
-                        DataPublicacao = DateTime.Now,
+                        DataPublicacao = DateTime.UtcNow,
                         Link = $"{_configuration["Configuration:BaseUrl"]}/pagar-inscricao/{inscricaoId}",
                         TipoAnuncio = "Inscrição"
                     };
@@ -192,7 +192,7 @@ namespace CRUDAPI.Controllers
                         Descricao = $"Sua inscrição no evento {competicao.Titulo} " +
                         $"do competidor {competidor.Nome} " +
                         $"foi recusada!",
-                        DataPublicacao = DateTime.Now,
+                        DataPublicacao = DateTime.UtcNow,
                         Link = $"{_configuration["Configuration:BaseUrl"]}/pagar-inscricao/{inscricaoId}",
                         TipoAnuncio = "Inscrição"
                     };
