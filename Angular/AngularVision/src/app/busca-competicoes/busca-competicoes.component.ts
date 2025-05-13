@@ -141,4 +141,7 @@ export class BuscaCompeticoesComponent implements OnInit {
   carregarMais(): void {
     // Lógica para carregar mais competições se houver paginação
   }
+  verInformacoes(id: number): void {
+    this.router.navigate([`/informacoes/${id}`]);
+  }
 }
