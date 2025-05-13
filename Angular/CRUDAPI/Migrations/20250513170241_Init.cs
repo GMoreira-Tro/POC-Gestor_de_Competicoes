@@ -1,41 +1,27 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace CRUDAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Migracao : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Confrontos",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DataTermino = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Local = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Confrontos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pagamentos",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Txid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Txid = table.Column<string>(type: "text", nullable: false),
                     PagadorId = table.Column<long>(type: "bigint", nullable: false),
                     FavorecidoId = table.Column<long>(type: "bigint", nullable: false),
-                    InfoPagamento = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    InfoPagamento = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,19 +33,21 @@ namespace CRUDAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Sobrenome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailConfirmado = table.Column<bool>(type: "bit", nullable: false),
-                    SenhaHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SenhaValidada = table.Column<bool>(type: "bit", nullable: false),
-                    Pais = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CpfCnpj = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Sobrenome = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    EmailConfirmado = table.Column<bool>(type: "boolean", nullable: false),
+                    TokenConfirmacao = table.Column<string>(type: "text", nullable: false),
+                    SenhaHash = table.Column<string>(type: "text", nullable: false),
+                    SenhaValidada = table.Column<bool>(type: "boolean", nullable: false),
+                    Pais = table.Column<string>(type: "text", nullable: false),
+                    Estado = table.Column<string>(type: "text", nullable: false),
+                    Cidade = table.Column<string>(type: "text", nullable: false),
+                    DataNascimento = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CpfCnpj = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    ImagemUrl = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,38 +55,14 @@ namespace CRUDAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notificacoes",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PagamentoId = table.Column<long>(type: "bigint", nullable: true),
-                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataPublicacao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataExpiracao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    BannerImagem = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TipoAnuncio = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notificacoes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Notificacoes_Pagamentos_PagamentoId",
-                        column: x => x.PagamentoId,
-                        principalTable: "Pagamentos",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Premios",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataEntrega = table.Column<DateTime>(type: "datetime2", nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: false),
+                    DataEntrega = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PagamentoId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -108,7 +72,8 @@ namespace CRUDAPI.Migrations
                         name: "FK_Premios_Pagamentos_PagamentoId",
                         column: x => x.PagamentoId,
                         principalTable: "Pagamentos",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,18 +81,19 @@ namespace CRUDAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Modalidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Pais = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BannerImagem = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Titulo = table.Column<string>(type: "text", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: true),
+                    Modalidade = table.Column<string>(type: "text", nullable: false),
+                    Pais = table.Column<string>(type: "text", nullable: true),
+                    Estado = table.Column<string>(type: "text", nullable: true),
+                    Cidade = table.Column<string>(type: "text", nullable: true),
+                    BannerImagem = table.Column<string>(type: "text", nullable: true),
+                    DataInicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CriadorUsuarioId = table.Column<long>(type: "bigint", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    ChavePix = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,10 +111,11 @@ namespace CRUDAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tipo = table.Column<int>(type: "int", nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Tipo = table.Column<int>(type: "integer", nullable: false),
+                    ImagemUrl = table.Column<string>(type: "text", nullable: true),
                     CriadorId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -163,29 +130,25 @@ namespace CRUDAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsuarioNotificacoes",
+                name: "Notificacoes",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UsuarioId = table.Column<long>(type: "bigint", nullable: false),
-                    UsuarioAnunciante = table.Column<bool>(type: "bit", nullable: false),
-                    NotificacaoId = table.Column<long>(type: "bigint", nullable: false),
-                    Lido = table.Column<bool>(type: "bit", nullable: false),
-                    DataLeitura = table.Column<DateTime>(type: "datetime2", nullable: true)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    NotificadoId = table.Column<long>(type: "bigint", nullable: false),
+                    Titulo = table.Column<string>(type: "text", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: true),
+                    DataPublicacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataExpiracao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Link = table.Column<string>(type: "text", nullable: false),
+                    TipoAnuncio = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsuarioNotificacoes", x => x.Id);
+                    table.PrimaryKey("PK_Notificacoes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UsuarioNotificacoes_Notificacoes_NotificacaoId",
-                        column: x => x.NotificacaoId,
-                        principalTable: "Notificacoes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UsuarioNotificacoes_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
+                        name: "FK_Notificacoes_Usuarios_NotificadoId",
+                        column: x => x.NotificadoId,
                         principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -196,10 +159,11 @@ namespace CRUDAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompeticaoId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: true),
+                    CompeticaoId = table.Column<long>(type: "bigint", nullable: false),
+                    ValorInscricao = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -209,6 +173,27 @@ namespace CRUDAPI.Migrations
                         column: x => x.CompeticaoId,
                         principalTable: "Competicoes",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chaveamentos",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: false),
+                    CategoriaId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chaveamentos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Chaveamentos_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -217,12 +202,13 @@ namespace CRUDAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CategoriaId = table.Column<long>(type: "bigint", nullable: false),
-                    PagamentoId = table.Column<long>(type: "bigint", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    PagamentoId = table.Column<long>(type: "bigint", nullable: true),
                     CompetidorId = table.Column<long>(type: "bigint", nullable: false),
-                    Posição = table.Column<int>(type: "int", nullable: true),
-                    WO = table.Column<bool>(type: "bit", nullable: false),
+                    Posição = table.Column<int>(type: "integer", nullable: true),
+                    WO = table.Column<bool>(type: "boolean", nullable: false),
                     PremioResgatavelId = table.Column<long>(type: "bigint", nullable: true),
                     CompetidorId1 = table.Column<long>(type: "bigint", nullable: true)
                 },
@@ -234,7 +220,7 @@ namespace CRUDAPI.Migrations
                         column: x => x.CategoriaId,
                         principalTable: "Categorias",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Inscricoes_Competidores_CompetidorId",
                         column: x => x.CompetidorId,
@@ -251,11 +237,33 @@ namespace CRUDAPI.Migrations
                         column: x => x.PagamentoId,
                         principalTable: "Pagamentos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Inscricoes_Premios_PremioResgatavelId",
                         column: x => x.PremioResgatavelId,
                         principalTable: "Premios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Confrontos",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ChaveamentoId = table.Column<long>(type: "bigint", nullable: true),
+                    DataInicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DataTermino = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Local = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Confrontos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Confrontos_Chaveamentos_ChaveamentoId",
+                        column: x => x.ChaveamentoId,
+                        principalTable: "Chaveamentos",
                         principalColumn: "Id");
                 });
 
@@ -264,7 +272,7 @@ namespace CRUDAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ConfrontoId = table.Column<long>(type: "bigint", nullable: false),
                     InscricaoId = table.Column<long>(type: "bigint", nullable: false),
                     ConfrontoInscricaoPaiId = table.Column<long>(type: "bigint", nullable: true)
@@ -273,28 +281,34 @@ namespace CRUDAPI.Migrations
                 {
                     table.PrimaryKey("PK_ConfrontoInscricao", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ConfrontoInscricao_ConfrontoInscricao_ConfrontoInscricaoPaiId",
+                        name: "FK_ConfrontoInscricao_ConfrontoInscricao_ConfrontoInscricaoPai~",
                         column: x => x.ConfrontoInscricaoPaiId,
                         principalTable: "ConfrontoInscricao",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ConfrontoInscricao_Confrontos_ConfrontoId",
                         column: x => x.ConfrontoId,
                         principalTable: "Confrontos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ConfrontoInscricao_Inscricoes_InscricaoId",
                         column: x => x.InscricaoId,
                         principalTable: "Inscricoes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categorias_CompeticaoId",
                 table: "Categorias",
                 column: "CompeticaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chaveamentos_CategoriaId",
+                table: "Chaveamentos",
+                column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Competicoes_CriadorUsuarioId",
@@ -322,6 +336,11 @@ namespace CRUDAPI.Migrations
                 column: "InscricaoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Confrontos_ChaveamentoId",
+                table: "Confrontos",
+                column: "ChaveamentoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inscricoes_CategoriaId",
                 table: "Inscricoes",
                 column: "CategoriaId");
@@ -347,24 +366,14 @@ namespace CRUDAPI.Migrations
                 column: "PremioResgatavelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notificacoes_PagamentoId",
+                name: "IX_Notificacoes_NotificadoId",
                 table: "Notificacoes",
-                column: "PagamentoId");
+                column: "NotificadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Premios_PagamentoId",
                 table: "Premios",
                 column: "PagamentoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsuarioNotificacoes_NotificacaoId",
-                table: "UsuarioNotificacoes",
-                column: "NotificacaoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsuarioNotificacoes_UsuarioId",
-                table: "UsuarioNotificacoes",
-                column: "UsuarioId");
         }
 
         /// <inheritdoc />
@@ -374,7 +383,7 @@ namespace CRUDAPI.Migrations
                 name: "ConfrontoInscricao");
 
             migrationBuilder.DropTable(
-                name: "UsuarioNotificacoes");
+                name: "Notificacoes");
 
             migrationBuilder.DropTable(
                 name: "Confrontos");
@@ -383,10 +392,7 @@ namespace CRUDAPI.Migrations
                 name: "Inscricoes");
 
             migrationBuilder.DropTable(
-                name: "Notificacoes");
-
-            migrationBuilder.DropTable(
-                name: "Categorias");
+                name: "Chaveamentos");
 
             migrationBuilder.DropTable(
                 name: "Competidores");
@@ -395,10 +401,13 @@ namespace CRUDAPI.Migrations
                 name: "Premios");
 
             migrationBuilder.DropTable(
-                name: "Competicoes");
+                name: "Categorias");
 
             migrationBuilder.DropTable(
                 name: "Pagamentos");
+
+            migrationBuilder.DropTable(
+                name: "Competicoes");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");

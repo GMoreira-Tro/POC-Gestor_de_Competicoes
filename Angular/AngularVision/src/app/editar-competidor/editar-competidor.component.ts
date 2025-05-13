@@ -58,7 +58,11 @@ export class EditarCompetidorComponent implements OnInit {
   }
 
   async uploadImagem(): Promise<void> {
-    if (!this.imagemSelecionada) return;
+    if (!this.imagemSelecionada) {
+      alert('Competidor atualizado com sucesso!');
+      this.router.navigate(['/meus-competidores']);
+      return;
+    };
     this.competidorService.uploadImagem(this.competidor.id, this.imagemSelecionada).subscribe(
       (response) => {
         console.log("Imagem enviada com sucesso!", response);

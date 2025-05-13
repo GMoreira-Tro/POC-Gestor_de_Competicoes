@@ -35,7 +35,12 @@ export class CadastroCompetidoresComponent {
   }
 
   async uploadImagem(): Promise<void> {
-    if (!this.imagemSelecionada) return;
+    if (!this.imagemSelecionada) 
+    {
+      this.router.navigate(['/meus-competidores']);
+      alert('Competidor cadastrado com sucesso!');
+      return;
+    }
     this.competidorService.uploadImagem(this.competidor.id, this.imagemSelecionada).subscribe(
       (response) => {
         console.log("Imagem enviada com sucesso!", response);

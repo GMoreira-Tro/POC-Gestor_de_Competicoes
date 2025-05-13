@@ -3,17 +3,17 @@ using System;
 using CRUDAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace CRUDAPI.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20250213181035_Migracao7")]
-    partial class Migracao7
+    [Migration("20250513170241_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,9 +21,9 @@ namespace CRUDAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CRUDAPI.Models.Categoria", b =>
                 {
@@ -31,20 +31,20 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CompeticaoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("ValorInscricao")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -53,48 +53,78 @@ namespace CRUDAPI.Migrations
                     b.ToTable("Categorias");
                 });
 
+            modelBuilder.Entity("CRUDAPI.Models.Chaveamento", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CategoriaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("Chaveamentos");
+                });
+
             modelBuilder.Entity("CRUDAPI.Models.Competicao", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("BannerImagem")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
+
+                    b.Property<string>("ChavePix")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Cidade")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<long>("CriadorUsuarioId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DataFim")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DataInicio")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Modalidade")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Pais")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -109,24 +139,24 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CriadorId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ImagemUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Tipo")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -141,19 +171,24 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("ChaveamentoId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DataInicio")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DataTermino")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Local")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChaveamentoId");
 
                     b.ToTable("Confrontos");
                 });
@@ -164,7 +199,7 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ConfrontoId")
                         .HasColumnType("bigint");
@@ -192,7 +227,7 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CategoriaId")
                         .HasColumnType("bigint");
@@ -203,17 +238,20 @@ namespace CRUDAPI.Migrations
                     b.Property<long?>("CompetidorId1")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PagamentoId")
+                    b.Property<long?>("PagamentoId")
                         .HasColumnType("bigint");
 
                     b.Property<int?>("Posição")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<long?>("PremioResgatavelId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("WO")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -236,33 +274,34 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("BannerImagem")
-                        .HasColumnType("nvarchar(max)");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("DataExpiracao")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DataPublicacao")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<long?>("PagamentoId")
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("NotificadoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("TipoAnuncio")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PagamentoId");
+                    b.HasIndex("NotificadoId");
 
                     b.ToTable("Notificacoes");
                 });
@@ -273,18 +312,18 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DataEntrega")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<long?>("PagamentoId")
                         .HasColumnType("bigint");
@@ -302,95 +341,63 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Cidade")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("CpfCnpj")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DataNascimento")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("EmailConfirmado")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Estado")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ImagemUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Pais")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Role")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("SenhaValidada")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Sobrenome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("TokenConfirmacao")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("CRUDAPI.Models.UsuarioNotificacao", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime?>("DataLeitura")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Lido")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("NotificacaoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("UsuarioAnunciante")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("UsuarioId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NotificacaoId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("UsuarioNotificacoes");
                 });
 
             modelBuilder.Entity("Pagamento", b =>
@@ -399,21 +406,21 @@ namespace CRUDAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("FavorecidoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("InfoPagamento")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<long>("PagadorId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Txid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -429,6 +436,17 @@ namespace CRUDAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Competicao");
+                });
+
+            modelBuilder.Entity("CRUDAPI.Models.Chaveamento", b =>
+                {
+                    b.HasOne("CRUDAPI.Models.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Competicao", b =>
@@ -451,6 +469,15 @@ namespace CRUDAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Criador");
+                });
+
+            modelBuilder.Entity("CRUDAPI.Models.Confronto", b =>
+                {
+                    b.HasOne("CRUDAPI.Models.Chaveamento", "Chaveamento")
+                        .WithMany("Confrontos")
+                        .HasForeignKey("ChaveamentoId");
+
+                    b.Navigation("Chaveamento");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.ConfrontoInscricao", b =>
@@ -500,8 +527,7 @@ namespace CRUDAPI.Migrations
                     b.HasOne("Pagamento", "Pagamento")
                         .WithMany()
                         .HasForeignKey("PagamentoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRUDAPI.Models.Premio", "PremioResgatavel")
                         .WithMany()
@@ -519,12 +545,13 @@ namespace CRUDAPI.Migrations
 
             modelBuilder.Entity("CRUDAPI.Models.Notificacao", b =>
                 {
-                    b.HasOne("Pagamento", "Pagamento")
-                        .WithMany()
-                        .HasForeignKey("PagamentoId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("CRUDAPI.Models.Usuario", "Notificado")
+                        .WithMany("Notificacoes")
+                        .HasForeignKey("NotificadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Pagamento");
+                    b.Navigation("Notificado");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Premio", b =>
@@ -537,28 +564,14 @@ namespace CRUDAPI.Migrations
                     b.Navigation("Pagamento");
                 });
 
-            modelBuilder.Entity("CRUDAPI.Models.UsuarioNotificacao", b =>
-                {
-                    b.HasOne("CRUDAPI.Models.Notificacao", "Notificacao")
-                        .WithMany("UsuariosAlvo")
-                        .HasForeignKey("NotificacaoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("CRUDAPI.Models.Usuario", "Usuario")
-                        .WithMany("AnunciosRecebidos")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Notificacao");
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("CRUDAPI.Models.Categoria", b =>
                 {
                     b.Navigation("Inscricoes");
+                });
+
+            modelBuilder.Entity("CRUDAPI.Models.Chaveamento", b =>
+                {
+                    b.Navigation("Confrontos");
                 });
 
             modelBuilder.Entity("CRUDAPI.Models.Competicao", b =>
@@ -581,16 +594,11 @@ namespace CRUDAPI.Migrations
                     b.Navigation("ConfrontoInscricoes");
                 });
 
-            modelBuilder.Entity("CRUDAPI.Models.Notificacao", b =>
-                {
-                    b.Navigation("UsuariosAlvo");
-                });
-
             modelBuilder.Entity("CRUDAPI.Models.Usuario", b =>
                 {
-                    b.Navigation("AnunciosRecebidos");
-
                     b.Navigation("Competidores");
+
+                    b.Navigation("Notificacoes");
                 });
 #pragma warning restore 612, 618
         }

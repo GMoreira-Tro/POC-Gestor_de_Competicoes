@@ -21,7 +21,7 @@ namespace CRUDAPI
         public void ConfigureServices(IServiceCollection services)
         {
             string? connectionString = Configuration.GetConnectionString("ConexaoBD");
-            services.AddDbContext<Contexto>(opcoes => opcoes.UseSqlServer(connectionString));
+            services.AddDbContext<Contexto>(opcoes => opcoes.UseNpgsql(connectionString));
 
             services.AddHttpClient();
             services.AddScoped<CategoriaService>();

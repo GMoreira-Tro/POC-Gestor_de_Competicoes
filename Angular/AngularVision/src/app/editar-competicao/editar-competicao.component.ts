@@ -247,7 +247,11 @@ export class EditarCompeticaoComponent implements OnInit {
   }
 
   async uploadImagem(): Promise<void> {
-    if (!this.imagemSelecionada) return;
+    if (!this.imagemSelecionada) {
+      alert("Competição atualizada com sucesso!");
+      this.router.navigate(['/minhas-competicoes']);
+      return;
+    };
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
       () => {
         alert("Competição atualizada com sucesso!");

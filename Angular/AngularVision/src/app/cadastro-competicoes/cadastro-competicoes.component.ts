@@ -169,7 +169,11 @@ export class CadastroCompeticoesComponent implements OnInit {
   }
 
   async uploadImagem(): Promise<void> {
-    if (!this.imagemSelecionada) return;
+    if (!this.imagemSelecionada) {
+      this.router.navigate(['/minhas-competicoes']);
+      alert("Competição criada com sucesso!");
+      return;
+    };
     this.competicaoService.uploadImagem(this.competicao.id, this.imagemSelecionada).subscribe(
       () => {
         this.router.navigate(['/minhas-competicoes']);
