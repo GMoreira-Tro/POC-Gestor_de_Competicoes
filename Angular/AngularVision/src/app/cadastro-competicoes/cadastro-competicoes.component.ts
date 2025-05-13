@@ -162,6 +162,7 @@ export class CadastroCompeticoesComponent implements OnInit {
           );
         });
 
+        this.competicao = novaCompeticao;
         await this.uploadImagem();
       },
       error => {

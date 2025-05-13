@@ -54,6 +54,7 @@ export class CadastroCompetidoresComponent {
           alert('Competidor cadastrado com sucesso!');
       },
       (error) => {
+        this.isLoading = false;
         console.error("Erro ao fazer upload da imagem", error);
       }
     );
@@ -69,7 +70,7 @@ export class CadastroCompetidoresComponent {
     this.competidor.tipo = Number(this.competidor.tipo);
     console.log(this.competidor)
     this.competidorService.cadastrarCompetidor(this.competidor).subscribe(async competidor => {
-
+      this.competidor = competidor;
       await this.uploadImagem();
     },
       error => {
