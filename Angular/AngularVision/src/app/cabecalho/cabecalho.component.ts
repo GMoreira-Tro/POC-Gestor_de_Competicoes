@@ -28,7 +28,7 @@ export class CabecalhoComponent implements OnInit {
       this.usuario = data;
       this.usuario.imagemUrl = this.usuario.imagemUrl?.startsWith('http')
         ? this.usuario.imagemUrl
-        : `${environment.apiBaseUrl}${this.usuario.imagemUrl}`;
+        : `${environment.apiBaseUrl}/${this.usuario.imagemUrl}`;
 
         this.notificacaoService.buscarNotificacoesDoUsuario(data.id).subscribe(notificacoes =>
         {
