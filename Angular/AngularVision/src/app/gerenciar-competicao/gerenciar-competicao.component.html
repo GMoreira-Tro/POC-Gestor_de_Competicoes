@@ -13,30 +13,40 @@
     </select>
   </div>
 
-  <div class="confrontos-container" *ngIf="categoriaSelecionada">
-    <h2>Chaveamentos</h2>
-    <div class="chaveamentos">
-      <ul>
-        <li *ngFor="let chaveamento of chaveamentos">
-          {{ chaveamento.nome }}
-          <ul>
-            <li *ngFor="let confronto of chaveamento.confrontos">
-              {{ confronto.dataInicio }} - {{ confronto.dataTermino }} - {{ confronto.local }}
-              {{confronto.confrontoInscricoes[0].competidor.nome}} vs {{confronto.confrontoInscricoes[1].competidor.nome}}
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <button (click)="criarChaveamento()">Criar Novo Chaveamento</button>
+  <div *ngIf="inscricoes.length > 0 && carregouInscricao" class="competidores-lista">
+    <h3>Competidores:</h3>
+    <ul>
+      <li *ngFor="let i of inscricoes">{{ i.inscricaoInfo.nomeCompetidor }}</li>
+    </ul>
+  </div>
 
-    <!-- <h2>Confrontos Avulsos</h2>
-    <div class="confrontos-avulsos">
-      <ul>
-        <li *ngFor="let confronto of confrontos">{{ confronto.descricao }}</li>
-      </ul>
+  <div *ngIf="categoriaSelecionada" class="confronto-area">
+    <h2>Chaveamentos Visuais</h2>
+
+    <div class="chaveamentos">
+      <div *ngFor="let chave of chaveamentos" class="chaveamento">
+        <h4>{{ chave.nome }}</h4>
+
+        <div class="confronto" *ngFor="let confronto of chave.confrontos">
+          <select [(ngModel)]="confronto.competidorA">
+            <option [ngValue]="null">Escolher A</option>
+            <option *ngFor="let i of inscricoes" [ngValue]="i.inscricaoInfo">{{ i.inscricaoInfo.nomeCompetidor }}</option>
+          </select>
+
+          <span>vs</span>
+
+          <select [(ngModel)]="confronto.competidorB">
+            <option [ngValue]="null">Escolher B</option>
+            <option *ngFor="let i of inscricoes" [ngValue]="i.inscricaoInfo">{{ i.inscricaoInfo.nomeCompetidor }}</option>
+          </select>
+        </div>
+
+        <!-- Botão para adicionar novo confronto dentro da chave -->
+        <!-- <button (click)="adicionarConfronto(chave)">+ Adicionar Confronto</button> -->
+      </div>
     </div>
-    <button (click)="criarConfronto()">Criar Novo Confronto</button> -->
+
+    <button (click)="criarChaveamento()">+ Criar Novo Chaveamento</button>
   </div>
 </div>
 
