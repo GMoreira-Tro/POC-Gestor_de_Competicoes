@@ -19,9 +19,9 @@
                             <span *ngIf="competicao.cidade">, {{ competicao.cidade }}</span>
                         </p>
                         <div class="button-container">
-                            <button style="margin-right: 8px;" (click)="editarCompeticao(competicao.id)">Editar</button>
-                            <button style="margin-right: 8px;" (click)="excluirCompeticao(competicao.id)">Excluir</button>
-                            <button (click)="gerenciarInscricoes(competicao.id)">Gerenciar</button>
+                            <button style="margin-right: 6px;" (click)="editarCompeticao(competicao.id)">Editar</button>
+                            <button style="margin-right: 6px;" (click)="gerenciarConfrontos(competicao.id)">Gerenciar confrontos</button>
+                            <button (click)="gerenciarInscricoes(competicao.id)">Gerenciar inscrições</button>
                         </div>
                     </div>
                 </div>
