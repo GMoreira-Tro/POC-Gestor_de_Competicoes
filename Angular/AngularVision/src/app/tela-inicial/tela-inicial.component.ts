@@ -17,6 +17,42 @@ export class TelaInicialComponent implements OnInit {
   competicoes: any[] = [];
   filtroSelecionado: string = 'municipal';
   usuarioLogado: any
+  currentIndex = 0;
+
+  slides = [
+    {
+      imagem: 'assets/images/criacao.png',
+      texto: 'Crie suas próprias competições com categorias personalizadas. Divulgue seu evento e atraia atletas de toda parte.'
+    },
+    {
+      imagem: 'assets/images/registro.png',
+      texto: 'Registre seus atletas na plataforma para vinculá-los às suas competições ou inscrevê-los em competições de terceiros.'
+    },
+    {
+      imagem: 'assets/images/inscricao.png',
+      texto: 'Solicite a inscrição de seus competidores em eventos criados por outros usuários. Após a aprovação, realize o pagamento diretamente na plataforma.'
+    },
+    {
+      imagem: 'assets/images/gerenciar-inscricoes.png',
+      texto: 'Receba inscrições em suas competições e gerencie-as com praticidade. Aprove ou recuse com apenas um clique.'
+    },
+    {
+      imagem: 'assets/images/confrontos.png',
+      texto: 'Crie os chaveamentos das categorias da sua competição, registre os vencedores e avance com controle total.'
+    }
+  ];
+
+  avancar() {
+    this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+  }
+
+  voltar() {
+    this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+  }
+
+  irParaSlide(index: number) {
+    this.currentIndex = index;
+  }
 
   constructor(private userService: UserService,
     private competicaoService: CompeticaoService,

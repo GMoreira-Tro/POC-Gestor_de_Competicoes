@@ -12,7 +12,7 @@ body {
     padding: 40px 20px;
     background-color: #2e2e2e;
     background-image: url('../../assets/images/Imagens_TOC_borrada.jpg');
-    background-size: cover; 
+    background-size: cover;
     background-position: center;
     color: #f5f5f5;
 }
@@ -130,4 +130,103 @@ button {
 
 button:hover {
     background-color: #45a049;
+}
+
+.carrossel-container {
+    position: relative;
+    max-width: 800px;
+    margin: 60px auto;
+    overflow: hidden;
+    background-color: #3e3e3e;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.carrossel-slide {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.carrossel-item {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.carrossel-img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.carrossel-item p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #f5f5f5;
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+/* Botões laterais */
+.carrossel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #f5f5f5;
+    border: none;
+    font-size: 30px;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+    border-radius: 50%;
+}
+
+.carrossel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.carrossel-btn.left {
+    left: 10px;
+}
+
+.carrossel-btn.right {
+    right: 10px;
+}
+
+/* Indicadores */
+.carrossel-indicadores {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.carrossel-indicadores span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: #777;
+    margin: 0 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.carrossel-indicadores span.ativo {
+    background-color: #ffffff;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .carrossel-item p {
+        font-size: 16px;
+    }
+
+    .carrossel-btn {
+        font-size: 24px;
+    }
 }
