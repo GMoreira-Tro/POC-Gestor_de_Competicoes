@@ -17,6 +17,7 @@ export class GerenciarCompeticaoComponent implements OnInit {
   categoriaSelecionada: any;
   inscricoes: any[] = [];
   carregouInscricao: boolean = false;
+  chaveamentoSelecionado: any = null;
 
   chaveamentos: any[] = [];
 
@@ -84,17 +85,36 @@ export class GerenciarCompeticaoComponent implements OnInit {
   criarChaveamento(): void {
     const novo = {
       nome: `Chaveamento ${this.chaveamentos.length + 1}`,
-      confrontos: []
+      rounds: [
+        {
+          numero: 1,
+          confrontos: []
+        }
+      ],
+      editandoNome: true
     };
     this.chaveamentos.push(novo);
+    this.chaveamentoSelecionado = novo;
   }
+   
+  confirmarNome(chaveamento: any): void {
+    chaveamento.editandoNome = false;
+    // Se desejar, você pode validar nome vazio aqui
+  }
+  selecionarChaveamento(chave: any): void {
+    this.chaveamentoSelecionado = chave;
+  }
+  
 
-  adicionarConfronto(chaveamentoIndex: number, equipeA: any, equipeB: any): void {
-    const confronto = {
-      equipeA,
-      equipeB,
-      vencedor: null
-    };
-    this.chaveamentos[chaveamentoIndex].confrontos.push(confronto);
+  adicionarConfronto(chaveamento: any, roundNumero: number): void {
+    const round = chaveamento.rounds.find((r: any) => r.numero === roundNumero);
+    if (round) {
+      round.confrontos.push({
+        competidorA: null,
+        competidorB: null,
+        vencedor: null
+      });
+    }
   }
+  
 }
