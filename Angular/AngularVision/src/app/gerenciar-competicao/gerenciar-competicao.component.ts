@@ -5,6 +5,9 @@ import { InscricaoService } from '../services/inscricao.service';
 import { CompeticaoService } from '../services/competicao.service';
 import { UserService } from '../services/user.service';
 import { CompetidorService } from '../services/competidor.service';
+import { Confronto } from '../interfaces/Confronto';
+import { Competidor } from '../interfaces/Competidor';
+import { ConfrontoInscricao } from '../interfaces/ConfrontoInscricao';
 
 @Component({
   selector: 'app-gerenciar-competicao',
@@ -20,6 +23,8 @@ export class GerenciarCompeticaoComponent implements OnInit {
   chaveamentoSelecionado: any = null;
 
   chaveamentos: any[] = [];
+  chaveamentosPorCategoria: { [categoriaId: number]: any[] } = {};
+
 
   constructor(
     private route: ActivatedRoute,
@@ -60,17 +65,32 @@ export class GerenciarCompeticaoComponent implements OnInit {
 
   onCategoriaSelecionada(): void {
     if (!this.categoriaSelecionada) return;
-
+  
+    this.inscricoes = [];
     this.carregouInscricao = false;
+  
+    // 🧠 Troca de chaveamentos conforme a categoria
+    if (this.chaveamentosPorCategoria[this.categoriaSelecionada]) {
+      this.chaveamentos = this.chaveamentosPorCategoria[this.categoriaSelecionada];
+    } else {
+      this.chaveamentos = [];
+      this.chaveamentosPorCategoria[this.categoriaSelecionada] = this.chaveamentos;
+    }
+  
+    this.chaveamentoSelecionado = null;
+  
     this.inscricaoService.getInscricoesPorCategoria(this.categoriaSelecionada).subscribe(
       res => {
         this.inscricoes = res.filter(i => i.status === 1);
         const inscricoesQuant = this.inscricoes.length;
         let inscricoesCarregadas = 0;
-
+  
         this.inscricoes.forEach(inscricao => {
           this.inscricaoService.getInfoInscricao(inscricao.id).subscribe(inscricaoInfo => {
             inscricao.inscricaoInfo = inscricaoInfo;
+            this.competidorService.obterCompetidor(inscricao.competidorId).subscribe(competidor => {
+              inscricao.inscricaoInfo.competidor = competidor;
+            });
             inscricoesCarregadas++;
             if (inscricoesCarregadas === inscricoesQuant) {
               this.carregouInscricao = true;
@@ -80,7 +100,7 @@ export class GerenciarCompeticaoComponent implements OnInit {
       },
       err => console.error('Erro ao carregar inscrições', err)
     );
-  }
+  }  
 
   criarChaveamento(): void {
     const novo = {
@@ -95,8 +115,9 @@ export class GerenciarCompeticaoComponent implements OnInit {
     };
     this.chaveamentos.push(novo);
     this.chaveamentoSelecionado = novo;
+    this.chaveamentosPorCategoria[this.categoriaSelecionada] = this.chaveamentos;
   }
-   
+
   confirmarNome(chaveamento: any): void {
     chaveamento.editandoNome = false;
     // Se desejar, você pode validar nome vazio aqui
@@ -104,7 +125,7 @@ export class GerenciarCompeticaoComponent implements OnInit {
   selecionarChaveamento(chave: any): void {
     this.chaveamentoSelecionado = chave;
   }
-  
+
 
   adicionarConfronto(chaveamento: any, roundNumero: number): void {
     const round = chaveamento.rounds.find((r: any) => r.numero === roundNumero);
@@ -116,5 +137,39 @@ export class GerenciarCompeticaoComponent implements OnInit {
       });
     }
   }
+
+  getOpcoes(confronto: Confronto, lado: 'A' | 'B'): any[] {
+    if (!confronto.pais?.length) {
+      const retorno = this.inscricoes.map(i => i.inscricaoInfo.competidor);
+      return retorno;
+    }
+
+    return confronto.pais
+      .map(id => this.buscarConfrontoPorId(id))
+      .filter(c => c?.vencedor)
+      .map(c => c!.vencedor!);
+  }
+
+  buscarConfrontoPorId(id: number | string): Confronto | undefined {
+    if (!this.chaveamentoSelecionado) return undefined;
+
+    for (const round of this.chaveamentoSelecionado.rounds) {
+      for (const confronto of round.confrontos) {
+        if (confronto.id === id || confronto.tempId === id) {
+          return confronto;
+        }
+      }
+    }
+
+    return undefined;
+  }
+
+  trackPorId(index: number, item: any): number {
+    return item.id;
+  }
+  
+  compararCompetidores = (c1: any, c2: any) => {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  };
   
 }

@@ -46,19 +46,31 @@
             <h4>Rodada {{ round.numero }}</h4>
         
             <div *ngFor="let confronto of round.confrontos" class="confronto-item">
-              <select [(ngModel)]="confronto.competidorA">
-                <option [ngValue]="null">Escolher A</option>
-                <option *ngFor="let i of inscricoes" [ngValue]="i.inscricaoInfo">{{ i.inscricaoInfo.nomeCompetidor }}</option>
-              </select>
-        
-              <span>vs</span>
-        
-              <select [(ngModel)]="confronto.competidorB">
-                <option [ngValue]="null">Escolher B</option>
-                <option *ngFor="let i of inscricoes" [ngValue]="i.inscricaoInfo">{{ i.inscricaoInfo.nomeCompetidor }}</option>
-              </select>
+
+              <div class="competidores-selects">
+                <select [(ngModel)]="confronto.competidorA" [compareWith]="compararCompetidores">
+                  <option [ngValue]="null">Escolher A</option>
+                  <option *ngFor="let c of getOpcoes(confronto, 'A')" [ngValue]="c">{{ c.nome }}</option>
+                </select>
+
+                <span>vs</span>
+
+                <select [(ngModel)]="confronto.competidorB" [compareWith]="compararCompetidores">
+                  <option [ngValue]="null">Escolher B</option>
+                  <option *ngFor="let c of getOpcoes(confronto, 'B')" [ngValue]="c">{{ c.nome }}</option>
+                </select>
+              </div>
+
+              <div class="vencedor-select">
+                <label>Vencedor:</label>
+                <select [(ngModel)]="confronto.vencedor">
+                  <option [ngValue]="null">Selecionar Vencedor</option>
+                  <option *ngIf="confronto.competidorA" [ngValue]="confronto.competidorA">{{ confronto.competidorA.nome }}</option>
+                  <option *ngIf="confronto.competidorB" [ngValue]="confronto.competidorB">{{ confronto.competidorB.nome }}</option>
+                </select>
+              </div>
             </div>
-        
+
             <button (click)="adicionarConfronto(chaveamentoSelecionado, round.numero)">+ Adicionar Confronto</button>
           </div>
         </div>        
