@@ -24,59 +24,61 @@
     <h2>Chaveamentos</h2>
 
     <div class="chaveamentos">
-      <div *ngFor="let chave of chaveamentos" 
-           class="chaveamento" 
-           [class.ativo]="chave === chaveamentoSelecionado"
-           (click)="selecionarChaveamento(chave)">
-    
+      <div *ngFor="let chave of chaveamentos" class="chaveamento" [class.ativo]="chave === chaveamentoSelecionado"
+        (click)="selecionarChaveamento(chave)">
+
         <div class="chaveamento-nome">
-          <input *ngIf="chave.editandoNome"
-                 [(ngModel)]="chave.nome"
-                 (blur)="confirmarNome(chave)"
-                 (keyup.enter)="confirmarNome(chave)"
-                 placeholder="Nome do Chaveamento" />
-    
+          <input *ngIf="chave.editandoNome" [(ngModel)]="chave.nome" (blur)="confirmarNome(chave)"
+            (keyup.enter)="confirmarNome(chave)" placeholder="Nome do Chaveamento" />
+
           <h4 *ngIf="!chave.editandoNome">{{ chave.nome }}</h4>
         </div>
-    
+
         <div class="arvore-confrontos" *ngIf="chaveamentoSelecionado">
           <h3>{{ chaveamentoSelecionado.nome }}</h3>
-        
+
           <div *ngFor="let round of chaveamentoSelecionado.rounds" class="round">
             <h4>Rodada {{ round.numero }}</h4>
-        
+
             <div *ngFor="let confronto of round.confrontos" class="confronto-item">
 
               <div class="competidores-selects">
-                <select [(ngModel)]="confronto.competidorA" [compareWith]="compararCompetidores">
-                  <option [ngValue]="null">Escolher A</option>
-                  <option *ngFor="let c of getOpcoes(confronto, 'A')" [ngValue]="c">{{ c.nome }}</option>
+                <select [compareWith]="compararCompetidores" [ngModel]="confronto.competidorA"
+                  (ngModelChange)="confronto.competidorA = $event">
+                  <option *ngFor="let c of getOpcoes(confronto, 'A', round.numero)" [ngValue]="c">
+                    {{ c.nome }}
+                  </option>
                 </select>
 
-                <span>vs</span>
-
-                <select [(ngModel)]="confronto.competidorB" [compareWith]="compararCompetidores">
-                  <option [ngValue]="null">Escolher B</option>
-                  <option *ngFor="let c of getOpcoes(confronto, 'B')" [ngValue]="c">{{ c.nome }}</option>
+                <!-- Repete o mesmo para competidorB -->
+                <select [compareWith]="compararCompetidores" [ngModel]="confronto.competidorB"
+                  (ngModelChange)="confronto.competidorB = $event">
+                  <option *ngFor="let c of getOpcoes(confronto, 'B', round.numero)" [ngValue]="c">
+                    {{ c.nome }}
+                  </option>
                 </select>
+
               </div>
 
               <div class="vencedor-select">
                 <label>Vencedor:</label>
-                <select [(ngModel)]="confronto.vencedor">
+                <select [(ngModel)]="confronto.vencedor"
+                  (change)="vincularVencedor(chaveamentoSelecionado, round.numero, confronto)">
                   <option [ngValue]="null">Selecionar Vencedor</option>
-                  <option *ngIf="confronto.competidorA" [ngValue]="confronto.competidorA">{{ confronto.competidorA.nome }}</option>
-                  <option *ngIf="confronto.competidorB" [ngValue]="confronto.competidorB">{{ confronto.competidorB.nome }}</option>
+                  <option *ngIf="confronto.competidorA" [ngValue]="confronto.competidorA">{{ confronto.competidorA.nome
+                    }}</option>
+                  <option *ngIf="confronto.competidorB" [ngValue]="confronto.competidorB">{{ confronto.competidorB.nome
+                    }}</option>
                 </select>
               </div>
             </div>
 
             <button (click)="adicionarConfronto(chaveamentoSelecionado, round.numero)">+ Adicionar Confronto</button>
           </div>
-        </div>        
-    
+        </div>
+
       </div>
-    </div>    
+    </div>
 
     <button (click)="criarChaveamento()">+ Criar Novo Chaveamento</button>
   </div>

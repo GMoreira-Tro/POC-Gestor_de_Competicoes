@@ -65,10 +65,10 @@ export class GerenciarCompeticaoComponent implements OnInit {
 
   onCategoriaSelecionada(): void {
     if (!this.categoriaSelecionada) return;
-  
+
     this.inscricoes = [];
     this.carregouInscricao = false;
-  
+
     // 🧠 Troca de chaveamentos conforme a categoria
     if (this.chaveamentosPorCategoria[this.categoriaSelecionada]) {
       this.chaveamentos = this.chaveamentosPorCategoria[this.categoriaSelecionada];
@@ -76,15 +76,15 @@ export class GerenciarCompeticaoComponent implements OnInit {
       this.chaveamentos = [];
       this.chaveamentosPorCategoria[this.categoriaSelecionada] = this.chaveamentos;
     }
-  
+
     this.chaveamentoSelecionado = null;
-  
+
     this.inscricaoService.getInscricoesPorCategoria(this.categoriaSelecionada).subscribe(
       res => {
         this.inscricoes = res.filter(i => i.status === 1);
         const inscricoesQuant = this.inscricoes.length;
         let inscricoesCarregadas = 0;
-  
+
         this.inscricoes.forEach(inscricao => {
           this.inscricaoService.getInfoInscricao(inscricao.id).subscribe(inscricaoInfo => {
             inscricao.inscricaoInfo = inscricaoInfo;
@@ -100,7 +100,7 @@ export class GerenciarCompeticaoComponent implements OnInit {
       },
       err => console.error('Erro ao carregar inscrições', err)
     );
-  }  
+  }
 
   criarChaveamento(): void {
     const novo = {
@@ -138,16 +138,50 @@ export class GerenciarCompeticaoComponent implements OnInit {
     }
   }
 
-  getOpcoes(confronto: Confronto, lado: 'A' | 'B'): any[] {
-    if (!confronto.pais?.length) {
-      const retorno = this.inscricoes.map(i => i.inscricaoInfo.competidor);
-      return retorno;
+  getOpcoes(confronto: Confronto, lado: 'A' | 'B', roundNumero: number): Competidor[] {
+    let opcoes: Competidor[] = [];
+
+    // Primeiro round → todos os competidores inscritos
+    if (roundNumero === 1) {
+      opcoes = this.inscricoes.map(i => i.inscricaoInfo.competidor);
+    } else {
+      // Rodadas seguintes → apenas vencedores da rodada anterior
+      const anterior = this.chaveamentoSelecionado.rounds.find((r: any) => r.numero === roundNumero - 1);
+      if (!anterior) return [];
+
+      opcoes = anterior.confrontos
+        .map((c: any) => c.vencedor)
+        .filter((v: any) => !!v); // remove undefined
     }
 
-    return confronto.pais
-      .map(id => this.buscarConfrontoPorId(id))
-      .filter(c => c?.vencedor)
-      .map(c => c!.vencedor!);
+    // Remove quem já foi escolhido em outros confrontos desse round
+    const usados = this.getCompetidoresUsadosNoRound(roundNumero, confronto);
+    opcoes = opcoes.filter(c => !usados.some(u => u.id === c.id));
+
+    // Remove o competidor escolhido no outro lado do mesmo confronto
+    const outroLado = lado === 'A' ? confronto.competidorB : confronto.competidorA;
+    if (outroLado) {
+      opcoes = opcoes.filter(c => c.id !== outroLado.id);
+    }
+
+    return opcoes;
+  }
+
+
+  getCompetidoresUsadosNoRound(roundNumero: number, confrontoAtual: any): Competidor[] {
+    const round = this.chaveamentoSelecionado.rounds.find((r: any) => r.numero === roundNumero);
+    if (!round) return [];
+
+    const usados: Competidor[] = [];
+
+    for (const confronto of round.confrontos) {
+      if (confronto === confrontoAtual) continue; // Evita bloquear seleção no próprio confronto
+
+      if (confronto.competidorA) usados.push(confronto.competidorA);
+      if (confronto.competidorB) usados.push(confronto.competidorB);
+    }
+
+    return usados;
   }
 
   buscarConfrontoPorId(id: number | string): Confronto | undefined {
@@ -167,9 +201,69 @@ export class GerenciarCompeticaoComponent implements OnInit {
   trackPorId(index: number, item: any): number {
     return item.id;
   }
-  
+
   compararCompetidores = (c1: any, c2: any) => {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   };
+
+  vincularVencedor(chaveamento: any, roundNumero: number, confrontoAtual: any): void {
+    const proximoRoundNumero = roundNumero + 1;
+    const rounds = chaveamento.rounds;
   
+    // Cria o próximo round se não existir
+    let proximoRound = rounds.find((r: any) => r.numero === proximoRoundNumero);
+    if (!proximoRound) {
+      proximoRound = {
+        numero: proximoRoundNumero,
+        confrontos: []
+      };
+      rounds.push(proximoRound);
+      rounds.sort((a: any, b: any) => a.numero - b.numero);
+    }
+  
+    const novoVencedor = confrontoAtual.vencedor;
+    const antigoVencedor = confrontoAtual._ultimoVencedor; // Campo auxiliar interno
+  
+    // ⚙️ Se o vencedor mudou, atualiza nos rounds seguintes
+    if (antigoVencedor && antigoVencedor.id !== novoVencedor?.id) {
+      for (let i = 0; i < rounds.length; i++) {
+        const r = rounds[i];
+        if (r.numero <= roundNumero) continue;
+  
+        for (const c of r.confrontos) {
+          if (c.competidorA?.id === antigoVencedor.id) c.competidorA = novoVencedor;
+          if (c.competidorB?.id === antigoVencedor.id) c.competidorB = novoVencedor;
+        }
+      }
+    }
+  
+    // ⚙️ Se o novo vencedor ainda não está no próximo round, adiciona
+    if (novoVencedor) {
+      const jaExiste = proximoRound.confrontos.some(c =>
+        c.competidorA?.id === novoVencedor.id || c.competidorB?.id === novoVencedor.id
+      );
+  
+      if (!jaExiste) {
+        // Procura espaço vazio
+        let destino = proximoRound.confrontos.find(c => !c.competidorA || !c.competidorB);
+        if (!destino) {
+          destino = {
+            competidorA: null,
+            competidorB: null,
+            vencedor: null
+          };
+          proximoRound.confrontos.push(destino);
+        }
+  
+        if (!destino.competidorA) {
+          destino.competidorA = novoVencedor;
+        } else if (!destino.competidorB) {
+          destino.competidorB = novoVencedor;
+        }
+      }
+    }
+  
+    // Armazena o vencedor atual como "último conhecido"
+    confrontoAtual._ultimoVencedor = novoVencedor;
+  }  
 }
