@@ -1,0 +1,27 @@
+.arvore-confrontos {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  padding: 30px;
+  background-color: #1f1f1f;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+  color: #eee;
+}
+
+.confronto {
+  width: 180px;
+  padding: 14px 10px;
+  background-color: #2e2e2e;
+  border: 2px solid #555;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  position: relative;
+  user-select: none;
+}

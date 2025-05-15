@@ -62,7 +62,7 @@
 
               <div class="vencedor-select">
                 <label>Vencedor:</label>
-                <select [(ngModel)]="confronto.vencedor"
+                <select [(ngModel)]="confronto.vencedor" [disabled]="round.numero > 1"
                   (change)="vincularVencedor(chaveamentoSelecionado, round.numero, confronto)">
                   <option [ngValue]="null">Selecionar Vencedor</option>
                   <option *ngIf="confronto.competidorA" [ngValue]="confronto.competidorA">{{ confronto.competidorA.nome

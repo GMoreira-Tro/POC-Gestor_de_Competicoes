@@ -222,9 +222,9 @@ export class GerenciarCompeticaoComponent implements OnInit {
     }
   
     const novoVencedor = confrontoAtual.vencedor;
-    const antigoVencedor = confrontoAtual._ultimoVencedor; // Campo auxiliar interno
+    const antigoVencedor = confrontoAtual._ultimoVencedor;
   
-    // ⚙️ Se o vencedor mudou, atualiza nos rounds seguintes
+    // 🔁 Atualiza todos os rounds seguintes se o vencedor mudou
     if (antigoVencedor && antigoVencedor.id !== novoVencedor?.id) {
       for (let i = 0; i < rounds.length; i++) {
         const r = rounds[i];
@@ -237,33 +237,33 @@ export class GerenciarCompeticaoComponent implements OnInit {
       }
     }
   
-    // ⚙️ Se o novo vencedor ainda não está no próximo round, adiciona
+    // ⚠️ Impede duplicatas no próximo round
     if (novoVencedor) {
-      const jaExiste = proximoRound.confrontos.some(c =>
+      const jaExiste = proximoRound.confrontos.some((c : any) =>
         c.competidorA?.id === novoVencedor.id || c.competidorB?.id === novoVencedor.id
       );
+      if (jaExiste) return; // Já está alocado nesse round
   
-      if (!jaExiste) {
-        // Procura espaço vazio
-        let destino = proximoRound.confrontos.find(c => !c.competidorA || !c.competidorB);
-        if (!destino) {
-          destino = {
-            competidorA: null,
-            competidorB: null,
-            vencedor: null
-          };
-          proximoRound.confrontos.push(destino);
-        }
+      // Encontra slot vazio
+      let destino = proximoRound.confrontos.find((c : any) => !c.competidorA || !c.competidorB);
+      if (!destino) {
+        destino = {
+          competidorA: null,
+          competidorB: null,
+          vencedor: null
+        };
+        proximoRound.confrontos.push(destino);
+      }
   
-        if (!destino.competidorA) {
-          destino.competidorA = novoVencedor;
-        } else if (!destino.competidorB) {
-          destino.competidorB = novoVencedor;
-        }
+      if (!destino.competidorA) {
+        destino.competidorA = novoVencedor;
+      } else if (!destino.competidorB) {
+        destino.competidorB = novoVencedor;
       }
     }
   
-    // Armazena o vencedor atual como "último conhecido"
+    // Atualiza o "último vencedor" do confronto
     confrontoAtual._ultimoVencedor = novoVencedor;
-  }  
+  }
+  
 }
