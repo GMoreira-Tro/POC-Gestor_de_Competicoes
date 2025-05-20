@@ -39,3 +39,6 @@ input:focus, textarea:focus,select:focus {
     border-color: #1e90ff;
     outline: none;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

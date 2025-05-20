@@ -38,6 +38,9 @@ import { ArvoreConfrontosComponent } from './arvore-confrontos/arvore-confrontos
 import { VisualizacaoChaveamentoComponent } from './visualizacao-chaveamento/visualizacao-chaveamento.component';
 import { GojsChaveamentoComponent } from './gojs-chaveamento/gojs-chaveamento.component';
 import { VisualizacaoChaveamentoBotaoComponent } from './visualizacao-chaveamento-botao/visualizacao-chaveamento-botao.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatSelectModule } from '@angular/material/select';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -74,6 +77,8 @@ import { VisualizacaoChaveamentoBotaoComponent } from './visualizacao-chaveament
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    MatSelectModule,
     FormsModule,
     AppRoutingModule,
     CommonModule,
@@ -83,7 +88,7 @@ import { VisualizacaoChaveamentoBotaoComponent } from './visualizacao-chaveament
     NgxMaskModule.forRoot(),
 
   ],
-  providers: [UserService],
+  providers: [UserService, provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

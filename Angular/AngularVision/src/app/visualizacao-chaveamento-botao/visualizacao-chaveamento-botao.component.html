@@ -5,3 +5,14 @@
     Adicionar Participante
   </button>
 </div>
+
+<mat-select
+  *ngIf="selecionando"
+  [value]="''"
+  (selectionChange)="definirVencedor($event.value)"
+  [style.left.px]="posX"
+  [style.top.px]="posY"
+  style="position: absolute; z-index: 1000; background: white;"
+>
+  <mat-option *ngFor="let op of opcoesVencedor" [value]="op">{{ op }}</mat-option>
+</mat-select>

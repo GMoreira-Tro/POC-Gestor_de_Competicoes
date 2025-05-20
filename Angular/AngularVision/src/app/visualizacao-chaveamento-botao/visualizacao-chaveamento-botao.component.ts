@@ -13,6 +13,15 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
   participantes: string[] = [];
   nomesDisponiveis: string[] = ['Luan', 'Bianca', 'Alex', 'Guilherme', 'Maria', 'José', 'Ana', 'Carlos'];
 
+  selecionando = false;
+  opcoesVencedor: string[] = [];
+  nodoSelecionado: any = null;
+  posX = 0;
+  posY = 0;
+
+  vencedores: { [key: number]: string } = {}; // <--- Salva os vencedores manualmente
+
+
   ngOnInit(): void {
     const $ = go.GraphObject.make;
 
@@ -40,6 +49,26 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
       $(go.Link,
         { routing: go.Link.Orthogonal, corner: 5 },
         $(go.Shape, { strokeWidth: 2, stroke: '#1e90ff' }));
+
+    this.diagram.addDiagramListener('ObjectSingleClicked', (e) => {
+      const part = e.subject.part;
+      const data = part.data;
+
+      if (!data) return;
+
+      // Se for um nó de confronto (sem nome) e com dois filhos
+      const filhos = this.diagram.model.nodeDataArray.filter(n => n['parent'] === data.key);
+      if (data.name === '' && filhos.length === 2) {
+        this.nodoSelecionado = data;
+        this.opcoesVencedor = filhos.map(f => f['name']);
+        this.posX = e.diagram.lastInput.documentPoint.x;
+        this.posY = e.diagram.lastInput.documentPoint.y;
+        this.selecionando = true;
+      } else {
+        this.selecionando = false;
+      }
+    });
+
 
     this.atualizarModelo();
   }
@@ -130,17 +159,37 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
       return camadaAtual[0];
     }
 
-    // Função para linearizar a árvore em lista para GoJS, atribuindo parents
-    function linearizar(nodo: any, parentKey?: number, lista: any[] = []) {
-      lista.push({ key: nodo.key, name: nodo.name || '', parent: parentKey });
-      if (nodo.left) linearizar(nodo.left, nodo.key, lista);
-      if (nodo.right) linearizar(nodo.right, nodo.key, lista);
-      return lista;
-    }
-
     const raiz = construirArvore([...this.participantes]);
-    const modelo = linearizar(raiz);
+    const modelo = this.linearizar(raiz);
 
     this.diagram.model = new go.TreeModel(modelo);
+  }
+
+  linearizar(nodo: any, parentKey?: number, lista: any[] = []): any[] {
+    lista.push({ key: nodo.key, name: nodo.name || '', parent: parentKey });
+    if (nodo.left) this.linearizar(nodo.left, nodo.key, lista);
+    if (nodo.right) this.linearizar(nodo.right, nodo.key, lista);
+
+    return lista.map(n => {
+      if (n.name === '' && this.vencedores[n.key]) {
+        return { ...n, name: this.vencedores[n.key] };
+      }
+      return n;
+    });
+  }
+
+
+  definirVencedor(nome: string) {
+    if (!this.nodoSelecionado) return;
+
+    const key = this.nodoSelecionado.key;
+    this.vencedores[key] = nome;
+
+    const model = this.diagram.model as go.TreeModel;
+    model.startTransaction('define vencedor');
+    model.setDataProperty(this.nodoSelecionado, 'name', nome);
+    model.commitTransaction('define vencedor');
+
+    this.selecionando = false;
   }
 }
