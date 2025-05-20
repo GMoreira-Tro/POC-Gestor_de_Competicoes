@@ -36,6 +36,8 @@ import { PagarInscricaoComponent } from './pagar-inscricao/pagar-inscricao.compo
 import { GerenciarCompeticaoComponent } from './gerenciar-competicao/gerenciar-competicao.component';
 import { ArvoreConfrontosComponent } from './arvore-confrontos/arvore-confrontos.component';
 import { VisualizacaoChaveamentoComponent } from './visualizacao-chaveamento/visualizacao-chaveamento.component';
+import { GojsChaveamentoComponent } from './gojs-chaveamento/gojs-chaveamento.component';
+import { VisualizacaoChaveamentoBotaoComponent } from './visualizacao-chaveamento-botao/visualizacao-chaveamento-botao.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { VisualizacaoChaveamentoComponent } from './visualizacao-chaveamento/vis
     GerenciarCompeticaoComponent,
     ArvoreConfrontosComponent,
     VisualizacaoChaveamentoComponent,
+    VisualizacaoChaveamentoBotaoComponent,
+    GojsChaveamentoComponent,
     CabecalhoComponent,
     RodapeComponent,
     

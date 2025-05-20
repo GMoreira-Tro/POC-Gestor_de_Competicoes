@@ -37,43 +37,27 @@
         <div class="arvore-confrontos" *ngIf="chaveamentoSelecionado">
           <h3>{{ chaveamentoSelecionado.nome }}</h3>
 
-          <div *ngFor="let round of chaveamentoSelecionado.rounds" class="round">
-            <h4>Rodada {{ round.numero }}</h4>
+          <!-- Botão e select para adicionar competidor em bloco específico -->
+          <div class="adicionar-competidor-area" style="margin-bottom: 1rem;">
+            <label for="confrontoSelecionado">Selecionar bloco para adicionar competidor:</label>
+            <select id="confrontoSelecionado" [(ngModel)]="confrontoSelecionadoParaAdicionar"
+              style="margin-left: 0.5rem;">
+              <option *ngFor="let confronto of getTodosConfrontos(chaveamentoSelecionado)" [ngValue]="confronto">
+                Rodada {{ confronto.round }} - Confronto {{ confronto.id }}
+              </option>
+            </select>
 
-            <div *ngFor="let confronto of round.confrontos" class="confronto-item">
+            <label for="competidorParaAdicionar" style="margin-left: 1rem;">Competidor:</label>
+            <select id="competidorParaAdicionar" [(ngModel)]="competidorParaAdicionar" style="margin-left: 0.5rem;">
+              <option *ngFor="let c of inscricoes" [ngValue]="c.inscricaoInfo">
+                {{ c.inscricaoInfo.nomeCompetidor }}
+              </option>
+            </select>
 
-              <div class="competidores-selects">
-                <select [compareWith]="compararCompetidores" [ngModel]="confronto.competidorA"
-                  (ngModelChange)="confronto.competidorA = $event">
-                  <option *ngFor="let c of getOpcoes(confronto, 'A', round.numero)" [ngValue]="c">
-                    {{ c.nome }}
-                  </option>
-                </select>
+            <button (click)="adicionarCompetidorNoConfronto()" style="margin-left: 1rem;">Adicionar Competidor</button>
+          </div>
 
-                <!-- Repete o mesmo para competidorB -->
-                <select [compareWith]="compararCompetidores" [ngModel]="confronto.competidorB"
-                  (ngModelChange)="confronto.competidorB = $event">
-                  <option *ngFor="let c of getOpcoes(confronto, 'B', round.numero)" [ngValue]="c">
-                    {{ c.nome }}
-                  </option>
-                </select>
-
-              </div>
-
-              <div class="vencedor-select">
-                <label>Vencedor:</label>
-                <select [(ngModel)]="confronto.vencedor" [disabled]="round.numero > 1"
-                  (change)="vincularVencedor(chaveamentoSelecionado, round.numero, confronto)">
-                  <option [ngValue]="null">Selecionar Vencedor</option>
-                  <option *ngIf="confronto.competidorA" [ngValue]="confronto.competidorA">{{ confronto.competidorA.nome
-                    }}</option>
-                  <option *ngIf="confronto.competidorB" [ngValue]="confronto.competidorB">{{ confronto.competidorB.nome
-                    }}</option>
-                </select>
-              </div>
-            </div>
-
-            <button (click)="adicionarConfronto(chaveamentoSelecionado, round.numero)">+ Adicionar Confronto</button>
+          <div #diagramDiv class="gojs-diagram-container" style="width: 100%; height: 600px; border: 1px solid #ccc;">
           </div>
         </div>
 

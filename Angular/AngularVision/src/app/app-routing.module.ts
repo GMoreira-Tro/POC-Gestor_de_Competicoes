@@ -22,6 +22,7 @@ import { PagarInscricaoComponent } from './pagar-inscricao/pagar-inscricao.compo
 import { GerenciarCompeticaoComponent } from './gerenciar-competicao/gerenciar-competicao.component';
 import { ArvoreConfrontosComponent } from './arvore-confrontos/arvore-confrontos.component';
 import { VisualizacaoChaveamentoComponent } from './visualizacao-chaveamento/visualizacao-chaveamento.component';
+import { VisualizacaoChaveamentoBotaoComponent } from './visualizacao-chaveamento-botao/visualizacao-chaveamento-botao.component';
 
 const routes: Routes = [
   { path: '', component: TelaInicialComponent },
@@ -45,6 +46,7 @@ const routes: Routes = [
   { path: 'fale-conosco', component: FaleConoscoComponent },
   { path: 'arvore', component: ArvoreConfrontosComponent },
   { path: 'visualizacao', component: VisualizacaoChaveamentoComponent },
+  { path: 'visualizacao-botao', component: VisualizacaoChaveamentoBotaoComponent },
   { path: 'informacoes/:id', component: DetalhesCompeticaoComponent }, // Adicione a rota para os detalhes da competição  
   { path: '', redirectTo: '/register', pathMatch: 'full' }, // Defina uma rota padrão
   { path: '**', redirectTo: '/register' } // Redireciona para o registro se a rota não for encontrada
