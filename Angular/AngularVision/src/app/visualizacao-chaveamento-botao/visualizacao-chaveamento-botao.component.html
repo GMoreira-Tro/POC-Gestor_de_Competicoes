@@ -1,11 +1,25 @@
+<!-- Diagrama -->
 <div #diagramaRef style="width: 100%; height: 600px; background-color: #1e1e1e;"></div>
 
+<!-- Botão Adicionar Participante -->
 <div style="text-align: center; margin-top: 20px;">
-  <button (click)="adicionarParticipante()" style="padding: 10px 20px; font-size: 16px;">
+  <button (click)="abrirSelecaoParticipante()" style="padding: 10px 20px; font-size: 16px;">
     Adicionar Participante
   </button>
 </div>
 
+<!-- Seletor para Escolher Participante (ao adicionar) -->
+<mat-form-field
+  *ngIf="selecionandoParticipante"
+  style="position: absolute; left: 50%; transform: translateX(-50%); top: 650px; background: white; z-index: 1000; width: 300px;"
+>
+  <mat-label>Escolha um participante</mat-label>
+  <mat-select (selectionChange)="adicionarParticipante($event.value)">
+    <mat-option *ngFor="let nome of opcoesVencedor" [value]="nome">{{ nome }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<!-- Seletor de Vencedor (ao clicar em nó) -->
 <mat-select
   *ngIf="selecionando"
   [value]="''"

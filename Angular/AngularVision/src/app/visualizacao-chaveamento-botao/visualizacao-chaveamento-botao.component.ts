@@ -19,6 +19,8 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
   posX = 0;
   posY = 0;
 
+  selecionandoParticipante = false;
+
   vencedores: { [key: number]: string } = {}; // <--- Salva os vencedores manualmente
 
 
@@ -97,11 +99,12 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
     }
   }
 
-  adicionarParticipante() {
-    if (this.nomesDisponiveis.length === 0) return;
+  adicionarParticipante(nome: string) {
+    if (!nome || this.participantes.includes(nome)) return;
 
-    const nome = this.nomesDisponiveis.shift()!;
     this.participantes.push(nome);
+    this.nomesDisponiveis = this.nomesDisponiveis.filter(n => n !== nome);
+    this.selecionandoParticipante = false;
 
     this.atualizarModelo();
   }
@@ -217,6 +220,19 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
     model.commitTransaction('define vencedor');
 
     this.selecionando = false;
+  }
+
+  getNomesDisponiveis(): string[] {
+    const usados = this.diagram.model.nodeDataArray
+      .filter(n => !n['parent']) // só folhas reais
+      .map(n => n['name'])
+      .filter(name => !!name);
+
+    return this.nomesDisponiveis.filter(nome => !usados.includes(nome));
+  }
+  abrirSelecaoParticipante() {
+    this.opcoesVencedor = this.getNomesDisponiveis();
+    this.selecionandoParticipante = true;
   }
 
 }
