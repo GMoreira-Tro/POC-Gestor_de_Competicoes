@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoriaService } from '../services/categoria.service';
 import { InscricaoService } from '../services/inscricao.service';
 import { CompeticaoService } from '../services/competicao.service';
 import { UserService } from '../services/user.service';
 import { CompetidorService } from '../services/competidor.service';
-import { Confronto } from '../interfaces/Confronto';
-import { Competidor } from '../interfaces/Competidor';
-import { ConfrontoInscricao } from '../interfaces/ConfrontoInscricao';
 import * as go from 'gojs';
 
 @Component({
@@ -15,76 +12,18 @@ import * as go from 'gojs';
   templateUrl: './gerenciar-competicao.component.html',
   styleUrls: ['./gerenciar-competicao.component.css']
 })
-export class GerenciarCompeticaoComponent implements OnInit {
+export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
+  @ViewChild('diagramaRef', { static: false }) diagramaRef!: ElementRef;
+
   competicaoId!: number;
   categorias: any[] = [];
   categoriaSelecionada: any;
   inscricoes: any[] = [];
   carregouInscricao: boolean = false;
   chaveamentoSelecionado: any = null;
-
   chaveamentos: any[] = [];
   chaveamentosPorCategoria: { [categoriaId: number]: any[] } = {};
-
   diagram: go.Diagram | undefined;
-
-  ngAfterViewInit() {
-    this.inicializarDiagrama();
-    this.atualizarDiagrama();
-  }
-
-  inicializarDiagrama() {
-    const $ = go.GraphObject.make;
-
-    this.diagram = $(go.Diagram, 'diagramDiv', {
-      initialAutoScale: go.Diagram.Uniform,
-      layout: $(go.TreeLayout, { angle: 90, layerSpacing: 50 }),
-      'undoManager.isEnabled': true,
-    });
-
-    // Define como cada nó será visualizado
-    this.diagram.nodeTemplate =
-      $(go.Node, 'Auto',
-        $(go.Shape, 'RoundedRectangle', { fill: '#ACE600', strokeWidth: 0 }),
-        $(go.TextBlock,
-          { margin: 8, font: 'bold 14px sans-serif', stroke: '#333' },
-          new go.Binding('text', 'text'))
-      );
-  }
-
-  atualizarDiagrama() {
-    if (!this.diagram || !this.chaveamentoSelecionado) return;
-
-    const nodes: go.ObjectData[] | { key: string; text: string; }[] | undefined = [];
-    const links: go.ObjectData[] | { from: string; to: string; }[] | undefined = [];
-
-    // Construir nós e ligações baseado na estrutura rounds e confrontos
-    // Cada confronto vira um nó, com texto do competidorA vs competidorB ou vazio
-
-    this.chaveamentoSelecionado.rounds.forEach((round: any, roundIndex: number) => {
-      round.confrontos.forEach((confronto: any, confrontoIndex: number) => {
-        const nodeId = `R${round.numero}C${confrontoIndex}`;
-
-        // Texto do nó: nomes dos competidores ou vazio
-        const text = `${confronto.competidorA?.nome || '---'} vs ${confronto.competidorB?.nome || '---'}`;
-
-        nodes.push({ key: nodeId, text });
-
-        // Se não for a primeira rodada, linka com o nó do confronto anterior que deu origem
-        if (roundIndex > 0) {
-          // Supondo que a lógica é que este confronto depende dos vencedores de 2 confrontos da rodada anterior
-          // Por exemplo: nodeId = R2C0 liga com R1C0 e R1C1
-          const origem1 = `R${round.numero - 1}C${confrontoIndex * 2}`;
-          const origem2 = `R${round.numero - 1}C${confrontoIndex * 2 + 1}`;
-
-          links.push({ from: origem1, to: nodeId });
-          links.push({ from: origem2, to: nodeId });
-        }
-      });
-    });
-
-    this.diagram.model = new go.GraphLinksModel(nodes, links);
-  }
 
   constructor(
     private route: ActivatedRoute,
@@ -116,6 +55,10 @@ export class GerenciarCompeticaoComponent implements OnInit {
     this.carregarCategorias();
   }
 
+  ngAfterViewInit() {
+    this.inicializarDiagram();
+  }
+
   carregarCategorias(): void {
     this.categoriaService.getCategoriasPorCompeticao(this.competicaoId).subscribe(
       res => this.categorias = res,
@@ -129,7 +72,6 @@ export class GerenciarCompeticaoComponent implements OnInit {
     this.inscricoes = [];
     this.carregouInscricao = false;
 
-    // 🧠 Troca de chaveamentos conforme a categoria
     if (this.chaveamentosPorCategoria[this.categoriaSelecionada]) {
       this.chaveamentos = this.chaveamentosPorCategoria[this.categoriaSelecionada];
     } else {
@@ -154,6 +96,7 @@ export class GerenciarCompeticaoComponent implements OnInit {
             inscricoesCarregadas++;
             if (inscricoesCarregadas === inscricoesQuant) {
               this.carregouInscricao = true;
+              this.inicializarDiagram();
             }
           });
         });
@@ -162,204 +105,109 @@ export class GerenciarCompeticaoComponent implements OnInit {
     );
   }
 
-  criarChaveamento(): void {
-    const novo = {
-      nome: `Chaveamento ${this.chaveamentos.length + 1}`,
-      rounds: [
-        {
-          numero: 1,
-          confrontos: []
-        }
-      ],
-      editandoNome: true
-    };
-    this.chaveamentos.push(novo);
-    this.chaveamentoSelecionado = novo;
-    this.chaveamentosPorCategoria[this.categoriaSelecionada] = this.chaveamentos;
-  }
+  inicializarDiagram(): void {
+    if (!this.diagramaRef) return;
 
-  confirmarNome(chaveamento: any): void {
-    chaveamento.editandoNome = false;
-    // Se desejar, você pode validar nome vazio aqui
-  }
-  selecionarChaveamento(chave: any): void {
-    this.chaveamentoSelecionado = chave;
-  }
+    const $ = go.GraphObject.make;
 
-
-  adicionarConfronto(chaveamento: any, roundNumero: number): void {
-    const round = chaveamento.rounds.find((r: any) => r.numero === roundNumero);
-    if (round) {
-      round.confrontos.push({
-        competidorA: null,
-        competidorB: null,
-        vencedor: null
-      });
-    }
-  }
-
-  getOpcoes(confronto: Confronto, lado: 'A' | 'B', roundNumero: number): Competidor[] {
-    let opcoes: Competidor[] = [];
-
-    // Primeiro round → todos os competidores inscritos
-    if (roundNumero === 1) {
-      opcoes = this.inscricoes.map(i => i.inscricaoInfo.competidor);
-    } else {
-      // Rodadas seguintes → apenas vencedores da rodada anterior
-      const anterior = this.chaveamentoSelecionado.rounds.find((r: any) => r.numero === roundNumero - 1);
-      if (!anterior) return [];
-
-      opcoes = anterior.confrontos
-        .map((c: any) => c.vencedor)
-        .filter((v: any) => !!v); // remove undefined
-    }
-
-    // Remove quem já foi escolhido em outros confrontos desse round
-    const usados = this.getCompetidoresUsadosNoRound(roundNumero, confronto);
-    opcoes = opcoes.filter(c => !usados.some(u => u.id === c.id));
-
-    // Remove o competidor escolhido no outro lado do mesmo confronto
-    const outroLado = lado === 'A' ? confronto.competidorB : confronto.competidorA;
-    if (outroLado) {
-      opcoes = opcoes.filter(c => c.id !== outroLado.id);
-    }
-
-    return opcoes;
-  }
-
-
-  getCompetidoresUsadosNoRound(roundNumero: number, confrontoAtual: any): Competidor[] {
-    const round = this.chaveamentoSelecionado.rounds.find((r: any) => r.numero === roundNumero);
-    if (!round) return [];
-
-    const usados: Competidor[] = [];
-
-    for (const confronto of round.confrontos) {
-      if (confronto === confrontoAtual) continue; // Evita bloquear seleção no próprio confronto
-
-      if (confronto.competidorA) usados.push(confronto.competidorA);
-      if (confronto.competidorB) usados.push(confronto.competidorB);
-    }
-
-    return usados;
-  }
-
-  buscarConfrontoPorId(id: number | string): Confronto | undefined {
-    if (!this.chaveamentoSelecionado) return undefined;
-
-    for (const round of this.chaveamentoSelecionado.rounds) {
-      for (const confronto of round.confrontos) {
-        if (confronto.id === id || confronto.tempId === id) {
-          return confronto;
-        }
-      }
-    }
-
-    return undefined;
-  }
-
-  trackPorId(index: number, item: any): number {
-    return item.id;
-  }
-
-  compararCompetidores = (c1: any, c2: any) => {
-    return c1 && c2 ? c1.id === c2.id : c1 === c2;
-  };
-
-  vincularVencedor(chaveamento: any, roundNumero: number, confrontoAtual: any): void {
-    const proximoRoundNumero = roundNumero + 1;
-    const rounds = chaveamento.rounds;
-
-    // Cria o próximo round se não existir
-    let proximoRound = rounds.find((r: any) => r.numero === proximoRoundNumero);
-    if (!proximoRound) {
-      proximoRound = {
-        numero: proximoRoundNumero,
-        confrontos: []
-      };
-      rounds.push(proximoRound);
-      rounds.sort((a: any, b: any) => a.numero - b.numero);
-    }
-
-    const novoVencedor = confrontoAtual.vencedor;
-    const antigoVencedor = confrontoAtual._ultimoVencedor;
-
-    // 🔁 Atualiza todos os rounds seguintes se o vencedor mudou
-    if (antigoVencedor && antigoVencedor.id !== novoVencedor?.id) {
-      for (let i = 0; i < rounds.length; i++) {
-        const r = rounds[i];
-        if (r.numero <= roundNumero) continue;
-
-        for (const c of r.confrontos) {
-          if (c.competidorA?.id === antigoVencedor.id) c.competidorA = novoVencedor;
-          if (c.competidorB?.id === antigoVencedor.id) c.competidorB = novoVencedor;
-        }
-      }
-    }
-
-    // ⚠️ Impede duplicatas no próximo round
-    if (novoVencedor) {
-      const jaExiste = proximoRound.confrontos.some((c: any) =>
-        c.competidorA?.id === novoVencedor.id || c.competidorB?.id === novoVencedor.id
-      );
-      if (jaExiste) return; // Já está alocado nesse round
-
-      // Encontra slot vazio
-      let destino = proximoRound.confrontos.find((c: any) => !c.competidorA || !c.competidorB);
-      if (!destino) {
-        destino = {
-          competidorA: null,
-          competidorB: null,
-          vencedor: null
-        };
-        proximoRound.confrontos.push(destino);
-      }
-
-      if (!destino.competidorA) {
-        destino.competidorA = novoVencedor;
-      } else if (!destino.competidorB) {
-        destino.competidorB = novoVencedor;
-      }
-    }
-
-    // Atualiza o "último vencedor" do confronto
-    confrontoAtual._ultimoVencedor = novoVencedor;
-  }
-
-  // Variáveis que vão guardar os selects
-  confrontoSelecionadoParaAdicionar: any = null;
-  competidorParaAdicionar: any = null;
-
-  // Função que retorna todos os confrontos com uma propriedade 'round' pra identificar
-  getTodosConfrontos(chaveamento: any) {
-    const todos: any[] = [];
-    if (!chaveamento || !chaveamento.rounds) return todos;
-
-    chaveamento.rounds.forEach((round: any) => {
-      round.confrontos.forEach((confronto: any) => {
-        todos.push({ ...confronto, round: round.numero });
-      });
+    const diagram = $(go.Diagram, this.diagramaRef.nativeElement, {
+      layout: $(go.TreeLayout, { angle: 180, layerSpacing: 50 }),
+      'undoManager.isEnabled': true
     });
-    return todos;
+
+    diagram.nodeTemplate =
+      $(go.Node, 'Auto',
+        $(go.Shape, 'RoundedRectangle',
+          { fill: '#3e3e3e', stroke: '#555', portId: '', cursor: 'pointer' }),
+        $(go.TextBlock,
+          { margin: 8, stroke: '#f5f5f5', font: 'bold 12pt sans-serif' },
+          new go.Binding('text', 'name'))
+      );
+
+    diagram.linkTemplate =
+      $(go.Link,
+        { routing: go.Link.Orthogonal, corner: 5 },
+        $(go.Shape, { strokeWidth: 2, stroke: '#1e90ff' })
+      );
+
+    diagram.model = new go.TreeModel([
+      { key: 1, name: 'Luan', parent: 5 },
+      { key: 2, name: 'Bianca', parent: 5 },
+      { key: 3, name: 'Alex', parent: 6 },
+      { key: 4, name: 'Guilherme', parent: 6 },
+      { key: 5, name: '', parent: 7 },
+      { key: 6, name: '', parent: 7 },
+      { key: 7, name: '' }
+    ]);
+
+    diagram.addDiagramListener('ObjectSingleClicked', (e) => {
+      const part = e.subject.part;
+      if (part instanceof go.Node) {
+        this.showNameSelector(part, diagram);
+      }
+    });
+
+    this.diagram = diagram;
   }
 
-  // Função que adiciona o competidor escolhido no confronto selecionado
-  adicionarCompetidorNoConfronto() {
-    if (!this.confrontoSelecionadoParaAdicionar || !this.competidorParaAdicionar) {
-      alert('Selecione o confronto e o competidor para adicionar.');
-      return;
-    }
+  showNameSelector(node: go.Node, diagram: go.Diagram) {
+    const nodeData = node.data;
+    const children = diagram.model.nodeDataArray.filter(n => n['parent'] === nodeData.key);
+    const options = children.map(c => c['name']).filter(n => n);
+    const allNames = [...new Set(diagram.model.nodeDataArray.map(n => n['name']).filter(n => n))];
+    const availableNames = options.length >= 2 ? options : allNames;
 
-    // Se o competidorA estiver vazio, preenche ele; senão preenche o competidorB
-    if (!this.confrontoSelecionadoParaAdicionar.competidorA) {
-      this.confrontoSelecionadoParaAdicionar.competidorA = this.competidorParaAdicionar;
-    } else if (!this.confrontoSelecionadoParaAdicionar.competidorB) {
-      this.confrontoSelecionadoParaAdicionar.competidorB = this.competidorParaAdicionar;
-    } else {
-      alert('Este confronto já está completo.');
-    }
+    if (availableNames.length === 0) return;
 
-    // Atualiza o diagrama para refletir mudança
-    this.atualizarDiagrama();
+    const select = document.createElement('select');
+    select.style.position = 'absolute';
+    select.style.zIndex = '100';
+    select.style.left = `${node.actualBounds.centerX - 50}px`;
+    select.style.top = `${node.actualBounds.centerY - 10}px`;
+
+    const emptyOption = document.createElement('option');
+    emptyOption.value = '';
+    emptyOption.text = 'Selecione...';
+    select.appendChild(emptyOption);
+
+    availableNames.forEach(name => {
+      const option = document.createElement('option');
+      option.value = name;
+      option.text = name;
+      select.appendChild(option);
+    });
+
+    select.onchange = (e: any) => {
+      const newName = e.target.value;
+      const model = diagram.model;
+      const oldName = nodeData.name;
+
+      model.startTransaction('atualizar nomes');
+      model.setDataProperty(nodeData, 'name', newName);
+
+      if (oldName && oldName !== newName) {
+        const nodeKey = nodeData.key;
+        const paisComMesmoNome = diagram.model.nodeDataArray.filter(n => {
+          const filhos = diagram.model.nodeDataArray.filter(f => f['parent'] === n['key']);
+          return filhos.some(f => f['key'] === nodeKey) && n['name'] === oldName;
+        });
+
+        paisComMesmoNome.forEach(pai => {
+          model.setDataProperty(pai, 'name', newName);
+        });
+      }
+
+      model.commitTransaction('atualizar nomes');
+      document.body.removeChild(select);
+    };
+
+    select.onblur = () => {
+      if (document.body.contains(select)) {
+        document.body.removeChild(select);
+      }
+    };
+
+    document.body.appendChild(select);
+    select.focus();
   }
 }

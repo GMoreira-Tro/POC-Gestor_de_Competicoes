@@ -20,6 +20,8 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
   posY = 0;
 
   selecionandoParticipante = false;
+  participanteAntigo = '';
+  participanteSelecionadoKey: string = '';
 
   vencedores: { [key: number]: string } = {}; // <--- Salva os vencedores manualmente
 
@@ -235,4 +237,27 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
     this.selecionandoParticipante = true;
   }
 
+  substituirParticipante(novoNome: string) {
+    if (!novoNome || this.participantes.includes(novoNome)) return;
+
+    const key = Number(this.participanteSelecionadoKey);
+    const model = this.diagram.model as go.TreeModel;
+
+    model.startTransaction('substituir participante');
+    model.setDataProperty(this.diagram.findNodeForKey(key)?.data, 'name', novoNome);
+    model.commitTransaction('substituir participante');
+
+    // Atualiza os arrays
+    this.participantes = this.participantes.filter(n => n !== this.participanteAntigo);
+    this.participantes.push(novoNome);
+
+    this.nomesDisponiveis = this.nomesDisponiveis
+      .filter(n => n !== novoNome)
+      .concat(this.participanteAntigo)
+      .sort();
+
+    this.selecionandoParticipante = false;
+
+    this.limparAscendentes(key);
+  }
 }

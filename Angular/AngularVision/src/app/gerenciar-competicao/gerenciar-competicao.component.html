@@ -21,50 +21,8 @@
   </div>
 
   <div *ngIf="categoriaSelecionada" class="confronto-area">
-    <h2>Chaveamentos</h2>
-
-    <div class="chaveamentos">
-      <div *ngFor="let chave of chaveamentos" class="chaveamento" [class.ativo]="chave === chaveamentoSelecionado"
-        (click)="selecionarChaveamento(chave)">
-
-        <div class="chaveamento-nome">
-          <input *ngIf="chave.editandoNome" [(ngModel)]="chave.nome" (blur)="confirmarNome(chave)"
-            (keyup.enter)="confirmarNome(chave)" placeholder="Nome do Chaveamento" />
-
-          <h4 *ngIf="!chave.editandoNome">{{ chave.nome }}</h4>
-        </div>
-
-        <div class="arvore-confrontos" *ngIf="chaveamentoSelecionado">
-          <h3>{{ chaveamentoSelecionado.nome }}</h3>
-
-          <!-- Botão e select para adicionar competidor em bloco específico -->
-          <div class="adicionar-competidor-area" style="margin-bottom: 1rem;">
-            <label for="confrontoSelecionado">Selecionar bloco para adicionar competidor:</label>
-            <select id="confrontoSelecionado" [(ngModel)]="confrontoSelecionadoParaAdicionar"
-              style="margin-left: 0.5rem;">
-              <option *ngFor="let confronto of getTodosConfrontos(chaveamentoSelecionado)" [ngValue]="confronto">
-                Rodada {{ confronto.round }} - Confronto {{ confronto.id }}
-              </option>
-            </select>
-
-            <label for="competidorParaAdicionar" style="margin-left: 1rem;">Competidor:</label>
-            <select id="competidorParaAdicionar" [(ngModel)]="competidorParaAdicionar" style="margin-left: 0.5rem;">
-              <option *ngFor="let c of inscricoes" [ngValue]="c.inscricaoInfo">
-                {{ c.inscricaoInfo.nomeCompetidor }}
-              </option>
-            </select>
-
-            <button (click)="adicionarCompetidorNoConfronto()" style="margin-left: 1rem;">Adicionar Competidor</button>
-          </div>
-
-          <div #diagramDiv class="gojs-diagram-container" style="width: 100%; height: 600px; border: 1px solid #ccc;">
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <button (click)="criarChaveamento()">+ Criar Novo Chaveamento</button>
+    <!-- Aqui mora o diagrama -->
+    <div #diagramaRef style="width: 100%; height: 600px; border: 1px solid #ccc; background: #fafafa;"></div>
   </div>
 </div>
 

@@ -9,24 +9,23 @@
 </div>
 
 <!-- Seletor para Escolher Participante (ao adicionar) -->
-<mat-form-field
-  *ngIf="selecionandoParticipante"
-  style="position: absolute; left: 50%; transform: translateX(-50%); top: 650px; background: white; z-index: 1000; width: 300px;"
->
+<mat-form-field *ngIf="selecionandoParticipante"
+  style="position: absolute; left: 50%; transform: translateX(-50%); top: 650px; background: white; z-index: 1000; width: 300px;">
   <mat-label>Escolha um participante</mat-label>
   <mat-select (selectionChange)="adicionarParticipante($event.value)">
     <mat-option *ngFor="let nome of opcoesVencedor" [value]="nome">{{ nome }}</mat-option>
   </mat-select>
+  <mat-select *ngIf="selecionandoParticipante" [value]="''" (selectionChange)="substituirParticipante($event.value)"
+    [style.left.px]="posX" [style.top.px]="posY" style="position: absolute; z-index: 1000; background: white;">
+    <mat-option *ngFor="let nome of nomesDisponiveis" [value]="nome">
+      {{ nome }}
+    </mat-option>
+  </mat-select>
+
 </mat-form-field>
 
 <!-- Seletor de Vencedor (ao clicar em nó) -->
-<mat-select
-  *ngIf="selecionando"
-  [value]="''"
-  (selectionChange)="definirVencedor($event.value)"
-  [style.left.px]="posX"
-  [style.top.px]="posY"
-  style="position: absolute; z-index: 1000; background: white;"
->
+<mat-select *ngIf="selecionando" [value]="''" (selectionChange)="definirVencedor($event.value)" [style.left.px]="posX"
+  [style.top.px]="posY" style="position: absolute; z-index: 1000; background: white;">
   <mat-option *ngFor="let op of opcoesVencedor" [value]="op">{{ op }}</mat-option>
 </mat-select>
