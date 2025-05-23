@@ -50,6 +50,14 @@ export class VisualizacaoChaveamentoComponent implements AfterViewInit, OnChange
 
     this.diagram.model = new go.TreeModel(this.nos);
 
+    this.diagram.addDiagramListener('ObjectSingleClicked', (e: any) => {
+      const part = e.subject.part;
+      if (!(part instanceof go.Node)) return;
+
+      const node = part as go.Node;
+      this.showNameSelector(node, this.diagram);
+    });
+
     this.diagramaCriado = true;
   }
 
@@ -58,7 +66,15 @@ export class VisualizacaoChaveamentoComponent implements AfterViewInit, OnChange
 
     // Filhos do nó atual (se houver)
     const children = diagram.model.nodeDataArray.filter(n => n['parent'] === nodeData.key);
-    const options = children.map(c => c['name']).filter(n => n);
+    const validChildren = children.filter(c => c['name'] && c['name'].trim() !== '');
+
+    if (validChildren.length !== 2) {
+      // Se não houver exatamente dois filhos válidos, não mostra o seletor
+      console.log(`Nó ${nodeData.key} ignorado — filhos válidos: ${validChildren.length}`);
+      return;
+    }
+
+    const options = validChildren.map(c => c['name']);
 
     const allNames = [...new Set(diagram.model.nodeDataArray.map(n => n['name']).filter(n => n))];
     const availableNames = options.length >= 2 ? options : allNames;
@@ -91,6 +107,7 @@ export class VisualizacaoChaveamentoComponent implements AfterViewInit, OnChange
       model.startTransaction('atualizar nomes');
 
       model.setDataProperty(nodeData, 'name', newName);
+      limparPaisFuturos(nodeData.key);
 
       // Se o nó tinha um nome antes, e outros nós também, atualiza todos
       if (oldName && oldName !== newName) {
@@ -120,5 +137,14 @@ export class VisualizacaoChaveamentoComponent implements AfterViewInit, OnChange
 
     document.body.appendChild(select);
     select.focus();
+
+    const limparPaisFuturos = (key: number) => {
+      const pai = diagram.model.nodeDataArray.find(n => n['key'] === diagram.model.nodeDataArray.find(d => d['key'] === key)?.['parent']);
+      if (pai) {
+        diagram.model.setDataProperty(pai, 'name', '');
+        limparPaisFuturos(pai['key']); // limpa recursivamente os ancestrais
+      }
+    };
+
   }
 }
