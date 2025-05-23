@@ -20,10 +20,9 @@
     </ul>
   </div>
 
-  <div *ngIf="categoriaSelecionada" class="confronto-area">
-    <!-- Aqui mora o diagrama -->
-    <div #diagramaRef style="width: 100%; height: 600px; border: 1px solid #ccc; background: #fafafa;"></div>
-  </div>
+  <app-visualizacao-chaveamento *ngIf="carregouInscricao" [nos]="nosChaveamento">
+  </app-visualizacao-chaveamento>
+
 </div>
 
 <app-rodape></app-rodape>

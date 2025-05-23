@@ -1,18 +1,34 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import * as go from 'gojs';
 
 @Component({
   selector: 'app-visualizacao-chaveamento',
-  templateUrl: './visualizacao-chaveamento.component.html',
+  template: `<div #diagramaRef style="width:100%; height:500px; background-color: #f0f0f0;"></div>`,
   styleUrls: ['./visualizacao-chaveamento.component.css']
 })
-export class VisualizacaoChaveamentoComponent implements OnInit {
+export class VisualizacaoChaveamentoComponent implements AfterViewInit, OnChanges {
   @ViewChild('diagramaRef', { static: true }) diagramaRef!: ElementRef;
+  @Input() nos: any[] = [];
 
-  ngOnInit(): void {
+  private diagram!: go.Diagram;
+  private diagramaCriado = false;
+
+  ngAfterViewInit(): void {
+    if (this.nos.length > 0 && !this.diagramaCriado) {
+      this.inicializarDiagrama();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['nos'] && !changes['nos'].firstChange && this.diagramaCriado) {
+      this.diagram.model = new go.TreeModel(this.nos);
+    }
+  }
+
+  inicializarDiagrama(): void {
     const $ = go.GraphObject.make;
 
-    const myDiagram = $(go.Diagram, this.diagramaRef.nativeElement, {
+    this.diagram = $(go.Diagram, this.diagramaRef.nativeElement, {
       layout: $(go.TreeLayout, {
         angle: 180,
         layerSpacing: 50
@@ -20,43 +36,21 @@ export class VisualizacaoChaveamentoComponent implements OnInit {
       'undoManager.isEnabled': true
     });
 
-    // Template do nó
-    myDiagram.nodeTemplate =
+    this.diagram.nodeTemplate =
       $(go.Node, 'Auto',
-        $(go.Shape, 'RoundedRectangle',
-          {
-            fill: '#3e3e3e', stroke: '#555',
-            portId: '', cursor: 'pointer'
-          }),
-        $(go.TextBlock,
-          { margin: 8, stroke: '#f5f5f5', font: 'bold 12pt sans-serif' },
-          new go.Binding('text', 'name'))
+        $(go.Shape, 'RoundedRectangle', { fill: '#ddd', stroke: '#555' }),
+        $(go.TextBlock, { margin: 8, font: 'bold 12pt sans-serif' }, new go.Binding('text', 'name'))
       );
 
-    myDiagram.linkTemplate =
+    this.diagram.linkTemplate =
       $(go.Link,
         { routing: go.Link.Orthogonal, corner: 5 },
-        $(go.Shape, { strokeWidth: 2, stroke: '#1e90ff' }));
+        $(go.Shape, { strokeWidth: 2, stroke: '#1e90ff' })
+      );
 
-    // Modelo com 7 nós (4 folhas, 2 semifinais, 1 final)
-    myDiagram.model = new go.TreeModel([
-      { key: 1, name: 'Luan', parent: 5 },
-      { key: 2, name: 'Bianca', parent: 5 },
-      { key: 3, name: 'Alex', parent: 6 },
-      { key: 4, name: 'Guilherme', parent: 6 },
-      { key: 5, name: '', parent: 7 }, // SF1
-      { key: 6, name: '', parent: 7 }, // SF2
-      { key: 7, name: '' }             // CAMPEÃO
-    ]);
+    this.diagram.model = new go.TreeModel(this.nos);
 
-
-    myDiagram.addDiagramListener('ObjectSingleClicked', (e) => {
-      const part = e.subject.part;
-      if (part instanceof go.Node) {
-        this.showNameSelector(part, myDiagram);
-      }
-    });
-
+    this.diagramaCriado = true;
   }
 
   showNameSelector(node: go.Node, diagram: go.Diagram) {

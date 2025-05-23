@@ -24,6 +24,7 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
   chaveamentos: any[] = [];
   chaveamentosPorCategoria: { [categoriaId: number]: any[] } = {};
   diagram: go.Diagram | undefined;
+  nosChaveamento: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -56,7 +57,7 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.inicializarDiagram();
+
   }
 
   carregarCategorias(): void {
@@ -96,7 +97,7 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
             inscricoesCarregadas++;
             if (inscricoesCarregadas === inscricoesQuant) {
               this.carregouInscricao = true;
-              this.inicializarDiagram();
+              this.nosChaveamento = this.montarNosChaveamento(); // <- gera e guarda
             }
           });
         });
@@ -104,110 +105,26 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
       err => console.error('Erro ao carregar inscrições', err)
     );
   }
-
-  inicializarDiagram(): void {
-    if (!this.diagramaRef) return;
-
-    const $ = go.GraphObject.make;
-
-    const diagram = $(go.Diagram, this.diagramaRef.nativeElement, {
-      layout: $(go.TreeLayout, { angle: 180, layerSpacing: 50 }),
-      'undoManager.isEnabled': true
+  montarNosChaveamento(): any[] {
+    const competidores = this.inscricoes.map(i => {
+      return i.inscricaoInfo.nomeCompetidor;
     });
 
-    diagram.nodeTemplate =
-      $(go.Node, 'Auto',
-        $(go.Shape, 'RoundedRectangle',
-          { fill: '#3e3e3e', stroke: '#555', portId: '', cursor: 'pointer' }),
-        $(go.TextBlock,
-          { margin: 8, stroke: '#f5f5f5', font: 'bold 12pt sans-serif' },
-          new go.Binding('text', 'name'))
-      );
+    // Gerar IDs únicos para os nós
+    let id = 1;
+    const folhas = competidores.map(nome => ({ key: id++, name: nome, parent: undefined as number | undefined }));
+    const semi1 = { key: id++, name: '', parent: id }; // pai será a final
+    const semi2 = { key: id++, name: '', parent: id };
+    const final = { key: id++, name: '' };
 
-    diagram.linkTemplate =
-      $(go.Link,
-        { routing: go.Link.Orthogonal, corner: 5 },
-        $(go.Shape, { strokeWidth: 2, stroke: '#1e90ff' })
-      );
+    // Atribuir pai para folhas
+    folhas[0].parent = semi1.key;
+    folhas[1].parent = semi1.key;
+    folhas[2].parent = semi2.key;
+    folhas[3].parent = semi2.key;
+    semi1.parent = final.key;
+    semi2.parent = final.key;
 
-    diagram.model = new go.TreeModel([
-      { key: 1, name: 'Luan', parent: 5 },
-      { key: 2, name: 'Bianca', parent: 5 },
-      { key: 3, name: 'Alex', parent: 6 },
-      { key: 4, name: 'Guilherme', parent: 6 },
-      { key: 5, name: '', parent: 7 },
-      { key: 6, name: '', parent: 7 },
-      { key: 7, name: '' }
-    ]);
-
-    diagram.addDiagramListener('ObjectSingleClicked', (e) => {
-      const part = e.subject.part;
-      if (part instanceof go.Node) {
-        this.showNameSelector(part, diagram);
-      }
-    });
-
-    this.diagram = diagram;
-  }
-
-  showNameSelector(node: go.Node, diagram: go.Diagram) {
-    const nodeData = node.data;
-    const children = diagram.model.nodeDataArray.filter(n => n['parent'] === nodeData.key);
-    const options = children.map(c => c['name']).filter(n => n);
-    const allNames = [...new Set(diagram.model.nodeDataArray.map(n => n['name']).filter(n => n))];
-    const availableNames = options.length >= 2 ? options : allNames;
-
-    if (availableNames.length === 0) return;
-
-    const select = document.createElement('select');
-    select.style.position = 'absolute';
-    select.style.zIndex = '100';
-    select.style.left = `${node.actualBounds.centerX - 50}px`;
-    select.style.top = `${node.actualBounds.centerY - 10}px`;
-
-    const emptyOption = document.createElement('option');
-    emptyOption.value = '';
-    emptyOption.text = 'Selecione...';
-    select.appendChild(emptyOption);
-
-    availableNames.forEach(name => {
-      const option = document.createElement('option');
-      option.value = name;
-      option.text = name;
-      select.appendChild(option);
-    });
-
-    select.onchange = (e: any) => {
-      const newName = e.target.value;
-      const model = diagram.model;
-      const oldName = nodeData.name;
-
-      model.startTransaction('atualizar nomes');
-      model.setDataProperty(nodeData, 'name', newName);
-
-      if (oldName && oldName !== newName) {
-        const nodeKey = nodeData.key;
-        const paisComMesmoNome = diagram.model.nodeDataArray.filter(n => {
-          const filhos = diagram.model.nodeDataArray.filter(f => f['parent'] === n['key']);
-          return filhos.some(f => f['key'] === nodeKey) && n['name'] === oldName;
-        });
-
-        paisComMesmoNome.forEach(pai => {
-          model.setDataProperty(pai, 'name', newName);
-        });
-      }
-
-      model.commitTransaction('atualizar nomes');
-      document.body.removeChild(select);
-    };
-
-    select.onblur = () => {
-      if (document.body.contains(select)) {
-        document.body.removeChild(select);
-      }
-    };
-
-    document.body.appendChild(select);
-    select.focus();
+    return [...folhas, semi1, semi2, final];
   }
 }
