@@ -106,25 +106,56 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
     );
   }
   montarNosChaveamento(): any[] {
-    const competidores = this.inscricoes.map(i => {
-      return i.inscricaoInfo.nomeCompetidor;
+    const competidores = this.inscricoes.map(i => i.inscricaoInfo.nomeCompetidor);
+    let id = 1;
+    const todosOsNos: any[] = [];
+
+    type NoChaveamento = { key: number; name: string; parent: number | undefined };
+
+    function construirArvore(participantes: string[]): NoChaveamento {
+      if (participantes.length === 1) {
+        const folha: NoChaveamento = { key: id++, name: participantes[0], parent: undefined };
+        todosOsNos.push(folha);
+        return folha;
+      }
+
+      if (participantes.length === 2) {
+        const folha1: NoChaveamento = { key: id++, name: participantes[0], parent: undefined };
+        const folha2: NoChaveamento = { key: id++, name: participantes[1], parent: undefined };
+        const pai: NoChaveamento = { key: id++, name: '', parent: undefined };
+
+        folha1.parent = pai.key;
+        folha2.parent = pai.key;
+
+        todosOsNos.push(folha1, folha2, pai);
+        return pai;
+      }
+
+      const meio = Math.ceil(participantes.length / 2);
+      const esquerda = construirArvore(participantes.slice(0, meio));
+      const direita = construirArvore(participantes.slice(meio));
+
+      const pai = { key: id++, name: '', parent: undefined };
+
+      esquerda.parent = pai.key;
+      direita.parent = pai.key;
+
+      todosOsNos.push(pai);
+      return pai;
+    }
+
+    const raiz = construirArvore(competidores);
+
+    // Aqui garantimos que raiz.parent seja undefined (raiz única)
+    raiz.parent = undefined;
+
+    // Ajustar os outros para que ninguém mais tenha parent undefined (não raiz)
+    todosOsNos.forEach(no => {
+      if (no !== raiz && (no.parent === undefined || no.parent === null)) {
+        no.parent = raiz.key; // pendura no nó raiz, evita erro no GoJS
+      }
     });
 
-    // Gerar IDs únicos para os nós
-    let id = 1;
-    const folhas = competidores.map(nome => ({ key: id++, name: nome, parent: undefined as number | undefined }));
-    const semi1 = { key: id++, name: '', parent: id }; // pai será a final
-    const semi2 = { key: id++, name: '', parent: id };
-    const final = { key: id++, name: '' };
-
-    // Atribuir pai para folhas
-    folhas[0].parent = semi1.key;
-    folhas[1].parent = semi1.key;
-    folhas[2].parent = semi2.key;
-    folhas[3].parent = semi2.key;
-    semi1.parent = final.key;
-    semi2.parent = final.key;
-
-    return [...folhas, semi1, semi2, final];
+    return todosOsNos;
   }
 }
