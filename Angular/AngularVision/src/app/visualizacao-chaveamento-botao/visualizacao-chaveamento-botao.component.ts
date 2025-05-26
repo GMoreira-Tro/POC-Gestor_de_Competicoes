@@ -234,8 +234,9 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
     return this.nomesDisponiveis.filter(nome => !usados.includes(nome));
   }
   abrirSelecaoParticipante() {
+    this.mostrarRemocao = false;
     this.opcoesVencedor = this.getNomesDisponiveis();
-    this.selecionandoParticipante = true;
+    this.selecionandoParticipante = !this.selecionandoParticipante;
   }
 
   substituirParticipante(novoNome: string) {
@@ -280,5 +281,7 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
 
     // Reconstrói o modelo
     this.atualizarModelo();
+
+    this.mostrarRemocao = false;
   }
 }

@@ -42,3 +42,46 @@
   display: flex;
   justify-content: center;
 }
+
+.botoes-participantes {
+  text-align: center;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.botao {
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.botao:hover {
+  transform: scale(1.05);
+}
+
+/* Estilo para Adicionar */
+.botao.adicionar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.botao.adicionar:hover {
+  background-color: #45A049;
+}
+
+/* Estilo para Remover */
+.botao.remover {
+  background-color: #e53935;
+  color: white;
+}
+
+.botao.remover:hover {
+  background-color: #c62828;
+}

@@ -2,12 +2,12 @@
 <div #diagramaRef style="width: 100%; height: 600px; background-color: #1e1e1e;"></div>
 
 <!-- Botão Adicionar Participante -->
-<div style="text-align: center; margin-top: 20px;">
-  <button (click)="abrirSelecaoParticipante()" style="padding: 10px 20px; font-size: 16px;">
-    Adicionar Participante
+<div class="botoes-participantes">
+  <button class="botao adicionar" (click)="abrirSelecaoParticipante()">
+    ➕ Adicionar Participante
   </button>
-    <button (click)="mostrarRemocao = !mostrarRemocao" style="padding: 10px 20px; font-size: 16px;">
-    Remover Participante
+  <button class="botao remover" (click)="mostrarRemocao = !mostrarRemocao; selecionandoParticipante = false;">
+    🗑️ Remover Participante
   </button>
 </div>
 
@@ -30,8 +30,8 @@
 </mat-select>
 
 <!-- Seletor para remover participante -->
-<div *ngIf="mostrarRemocao" class="seletor-participante" style="margin-top: 10px;">
-  <mat-form-field appearance="fill">
+<div *ngIf="mostrarRemocao" class="seletor-participante">
+  <mat-form-field appearance="fill" class="dropdown-personalizado">
     <mat-label>Selecione o participante a remover</mat-label>
     <mat-select (selectionChange)="removerParticipante($event.value)">
       <mat-option *ngFor="let nome of participantes" [value]="nome">
