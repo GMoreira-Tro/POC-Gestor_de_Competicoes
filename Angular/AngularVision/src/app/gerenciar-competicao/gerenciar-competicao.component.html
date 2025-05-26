@@ -20,8 +20,9 @@
     </ul>
   </div>
 
-  <app-visualizacao-chaveamento *ngIf="carregouInscricao" [nos]="nosChaveamento">
-  </app-visualizacao-chaveamento>
+  <app-visualizacao-chaveamento-botao *ngIf="carregouInscricao"
+    [nomesDisponiveis]="participantesNomes">
+  </app-visualizacao-chaveamento-botao>
 
 </div>
 

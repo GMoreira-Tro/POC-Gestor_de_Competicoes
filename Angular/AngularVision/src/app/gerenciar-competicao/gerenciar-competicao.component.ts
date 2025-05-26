@@ -19,6 +19,7 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
   categorias: any[] = [];
   categoriaSelecionada: any;
   inscricoes: any[] = [];
+  participantesNomes: string[] = [];
   carregouInscricao: boolean = false;
   chaveamentoSelecionado: any = null;
   chaveamentos: any[] = [];
@@ -96,6 +97,7 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
             });
             inscricoesCarregadas++;
             if (inscricoesCarregadas === inscricoesQuant) {
+              this.participantesNomes = this.inscricoes.map(i => i.inscricaoInfo.nomeCompetidor);
               this.carregouInscricao = true;
               this.nosChaveamento = this.montarNosChaveamento(); // <- gera e guarda
             }

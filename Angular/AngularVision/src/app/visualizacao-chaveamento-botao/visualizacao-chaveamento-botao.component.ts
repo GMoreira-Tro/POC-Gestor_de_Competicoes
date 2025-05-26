@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as go from 'gojs';
 
 @Component({
@@ -11,7 +11,7 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
 
   diagram!: go.Diagram;
   participantes: string[] = [];
-  nomesDisponiveis: string[] = ['Luan', 'Bianca', 'Alex', 'Guilherme', 'Maria', 'José', 'Ana', 'Carlos'];
+  @Input() nomesDisponiveis: string[] = [];
 
   selecionando = false;
   opcoesVencedor: string[] = [];
