@@ -6,26 +6,37 @@
   <button (click)="abrirSelecaoParticipante()" style="padding: 10px 20px; font-size: 16px;">
     Adicionar Participante
   </button>
+    <button (click)="mostrarRemocao = !mostrarRemocao" style="padding: 10px 20px; font-size: 16px;">
+    Remover Participante
+  </button>
 </div>
 
 <!-- Seletor para Escolher Participante (ao adicionar) -->
-<mat-form-field *ngIf="selecionandoParticipante"
-  style="position: absolute; left: 50%; transform: translateX(-50%); top: 650px; background: white; z-index: 1000; width: 300px;">
-  <mat-label>Escolha um participante</mat-label>
-  <mat-select (selectionChange)="adicionarParticipante($event.value)">
-    <mat-option *ngFor="let nome of opcoesVencedor" [value]="nome">{{ nome }}</mat-option>
-  </mat-select>
-  <mat-select *ngIf="selecionandoParticipante" [value]="''" (selectionChange)="substituirParticipante($event.value)"
-    [style.left.px]="posX" [style.top.px]="posY" style="position: absolute; z-index: 1000; background: white;">
-    <mat-option *ngFor="let nome of nomesDisponiveis" [value]="nome">
-      {{ nome }}
-    </mat-option>
-  </mat-select>
+<div *ngIf="selecionandoParticipante" class="seletor-participante">
+  <mat-form-field appearance="fill" class="dropdown-personalizado">
+    <mat-label>Escolha um participante</mat-label>
+    <mat-select (selectionChange)="adicionarParticipante($event.value)">
+      <mat-option *ngFor="let nome of opcoesVencedor" [value]="nome">
+        {{ nome }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 
-</mat-form-field>
-
-<!-- Seletor de Vencedor (ao clicar em nó) -->
-<mat-select *ngIf="selecionando" [value]="''" (selectionChange)="definirVencedor($event.value)" [style.left.px]="posX"
-  [style.top.px]="posY" style="position: absolute; z-index: 1000; background: white;">
+<!-- Seletor de Vencedor (visível somente ao selecionar) -->
+<mat-select *ngIf="selecionando" [value]="''" (selectionChange)="definirVencedor($event.value)"
+  class="seletor-vencedor">
   <mat-option *ngFor="let op of opcoesVencedor" [value]="op">{{ op }}</mat-option>
 </mat-select>
+
+<!-- Seletor para remover participante -->
+<div *ngIf="mostrarRemocao" class="seletor-participante" style="margin-top: 10px;">
+  <mat-form-field appearance="fill">
+    <mat-label>Selecione o participante a remover</mat-label>
+    <mat-select (selectionChange)="removerParticipante($event.value)">
+      <mat-option *ngFor="let nome of participantes" [value]="nome">
+        {{ nome }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

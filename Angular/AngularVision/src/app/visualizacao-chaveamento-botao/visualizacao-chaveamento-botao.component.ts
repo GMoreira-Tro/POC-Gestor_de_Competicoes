@@ -14,6 +14,7 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
   @Input() nomesDisponiveis: string[] = [];
 
   selecionando = false;
+  mostrarRemocao = false;
   opcoesVencedor: string[] = [];
   nodoSelecionado: any = null;
   posX = 0;
@@ -259,5 +260,25 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
     this.selecionandoParticipante = false;
 
     this.limparAscendentes(key);
+  }
+
+  removerParticipante(nome: string) {
+    if (!this.participantes.includes(nome)) return;
+
+    // Remove o participante da lista
+    this.participantes = this.participantes.filter(n => n !== nome);
+
+    // Adiciona de volta aos nomes disponíveis
+    this.nomesDisponiveis.push(nome);
+    this.nomesDisponiveis.sort();
+
+    // Remove todos os nós relacionados ao participante no diagrama
+    const nodesARemover = this.diagram.model.nodeDataArray.filter(n => n['name'] === nome);
+    for (const node of nodesARemover) {
+      this.limparAscendentes(node['key']);
+    }
+
+    // Reconstrói o modelo
+    this.atualizarModelo();
   }
 }
