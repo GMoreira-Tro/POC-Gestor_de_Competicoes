@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoriaService } from '../services/categoria.service';
 import { InscricaoService } from '../services/inscricao.service';
@@ -6,6 +6,8 @@ import { CompeticaoService } from '../services/competicao.service';
 import { UserService } from '../services/user.service';
 import { CompetidorService } from '../services/competidor.service';
 import * as go from 'gojs';
+import { Chaveamento } from '../interfaces/Chaveamento';
+import { VisualizacaoChaveamentoBotaoComponent } from '../visualizacao-chaveamento-botao/visualizacao-chaveamento-botao.component';
 
 @Component({
   selector: 'app-gerenciar-competicao',
@@ -14,10 +16,12 @@ import * as go from 'gojs';
 })
 export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
   @ViewChild('diagramaRef', { static: false }) diagramaRef!: ElementRef;
+  @ViewChildren(VisualizacaoChaveamentoBotaoComponent) diagramas!: QueryList<VisualizacaoChaveamentoBotaoComponent>;
 
   competicaoId!: number;
   categorias: any[] = [];
   categoriaSelecionada: any;
+  categoriaSelecionadaAtual: any;
   inscricoes: any[] = [];
   participantesNomes: string[] = [];
   carregouInscricao: boolean = false;
@@ -74,10 +78,17 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
     this.inscricoes = [];
     this.carregouInscricao = false;
 
+    this.salvarChaveamentosDaCategoriaAtual();
+    this.categoriaSelecionadaAtual = this.categoriaSelecionada;
+
     if (this.chaveamentosPorCategoria[this.categoriaSelecionada]) {
       this.chaveamentos = this.chaveamentosPorCategoria[this.categoriaSelecionada];
+      this.restaurarChaveamentosDaCategoriaSelecionada();
     } else {
-      this.chaveamentos = [];
+      // Criando 2 chaveamentos falsos com participantes fake
+      this.chaveamentos = [
+      ];
+
       this.chaveamentosPorCategoria[this.categoriaSelecionada] = this.chaveamentos;
     }
 
@@ -159,5 +170,65 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
     });
 
     return todosOsNos;
+  }
+
+  chaveamentoIdCounter = 1;
+
+  adicionarChaveamento() {
+    const novoChaveamento: any = {
+      id: this.chaveamentoIdCounter++,
+      categoriaId: this.categoriaSelecionada!,
+      nome: 'Novo Chaveamento',
+      participantes: [],
+      arvoreConfrontos: '' // Gera a árvore de confrontos inicial
+    };
+
+    this.chaveamentos.push(novoChaveamento);
+    this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
+  }
+
+  removerChaveamento(id: number) {
+    this.chaveamentos = this.chaveamentos.filter(c => c.id !== id);
+    this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
+  }
+
+  atualizarNomeChaveamento(id: number, novoNome: string) {
+    const chaveamento = this.chaveamentos.find(c => c.id === id);
+    if (chaveamento) chaveamento.nome = novoNome;
+  }
+
+  salvarChaveamentosDaCategoriaAtual(): void {
+    if (!this.categoriaSelecionadaAtual || this.chaveamentos.length === 0) return;
+
+    this.diagramas.forEach((diagrama, index) => {
+      const chaveamento = this.chaveamentos[index];
+      const arvore = diagrama.obterArvoreAtual(); // método que você cria no componente filho
+      if (arvore) {
+        console.log(`Chaveamento ${chaveamento.id} serializado:`, arvore);
+        chaveamento.arvoreConfrontos = arvore; // Atualiza o objeto chaveamento
+      }
+    });
+  }
+
+
+  restaurarChaveamentosDaCategoriaSelecionada(): void {
+    const modelosSalvos = this.chaveamentosPorCategoria[this.categoriaSelecionada];
+
+    if (modelosSalvos) {
+      console.log('Modelos salvos para a categoria selecionada:', modelosSalvos);
+      this.chaveamentos = Object.keys(modelosSalvos).map(id => ({
+        id: +id,
+        categoriaId: this.categoriaSelecionada,
+        participantes: [],
+        arvoreConfrontos: modelosSalvos[+id] // ainda em string, será passado ao componente filho
+      }));
+    } else {
+      this.chaveamentos = [1, 2].map(id => ({
+        id,
+        categoriaId: this.categoriaSelecionada,
+        participantes: [],
+        arvoreConfrontos: this.montarNosChaveamento()
+      }));
+    }
   }
 }

@@ -20,9 +20,27 @@
     </ul>
   </div>
 
-  <app-visualizacao-chaveamento-botao *ngIf="carregouInscricao"
-    [nomesDisponiveis]="participantesNomes">
-  </app-visualizacao-chaveamento-botao>
+  <div *ngIf="carregouInscricao">
+    <div style="text-align: center; margin-top: 20px;">
+      <button (click)="adicionarChaveamento()" class="botao-principal">
+        ➕ Adicionar Chaveamento
+      </button>
+    </div>
+
+    <div *ngFor="let chaveamento of chaveamentos" class="chaveamento-box">
+      <div class="cabecalho-chaveamento">
+        <input [(ngModel)]="chaveamento.nome" (blur)="atualizarNomeChaveamento(chaveamento.id, chaveamento.nome)"
+          placeholder="Nome do Chaveamento" class="input-nome" />
+        <button (click)="removerChaveamento(chaveamento.id)" class="botao-remover">
+          ✖
+        </button>
+      </div>
+
+      <app-visualizacao-chaveamento-botao [jsonSerializado]="chaveamento.arvoreConfrontos" [nomesDisponiveis]="participantesNomes">
+      </app-visualizacao-chaveamento-botao>
+    </div>
+  </div>
+
 
 </div>
 

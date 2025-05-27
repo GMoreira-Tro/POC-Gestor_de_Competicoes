@@ -8,6 +8,7 @@ import * as go from 'gojs';
 })
 export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
   @ViewChild('diagramaRef', { static: true }) diagramaRef!: ElementRef;
+  @Input() jsonSerializado: string | null = null;
 
   diagram!: go.Diagram;
   participantes: string[] = [];
@@ -78,7 +79,21 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
     });
 
 
-    this.atualizarModelo();
+    if (this.jsonSerializado) {
+      let objetoCompleto: any;
+
+      if (typeof this.jsonSerializado === 'string') {
+        objetoCompleto = JSON.parse(this.jsonSerializado);
+      } else {
+        objetoCompleto = this.jsonSerializado;
+      }
+
+      const modeloJson = objetoCompleto.arvoreConfrontos;
+
+      this.diagram.model = go.Model.fromJson(modeloJson);
+    } else {
+      this.atualizarModelo(); // cria do zero
+    }
   }
 
   limparAscendentes(filhoKey: number) {
@@ -283,5 +298,9 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
     this.atualizarModelo();
 
     this.mostrarRemocao = false;
+  }
+
+  obterArvoreAtual(): string {
+    return this.diagram.model.toJson(); // <- isso sim é serializável!
   }
 }

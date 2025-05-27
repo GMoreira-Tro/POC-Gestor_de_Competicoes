@@ -163,3 +163,51 @@ ul li:hover {
   border-color: #1e90ff;
   outline: none;
 }
+
+.chaveamento-box {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fdfdfd;
+}
+
+.cabecalho-chaveamento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-nome {
+  font-size: 18px;
+  padding: 6px 12px;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+}
+
+.botao-remover {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 16px;
+}
+
+.botao-principal {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
