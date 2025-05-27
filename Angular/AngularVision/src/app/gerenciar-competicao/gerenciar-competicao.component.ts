@@ -208,6 +208,8 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
         chaveamento.arvoreConfrontos = arvore; // Atualiza o objeto chaveamento
       }
     });
+
+    this.chaveamentosPorCategoria[this.categoriaSelecionadaAtual] = this.chaveamentos;
   }
 
 
@@ -222,13 +224,6 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
         participantes: [],
         arvoreConfrontos: modelosSalvos[+id] // ainda em string, será passado ao componente filho
       }));
-    } else {
-      this.chaveamentos = [1, 2].map(id => ({
-        id,
-        categoriaId: this.categoriaSelecionada,
-        participantes: [],
-        arvoreConfrontos: this.montarNosChaveamento()
-      }));
-    }
+    } 
   }
 }

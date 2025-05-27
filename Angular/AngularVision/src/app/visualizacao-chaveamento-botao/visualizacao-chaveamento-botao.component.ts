@@ -91,8 +91,9 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
       const modeloJson = objetoCompleto.arvoreConfrontos;
 
       this.diagram.model = go.Model.fromJson(modeloJson);
+      this.participantes = this.extrairParticipantesDoModelo(this.diagram.model as go.TreeModel);
     } else {
-      this.atualizarModelo(); // cria do zero
+      this.atualizarModelo(); // cria do zero 
     }
   }
 
@@ -302,5 +303,22 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
 
   obterArvoreAtual(): string {
     return this.diagram.model.toJson(); // <- isso sim é serializável!
+  }
+
+  extrairParticipantesDoModelo(model: go.TreeModel): string[] {
+    // Participantes são nós folhas que têm nome e não têm filhos (não são pais)
+    const nodes = model.nodeDataArray;
+    const participantesSet = new Set<string>();
+
+    nodes.forEach(n => {
+      const nome = n['name'];
+      const key = n['key'];
+      const isLeaf = !nodes.some(child => child['parent'] === key);
+      if (nome && isLeaf) {
+        participantesSet.add(nome);
+      }
+    });
+
+    return Array.from(participantesSet);
   }
 }
