@@ -10,7 +10,8 @@
 }
 
 /* Títulos principais */
-h1, h2 {
+h1,
+h2 {
   font-weight: bold;
   color: #f5f5f5;
   text-align: center;
@@ -177,10 +178,16 @@ ul li:hover {
 
 .cabecalho-chaveamento {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
+
+.cabecalho-chaveamento .botoes-acoes {
+  display: flex;
+  gap: 8px;
+}
+
 
 .input-nome {
   font-size: 18px;
@@ -200,6 +207,19 @@ ul li:hover {
   border-radius: 8px;
   cursor: pointer;
   margin-left: 16px;
+}
+
+.botao-salvar {
+  background-color: #4CAF50;
+  /* Verde vivo */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .botao-principal {

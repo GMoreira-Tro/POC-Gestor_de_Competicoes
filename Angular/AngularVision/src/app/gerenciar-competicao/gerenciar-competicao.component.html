@@ -29,14 +29,17 @@
 
     <div *ngFor="let chaveamento of chaveamentos" class="chaveamento-box">
       <div class="cabecalho-chaveamento">
-        <input [(ngModel)]="chaveamento.nome" (blur)="atualizarNomeChaveamento(chaveamento.id, chaveamento.nome)"
-          placeholder="Nome do Chaveamento" class="input-nome" />
-        <button (click)="removerChaveamento(chaveamento.id)" class="botao-remover">
-          ✖
-        </button>
+        <input [(ngModel)]="chaveamento.nome" (blur)="atualizarNomeChaveamento(
+          chaveamento.id, chaveamento.tempId, chaveamento.nome)" placeholder="Nome do Chaveamento"
+          class="input-nome" />
+        <div class="botoes-acoes">
+          <button (click)="salvarChaveamento(chaveamento)" class="botao-salvar">💾</button>
+          <button (click)="removerChaveamento(chaveamento.id, chaveamento.tempId)" class="botao-remover">✖</button>
+        </div>
       </div>
 
-      <app-visualizacao-chaveamento-botao [jsonSerializado]="chaveamento.arvoreConfrontos" [nomesDisponiveis]="participantesNomes">
+      <app-visualizacao-chaveamento-botao [jsonSerializado]="chaveamento.arvoreConfrontos"
+        [nomesDisponiveis]="participantesNomes">
       </app-visualizacao-chaveamento-botao>
     </div>
   </div>

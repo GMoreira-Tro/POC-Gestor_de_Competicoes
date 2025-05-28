@@ -6,8 +6,8 @@ import { CompeticaoService } from '../services/competicao.service';
 import { UserService } from '../services/user.service';
 import { CompetidorService } from '../services/competidor.service';
 import * as go from 'gojs';
-import { Chaveamento } from '../interfaces/Chaveamento';
 import { VisualizacaoChaveamentoBotaoComponent } from '../visualizacao-chaveamento-botao/visualizacao-chaveamento-botao.component';
+import { ChaveamentoService } from '../services/chaveamento.service';
 
 @Component({
   selector: 'app-gerenciar-competicao',
@@ -38,6 +38,7 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private competidorService: CompetidorService,
     private categoriaService: CategoriaService,
+    private chaveamentoService: ChaveamentoService,
     private inscricaoService: InscricaoService
   ) { }
 
@@ -85,11 +86,32 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
       this.chaveamentos = this.chaveamentosPorCategoria[this.categoriaSelecionada];
       this.restaurarChaveamentosDaCategoriaSelecionada();
     } else {
-      // Criando 2 chaveamentos falsos com participantes fake
-      this.chaveamentos = [
-      ];
+      console.log('Nenhum chaveamento encontrado para a categoria selecionada:', this.categoriaSelecionada);
+      // Busca do backend os chaveamentos da categoria
+      this.chaveamentoService.getChaveamentosPorCategoria(this.categoriaSelecionada)
+        .subscribe({
+          next: (res) => {
+            this.chaveamentos = res.map((chaveamento: any) => ({
+              id: chaveamento.id,
+              categoriaId: chaveamento.categoriaId,
+              nome: chaveamento.nome,
+              arvoreConfrontos: chaveamento.arvoreConfrontos,
+              participantes: [] // reconstruído pelo filho com base na árvore
+            }));
 
-      this.chaveamentosPorCategoria[this.categoriaSelecionada] = this.chaveamentos;
+            this.chaveamentosPorCategoria[this.categoriaSelecionada] = this.chaveamentos;
+            this.restaurarChaveamentosDaCategoriaSelecionada();
+          },
+          error: (err) => {
+            if (err.status === 404) {
+              // Nenhum chaveamento encontrado para a categoria
+              this.chaveamentos = [];
+              this.chaveamentosPorCategoria[this.categoriaSelecionada] = [];
+            } else {
+              console.error('Erro ao buscar chaveamentos:', err);
+            }
+          }
+        });
     }
 
     this.chaveamentoSelecionado = null;
@@ -176,7 +198,8 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
 
   adicionarChaveamento() {
     const novoChaveamento: any = {
-      id: this.chaveamentoIdCounter++,
+      tempId: this.chaveamentoIdCounter++,
+      id: 0, // Será atualizado após salvar no backend
       categoriaId: this.categoriaSelecionada!,
       nome: 'Novo Chaveamento',
       participantes: [],
@@ -187,18 +210,19 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
     this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
   }
 
-  removerChaveamento(id: number) {
-    this.chaveamentos = this.chaveamentos.filter(c => c.id !== id);
+  removerChaveamento(id: number, tempId?: number) {
+    this.chaveamentos = this.chaveamentos.filter(c => c.id !== id && c.tempId !== tempId);
     this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
   }
 
-  atualizarNomeChaveamento(id: number, novoNome: string) {
-    const chaveamento = this.chaveamentos.find(c => c.id === id);
+  atualizarNomeChaveamento(id: number, tempId: number, novoNome: string) {
+    const chaveamento = this.chaveamentos.find(c => c.id === id || c.tempId === tempId);
     if (chaveamento) chaveamento.nome = novoNome;
   }
 
   salvarChaveamentosDaCategoriaAtual(): void {
     if (!this.categoriaSelecionadaAtual || this.chaveamentos.length === 0) return;
+
 
     this.diagramas.forEach((diagrama, index) => {
       const chaveamento = this.chaveamentos[index];
@@ -218,12 +242,61 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
 
     if (modelosSalvos) {
       console.log('Modelos salvos para a categoria selecionada:', modelosSalvos);
-      this.chaveamentos = Object.keys(modelosSalvos).map(id => ({
-        id: +id,
-        categoriaId: this.categoriaSelecionada,
-        participantes: [],
-        arvoreConfrontos: modelosSalvos[+id] // ainda em string, será passado ao componente filho
+
+      // Agora cada item já é um objeto chaveamento completo
+      this.chaveamentos = modelosSalvos.map((chaveamento: any) => ({
+        ...chaveamento, // já contém id, categoriaId, etc.
+        participantes: [], // caso ainda vá ser preenchido ou resetado
+        // Garante que 'arvoreConfrontos' está em formato serializado (string)
+        arvoreConfrontos: chaveamento.arvoreConfrontos || ''
       }));
-    } 
+    }
+  }
+
+
+  salvarChaveamento(chaveamento: any): void {
+    let index = this.chaveamentos.findIndex(c => c.id === chaveamento.id);
+    if (index === -1) {
+      index = this.chaveamentos.findIndex(c => c.tempId === chaveamento.tempId);
+    }
+    if (index !== -1) {
+      this.salvarArvoreConfrontos(index);
+    }
+    const payload = {
+      id: chaveamento.id > 0 ? chaveamento.id : 0,
+      nome: chaveamento.nome,
+      categoriaId: this.categoriaSelecionada,
+      arvoreConfrontos: chaveamento.arvoreConfrontos
+    };
+
+    console.log('Salvando chaveamento:', payload);
+    if (payload.id === 0) {
+      // Novo chaveamento
+      this.chaveamentoService.createChaveamento(payload).subscribe((res) => {
+        console.log('Chaveamento criado:', res);
+        chaveamento.id = res.id; // Atualiza ID no frontend
+      });
+    } else {
+      // Atualizar chaveamento existente
+      this.chaveamentoService.updateChaveamento(payload.id, payload).subscribe((res) => {
+        console.log('Chaveamento atualizado:', res);
+      });
+    }
+  }
+
+  salvarArvoreConfrontos(index: number): void {
+    const diagrama = this.diagramas.toArray()[index];
+    const chaveamento = this.chaveamentos[index];
+
+    if (!diagrama || !chaveamento) {
+      console.warn(`Diagrama ou chaveamento não encontrado no índice ${index}`);
+      return;
+    }
+
+    const arvore = diagrama.obterArvoreAtual();
+    if (arvore) {
+      console.log(`Chaveamento ${chaveamento.id} serializado:`, arvore);
+      chaveamento.arvoreConfrontos = arvore;
+    }
   }
 }
