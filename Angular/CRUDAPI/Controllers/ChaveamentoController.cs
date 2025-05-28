@@ -21,7 +21,7 @@ namespace CRUDAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Chaveamento>>> GetChaveamentos()
         {
-            return await _contexto.Chaveamentos.Include(c => c.Confrontos).ToListAsync();
+            return await _contexto.Chaveamentos.ToListAsync();
         }
 
         // GET: api/Chaveamento/5
@@ -29,7 +29,6 @@ namespace CRUDAPI.Controllers
         public async Task<ActionResult<Chaveamento>> GetChaveamento(long id)
         {
             var chaveamento = await _contexto.Chaveamentos
-                .Include(c => c.Confrontos)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (chaveamento == null)

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CRUDAPI.Models
 {
     /// <summary>
-    /// Representa uma estrutura de chaveamento para uma categoria de competição.
+    /// Representa um chaveamento de confrontos, com estrutura armazenada como JSON.
     /// </summary>
     [Table("Chaveamentos")]
     public class Chaveamento
@@ -15,13 +15,15 @@ namespace CRUDAPI.Models
         [Required]
         public string Nome { get; set; } = string.Empty;
 
-        public string Descricao { get; set; } = string.Empty;
-
         [ForeignKey("Categoria")]
         public long CategoriaId { get; set; }
 
         public virtual Categoria? Categoria { get; set; }
 
-        public virtual ICollection<Confronto> Confrontos { get; set; } = new List<Confronto>();
+        /// <summary>
+        /// JSON serializado com a árvore completa de confrontos.
+        /// </summary>
+        [Required]
+        public string ArvoreConfrontos { get; set; } = string.Empty;
     }
 }
