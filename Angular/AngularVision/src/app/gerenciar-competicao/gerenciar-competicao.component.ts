@@ -212,9 +212,32 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
     this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
   }
 
-  removerChaveamento(id: number, tempId?: number) {
-    this.chaveamentos = this.chaveamentos.filter(c => c.id !== id && c.tempId !== tempId);
-    this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
+  removerChaveamento(id: number, tempId?: number): void {
+    const confirmar = confirm("Tem certeza que deseja remover este chaveamento?");
+    if (!confirmar) {
+      alert("Remoção cancelada.");
+      return;
+    }
+
+    if (id && id !== 0) {
+      // Remove do banco e do array local
+      this.chaveamentoService.deleteChaveamento(id).subscribe({
+        next: () => {
+          this.chaveamentos = this.chaveamentos.filter(c => c.id !== id);
+          this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
+          alert("Chaveamento removido com sucesso.");
+        },
+        error: (err) => {
+          console.error('Erro ao remover chaveamento:', err);
+          alert("Erro ao remover chaveamento. Verifique o console.");
+        }
+      });
+    } else if (tempId) {
+      // Apenas remove localmente
+      this.chaveamentos = this.chaveamentos.filter(c => c.tempId !== tempId);
+      this.chaveamentosPorCategoria[this.categoriaSelecionada!] = this.chaveamentos;
+      alert("Chaveamento temporário removido com sucesso.");
+    }
   }
 
   atualizarNomeChaveamento(id: number, tempId: number, novoNome: string) {
@@ -259,13 +282,21 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
 
 
   salvarChaveamento(chaveamento: any): void {
+    const confirmar = confirm("Deseja realmente salvar este chaveamento?");
+    if (!confirmar) {
+      alert("Operação de salvamento cancelada.");
+      return;
+    }
+
     let index = this.chaveamentos.findIndex(c => c.id === chaveamento.id);
     if (index === -1) {
       index = this.chaveamentos.findIndex(c => c.tempId === chaveamento.tempId);
     }
+
     if (index !== -1) {
       this.salvarArvoreConfrontos(index);
     }
+
     const payload = {
       id: chaveamento.id > 0 ? chaveamento.id : 0,
       nome: chaveamento.nome,
@@ -274,19 +305,35 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
     };
 
     console.log('Salvando chaveamento:', payload);
+
     if (payload.id === 0) {
       // Novo chaveamento
-      this.chaveamentoService.createChaveamento(payload).subscribe((res) => {
-        console.log('Chaveamento criado:', res);
-        chaveamento.id = res.id; // Atualiza ID no frontend
+      this.chaveamentoService.createChaveamento(payload).subscribe({
+        next: (res) => {
+          console.log('Chaveamento criado:', res);
+          chaveamento.id = res.id;
+          alert("Chaveamento criado com sucesso!");
+        },
+        error: (err) => {
+          console.error('Erro ao criar chaveamento:', err);
+          alert("Erro ao criar chaveamento. Verifique o console.");
+        }
       });
     } else {
       // Atualizar chaveamento existente
-      this.chaveamentoService.updateChaveamento(payload.id, payload).subscribe((res) => {
-        console.log('Chaveamento atualizado:', res);
+      this.chaveamentoService.updateChaveamento(payload.id, payload).subscribe({
+        next: (res) => {
+          console.log('Chaveamento atualizado:', res);
+          alert("Chaveamento atualizado com sucesso!");
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar chaveamento:', err);
+          alert("Erro ao atualizar chaveamento. Verifique o console.");
+        }
       });
     }
   }
+
 
   salvarArvoreConfrontos(index: number): void {
     const diagrama = this.diagramas.toArray()[index];
