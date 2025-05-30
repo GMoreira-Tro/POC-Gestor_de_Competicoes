@@ -8,6 +8,7 @@ import { CompetidorService } from '../services/competidor.service';
 import * as go from 'gojs';
 import { VisualizacaoChaveamentoBotaoComponent } from '../visualizacao-chaveamento-botao/visualizacao-chaveamento-botao.component';
 import { ChaveamentoService } from '../services/chaveamento.service';
+import { Chaveamento } from '../interfaces/Chaveamento';
 
 @Component({
   selector: 'app-gerenciar-competicao',
@@ -91,8 +92,9 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
       this.chaveamentoService.getChaveamentosPorCategoria(this.categoriaSelecionada)
         .subscribe({
           next: (res) => {
-            this.chaveamentos = res.map((chaveamento: any) => ({
+            this.chaveamentos = res.map((chaveamento: Chaveamento) => ({
               id: chaveamento.id,
+              tempId: 0,
               categoriaId: chaveamento.categoriaId,
               nome: chaveamento.nome,
               arvoreConfrontos: chaveamento.arvoreConfrontos,
@@ -246,10 +248,12 @@ export class GerenciarCompeticaoComponent implements OnInit, AfterViewInit {
       // Agora cada item já é um objeto chaveamento completo
       this.chaveamentos = modelosSalvos.map((chaveamento: any) => ({
         ...chaveamento, // já contém id, categoriaId, etc.
+        tempId: 0,
         participantes: [], // caso ainda vá ser preenchido ou resetado
         // Garante que 'arvoreConfrontos' está em formato serializado (string)
         arvoreConfrontos: chaveamento.arvoreConfrontos || ''
       }));
+      console.log('Chaveamentos restaurados:', this.chaveamentos);
     }
   }
 

@@ -80,20 +80,22 @@ export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
 
 
     if (this.jsonSerializado) {
-      let objetoCompleto: any;
+      const objetoCompleto =
+        typeof this.jsonSerializado === 'string'
+          ? JSON.parse(this.jsonSerializado)
+          : this.jsonSerializado;
 
-      if (typeof this.jsonSerializado === 'string') {
-        objetoCompleto = JSON.parse(this.jsonSerializado);
+      const modeloJson = objetoCompleto;
+
+      if (modeloJson) {
+        this.diagram.model = go.Model.fromJson(modeloJson);
+        this.participantes = this.extrairParticipantesDoModelo(this.diagram.model as go.TreeModel);
       } else {
-        objetoCompleto = this.jsonSerializado;
+        console.warn('JSON recebido não possui arvoreConfrontos. Criando modelo novo.');
+        this.atualizarModelo();
       }
-
-      const modeloJson = objetoCompleto.arvoreConfrontos;
-
-      this.diagram.model = go.Model.fromJson(modeloJson);
-      this.participantes = this.extrairParticipantesDoModelo(this.diagram.model as go.TreeModel);
     } else {
-      this.atualizarModelo(); // cria do zero 
+      this.atualizarModelo(); // cria do zero
     }
   }
 
