@@ -5,16 +5,11 @@ import { CategoriaService } from '../services/categoria.service';
 import { UserService } from '../services/user.service';
 import { Competicao } from '../interfaces/Competicao';
 import { Categoria } from '../interfaces/Categoria';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ChaveamentoService } from '../services/chaveamento.service';
 
 interface BracketMatch {
-  id: number;
-  round: number;
-  player1: string;
-  player2: string;
-  winner?: string;
-  nextMatchId?: number;
+  nomeChaveamento: string;
+  arvoreConfrontos: string;
 }
 
 @Component({
@@ -25,7 +20,7 @@ interface BracketMatch {
 export class DetalhesCompeticaoComponent implements OnInit {
   competicao: Competicao | null = null;
   categorias: Categoria[] = [];
-  brackets: { [key: string]: BracketMatch[] } = {};
+  bracketsPorCategoria: { [categoriaNome: string]: BracketMatch[] } = {};
   isOrganizador: boolean = false;
   bracketsPublicos: boolean = false;
   competicaoId: number = 0;
@@ -35,96 +30,68 @@ export class DetalhesCompeticaoComponent implements OnInit {
     private route: ActivatedRoute,
     private competicaoService: CompeticaoService,
     private categoriaService: CategoriaService,
+    private chaveamentoService: ChaveamentoService, // Supondo que o serviço de chaveamento seja o mesmo
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.competicaoId = +params['id'];
       this.loadCompeticao();
       this.loadCategorias();
-      this.checkOrganizador();
     });
   }
 
   loadCompeticao(): void {
-    this.competicaoService.getCompeticao(this.competicaoId).subscribe(
-      competicao => {
+    this.competicaoService.getCompeticao(this.competicaoId).subscribe({
+      next: competicao => {
         this.competicao = competicao;
-        this.loadBrackets();
+        this.checkOrganizador(); // só depois da competição carregada
       },
-      error => {
-        console.error('Erro ao carregar competição:', error);
-      }
-    );
+      error: err => console.error('Erro ao carregar competição:', err)
+    });
   }
 
   loadCategorias(): void {
-    this.categoriaService.getCategoriasPorCompeticao(this.competicaoId).subscribe(
-      (categorias: Categoria[]) => {
+    this.categoriaService.getCategoriasPorCompeticao(this.competicaoId).subscribe({
+      next: categorias => {
         this.categorias = categorias;
+        this.carregarChaveamentosPorCategoria();
       },
-      error => {
-        console.error('Erro ao carregar categorias:', error);
-      }
-    );
+      error: err => console.error('Erro ao carregar categorias:', err)
+    });
   }
 
   checkOrganizador(): void {
-    this.userService.getUsuarioLogado().subscribe(
-      usuario => {
+    this.userService.getUsuarioLogado().subscribe({
+      next: usuario => {
         this.userId = usuario.id;
         this.isOrganizador = this.competicao?.criadorUsuarioId === this.userId;
-      }
-    );
-  }
-
-  loadBrackets(): void {
-    // Aqui você implementaria a lógica para carregar os brackets do backend
-    // Por enquanto, vamos criar um exemplo
-    this.brackets = {
-      'Categoria A': [
-        {
-          id: 1,
-          round: 1,
-          player1: 'Jogador 1',
-          player2: 'Jogador 2',
-          nextMatchId: 3
-        },
-        {
-          id: 2,
-          round: 1,
-          player1: 'Jogador 3',
-          player2: 'Jogador 4',
-          nextMatchId: 3
-        },
-        {
-          id: 3,
-          round: 2,
-          player1: '',
-          player2: '',
-          nextMatchId: 5
-        }
-      ]
-    };
+      },
+      error: err => console.error('Erro ao verificar organizador:', err)
+    });
   }
 
   toggleBracketsPublicos(): void {
-    if (this.isOrganizador) {
-      this.bracketsPublicos = !this.bracketsPublicos;
-      // Aqui você implementaria a lógica para salvar no backend
-    }
+    if (!this.isOrganizador) return;
+    this.bracketsPublicos = !this.bracketsPublicos;
+    // Chamada ao backend para salvar visibilidade pode ser feita aqui
   }
 
   podeVerBrackets(): boolean {
     return this.bracketsPublicos || this.isOrganizador;
   }
 
-  getUniqueRounds(matches: BracketMatch[]): number[] {
-    return [...new Set(matches.map(match => match.round))].sort((a, b) => a - b);
-  }
+  carregarChaveamentosPorCategoria(): void {
+    this.bracketsPorCategoria = {};
 
-  getMatchesByRound(matches: BracketMatch[], round: number): BracketMatch[] {
-    return matches.filter(match => match.round === round);
+    this.categorias.forEach(categoria => {
+      this.chaveamentoService.getChaveamentosPorCategoria(categoria.id).subscribe(chaveamentos => {
+        this.bracketsPorCategoria[categoria.nome] = chaveamentos.map(ch => ({
+          nomeChaveamento: ch.nome,
+          arvoreConfrontos: ch.arvoreConfrontos // ou 'arvore', dependendo do que vem do backend
+        }));
+      });
+    });
   }
 }

@@ -9,6 +9,7 @@ import * as go from 'gojs';
 export class VisualizacaoChaveamentoBotaoComponent implements OnInit {
   @ViewChild('diagramaRef', { static: true }) diagramaRef!: ElementRef;
   @Input() jsonSerializado: string | null = null;
+  @Input() modoVisualizacao: boolean = false;
 
   diagram!: go.Diagram;
   participantes: string[] = [];
