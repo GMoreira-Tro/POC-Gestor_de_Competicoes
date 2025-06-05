@@ -140,7 +140,7 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
                 competicoes = competicoes.Where(c => c.Modalidade.ToLower().Contains(modalidade.ToLower())).ToList();
 
             if (!string.IsNullOrEmpty(descricao))
-                competicoes = competicoes.Where(c => c.Descricao.ToLower().Contains(descricao.ToLower())).ToList();
+                competicoes = competicoes.Where(c => c.Descricao != null && c.Descricao.ToLower().Contains(descricao.ToLower())).ToList();
 
             if (!string.IsNullOrEmpty(pais))
                 competicoes = competicoes.Where(c => c.Pais == pais).ToList();

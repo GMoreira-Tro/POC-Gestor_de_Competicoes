@@ -34,20 +34,31 @@ namespace CRUDAPI.Services
                 throw new CampoObrigatorioException("Data de início da competição é obrigatória.");
             }
 
-            if(!string.IsNullOrEmpty(competicao.Estado))
+            if (!string.IsNullOrEmpty(competicao.Estado))
             {
+                if (string.IsNullOrWhiteSpace(competicao.Pais))
+                {
+                    throw new CampoObrigatorioException("País é obrigatório quando o estado é informado.");
+                }
                 // Valida se o estado pertence ao país
                 var estadoPertenceAoPais = await _geonamesService.EstadoPertenceAoPais(competicao.Pais, competicao.Estado);
                 if (!estadoPertenceAoPais)
                 {
                     throw new EstadoNaoPertenceAoPaisException(); // Indica que o estado não pertence ao país
                 }
-
             }
 
             if(!string.IsNullOrEmpty(competicao.Cidade))
             {
+                if (string.IsNullOrWhiteSpace(competicao.Pais))
+                {
+                    throw new CampoObrigatorioException("País é obrigatório quando a cidade é informada.");
+                }
                 // Valida se a cidade pertence ao estado
+                if (string.IsNullOrWhiteSpace(competicao.Estado))
+                {
+                    throw new CampoObrigatorioException("Estado é obrigatório quando a cidade é informada.");
+                }
                 var cidadePertenceAoEstado = await _geonamesService.CidadePertenceAoPaisEEstado(competicao.Pais, competicao.Estado, competicao.Cidade);
                 if (!cidadePertenceAoEstado)
                 {
