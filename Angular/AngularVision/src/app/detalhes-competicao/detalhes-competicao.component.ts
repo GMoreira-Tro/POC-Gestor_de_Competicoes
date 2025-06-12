@@ -22,7 +22,6 @@ export class DetalhesCompeticaoComponent implements OnInit {
   categorias: Categoria[] = [];
   bracketsPorCategoria: { [categoriaNome: string]: BracketMatch[] } = {};
   isOrganizador: boolean = false;
-  bracketsPublicos: boolean = false;
   competicaoId: number = 0;
   userId: number = 0;
 
@@ -70,16 +69,6 @@ export class DetalhesCompeticaoComponent implements OnInit {
       },
       error: err => console.error('Erro ao verificar organizador:', err)
     });
-  }
-
-  toggleBracketsPublicos(): void {
-    if (!this.isOrganizador) return;
-    this.bracketsPublicos = !this.bracketsPublicos;
-    // Chamada ao backend para salvar visibilidade pode ser feita aqui
-  }
-
-  podeVerBrackets(): boolean {
-    return this.bracketsPublicos || this.isOrganizador;
   }
 
   carregarChaveamentosPorCategoria(): void {

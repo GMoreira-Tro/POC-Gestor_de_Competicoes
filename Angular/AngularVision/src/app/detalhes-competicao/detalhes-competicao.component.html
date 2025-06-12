@@ -7,13 +7,6 @@
             class="banner-image">
         <div class="competicao-header">
             <h1>{{ competicao.titulo }}</h1>
-            <div class="organizador-controls" *ngIf="isOrganizador">
-                <label class="switch">
-                    <input type="checkbox" [(ngModel)]="bracketsPublicos" (change)="toggleBracketsPublicos()">
-                    <span class="slider"></span>
-                    <span class="label">Tornar chaves públicas</span>
-                </label>
-            </div>
         </div>
     </div>
 
@@ -46,7 +39,7 @@
             </div>
         </div>
 
-        <div *ngIf="podeVerBrackets()">
+        <div>
             <div *ngFor="let categoria of categorias">
                 <h3>{{ categoria.nome }}</h3>
 
@@ -66,12 +59,6 @@
                 </ng-template>
             </div>
         </div>
-
-
-        <div *ngIf="!podeVerBrackets()" class="text-muted fst-italic">
-            Os chaveamentos desta competição ainda não estão públicos.
-        </div>
-
     </div>
 
     <app-rodape></app-rodape>
