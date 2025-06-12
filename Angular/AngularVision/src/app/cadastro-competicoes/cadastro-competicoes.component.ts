@@ -128,6 +128,8 @@ export class CadastroCompeticoesComponent implements OnInit {
     }
     this.isLoading = true;
     this.competicao.status = 1; // Ajusta o status para publicada
+    this.competicao.dataInicio = new Date(this.competicao.dataInicio).toISOString();
+    this.competicao.dataFim = new Date(this.competicao.dataFim).toISOString();
 
     this.competicaoService.createCompeticao(this.competicao).subscribe(
       async novaCompeticao => {

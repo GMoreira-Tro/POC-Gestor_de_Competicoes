@@ -50,19 +50,34 @@
               <textarea placeholder="Descrição" [(ngModel)]="categoria.descricao" required></textarea>
               <div class="form-group">
                 <label for="valorInscricao">Valor da Inscrição:</label>
-                <input type="number" id="valorInscricao" name="valorInscricao" [(ngModel)]="categoria.valorInscricao" required>
-                <small *ngIf="categoria.valorInscricao < 15.99" class="aviso">A inscrição deve possuir um valor maior que a taxa mínima de 15,99R$</small>
+                <input type="number" id="valorInscricao" name="valorInscricao" [(ngModel)]="categoria.valorInscricao"
+                  required>
+                <small *ngIf="categoria.valorInscricao < 15.99" class="aviso">A inscrição deve possuir um valor maior
+                  que a taxa mínima de 15,99R$</small>
               </div>
               <button type="button" (click)="removerCategoria(i)">-</button>
             </div>
             <button type="button" (click)="adicionarCategoria()">+ Adicionar Categoria</button>
           </div>
 
+
+          <!-- Datas da Competição -->
+          <div class="form-group">
+            <label for="dataInicio">Data de Início:</label>
+            <input type="date" id="dataInicio" name="dataInicio" [(ngModel)]="competicao.dataInicio" required>
+          </div>
+
+          <div class="form-group">
+            <label for="dataFim">Data de Término:</label>
+            <input type="date" id="dataFim" name="dataFim" [(ngModel)]="competicao.dataFim" required>
+          </div>
+
           <!-- Localização -->
           <div class="form-group">
             <label for="pais">País:</label>
             <select id="pais" name="pais" [(ngModel)]="competicao.pais" (change)="onCountryChange()">
-              <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}</option>
+              <option *ngFor="let pais of listaPaises?.geonames" [value]="pais.countryCode">{{ pais.countryName }}
+              </option>
             </select>
           </div>
 
@@ -107,9 +122,9 @@
       <div *ngIf="etapaAtual === 3" class="etapa-container">
         <h2>Registro do PIX</h2>
         <p class="info-text">
-          Por favor, registre a chave PIX para a qual você receberá os pagamentos das inscrições. 
-          Lembre-se de que os pagamentos serão processados em até 48 horas após o registro. 
-          Note que 20% do valor das inscrições será retido como taxa da plataforma, ou R$ 15,99, 
+          Por favor, registre a chave PIX para a qual você receberá os pagamentos das inscrições.
+          Lembre-se de que os pagamentos serão processados em até 48 horas após o registro.
+          Note que 20% do valor das inscrições será retido como taxa da plataforma, ou R$ 15,99,
           caso o valor da taxa mínima seja aplicável.
         </p>
         <div class="form-group">
@@ -126,7 +141,8 @@
       <div *ngIf="etapaAtual === 4" class="etapa-container">
         <h2>Pagamento para Gestão de Confrontos</h2>
         <p class="info-text">
-          Para finalizar o cadastro da sua competição e garantir a gestão completa dos confrontos, é necessário realizar o pagamento das inscrições dos competidores. 
+          Para finalizar o cadastro da sua competição e garantir a gestão completa dos confrontos, é necessário realizar
+          o pagamento das inscrições dos competidores.
           O valor da taxa é de apenas R$ 9,99 por inscrito. Invista na organização e sucesso do seu evento agora mesmo!
         </p>
         <div class="qrcode-container">

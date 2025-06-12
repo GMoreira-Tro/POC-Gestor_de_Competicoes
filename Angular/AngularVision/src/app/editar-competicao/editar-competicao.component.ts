@@ -174,6 +174,8 @@ export class EditarCompeticaoComponent implements OnInit {
     }
 
     console.log(this.competicao);
+    this.competicao.dataInicio = new Date(this.competicao.dataInicio).toISOString();
+    this.competicao.dataFim = new Date(this.competicao.dataFim).toISOString();
 
     this.competicaoService.updateCompeticao(this.competicao.id, this.competicao).subscribe(
       async competicaoAtualizada => {

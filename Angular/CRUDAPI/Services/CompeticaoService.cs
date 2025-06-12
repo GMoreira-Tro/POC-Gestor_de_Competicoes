@@ -71,8 +71,6 @@ namespace CRUDAPI.Services
                 throw new CampoObrigatorioException("Chave Pix é obrigatória.");
             }
 
-            competicao.Categorias ??= [];
-
             return competicao;
         }
 

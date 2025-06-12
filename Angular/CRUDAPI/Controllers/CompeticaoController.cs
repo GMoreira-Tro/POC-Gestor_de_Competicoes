@@ -52,9 +52,15 @@ namespace CRUDAPI.Controllers // Corrigi o nome do namespace para "Controllers"
 
                 return CreatedAtAction(nameof(GetCompeticao), new { id = competicao.Id }, competicao);
             }
+            catch (DbUpdateException dbEx)
+            {
+                var inner = dbEx.InnerException;
+                var mensagem = inner != null ? inner.Message : dbEx.Message;
+                return BadRequest("Erro ao salvar no banco: " + mensagem);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro geral: " + ex.Message);
             }
         }
 
