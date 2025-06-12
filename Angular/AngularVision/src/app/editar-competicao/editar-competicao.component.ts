@@ -449,10 +449,28 @@ export class EditarCompeticaoComponent implements OnInit {
     this.categoriasMap[categoriaTempId].mostrarModal = false;
   }
 
-  confirmarSelecaoCompetidores(categoriaTempId: number): void {
-    const competidoresSelecionados = this.competidoresUsuario.filter(competidor => competidor.selecionadoPorCategoria[categoriaTempId]);
-    this.categoriasMap[categoriaTempId].competidores = competidoresSelecionados.map(competidor => competidor);
-    this.fecharModalCompetidores(categoriaTempId);
+  atualizarSelecaoCompetidor(event: Event, categoriaTempId: number, competidor: any): void {
+    const input = event.target as HTMLInputElement;
+    const estaSelecionado = input.checked;
+
+    if (!this.categoriasMap[categoriaTempId]) {
+      this.categoriasMap[categoriaTempId] = { mostrarModal: false, competidores: [] };
+    }
+
+    const competidores = this.categoriasMap[categoriaTempId].competidores;
+
+    if (estaSelecionado) {
+      // Só adiciona se ainda não estiver incluso
+      if (!competidores.includes(competidor)) {
+        competidores.push(competidor);
+      }
+    } else {
+      // Remove se estiver presente
+      const index = competidores.indexOf(competidor);
+      if (index > -1) {
+        competidores.splice(index, 1);
+      }
+    }
   }
 
   gerarQRCode(quantidadeInscricoes: number) {

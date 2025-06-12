@@ -15,16 +15,11 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.formulario {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.form-content {
+  width: 80%;
+  max-width: 600px;
 }
 
 h2 {
@@ -35,19 +30,13 @@ h2 {
 }
 
 .form-group {
-  width: 90%;
   margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
   color: #ffffff;
-  text-align: center;
-  width: 100%;
 }
 
 .form-group input,
@@ -59,22 +48,20 @@ h2 {
   border-radius: 4px;
   background-color: #333333;
   color: #ffffff;
-  text-align: center;
 }
 
 .form-group textarea {
   min-height: 100px;
   resize: vertical;
-  text-align: left;
 }
 
 .button-container {
-  width: 90%;
   text-align: center;
   margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+}
+
+.button-container button {
+  margin: 0 10px;
 }
 
 button {
@@ -86,40 +73,194 @@ button {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
-  min-width: 120px;
 }
 
 button:hover {
   background-color: #45a049;
 }
 
-.categoria-container {
-  width: 90%;
-  background-color: #333333;
-  padding: 15px;
-  border-radius: 4px;
-  margin-bottom: 15px;
+.error-message {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.success-message {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.modal-content {
+  background-color: #3e3e3e;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  color: #f5f5f5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  width: auto;
+  padding: 8px 16px;
+}
+
+.categoria-container {
+  background-color: #333333;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #3a3a3a;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .categoria-container input,
 .categoria-container textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  text-align: center;
+  margin-bottom: 15px;
+  width: calc(100% - 40px); /* Ajuste para considerar o botão de remover */
+  padding: 12px;
+  background-color: #2e2e2e;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+  color: #f5f5f5;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.categoria-container input:focus,
+.categoria-container textarea:focus {
+  border-color: #4caf50;
+  outline: none;
 }
 
 .categoria-container textarea {
-  text-align: left;
+  min-height: 100px;
+  resize: vertical;
+  max-width: calc(100% - 40px); /* Ajuste para considerar o botão de remover */
+}
+
+.categoria-container .form-group {
+  margin-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.categoria-container .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #f5f5f5;
+  font-weight: 500;
+  padding-right: 40px; /* Espaço para o botão de remover */
+}
+
+.categoria-container .form-group input {
+  margin-bottom: 5px;
+}
+
+.categoria-container button[type="button"] {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4444;
+  color: #f5f5f5;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.categoria-container button[type="button"]:hover {
+  background-color: #cc0000;
+  transform: scale(1.1);
 }
 
 .categoria-container small.aviso {
-  color: #ffcc00;
+  color: #ff4444;
   font-size: 12px;
-  text-align: center;
+  display: block;
+  margin-top: 5px;
   width: 100%;
+  box-sizing: border-box;
+  padding-right: 40px; /* Espaço para o botão de remover */
+}
+
+/* Botão de adicionar categoria */
+.form-group > button[type="button"] {
+  background-color: #4caf50;
+  color: #f5f5f5;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  margin: 20px auto 0;
+  width: auto;
+}
+
+.form-group > button[type="button"]:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.form-group > button[type="button"]::before {
+  content: "+";
+  margin-right: 8px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Animação suave ao adicionar/remover categorias */
+.categoria-container {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .usuario-imagem {
@@ -130,155 +271,15 @@ button:hover {
 }
 
 .upload-imagem {
-  width: 90%;
   margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .upload-imagem input[type="file"] {
-  width: 100%;
   padding: 5px;
   background-color: #2e2e2e;
   border: none;
   color: #f5f5f5;
-  text-align: center;
-}
-
-.navegacao-etapas {
-  width: 90%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.navegacao-etapas button {
-  flex: 1;
-  min-width: 120px;
-  padding: 10px;
-}
-
-.etapa-container {
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.categoria-section {
   width: 100%;
-  background-color: #333333;
-  padding: 20px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.info-text {
-  color: #ffffff;
-  margin-bottom: 20px;
-  line-height: 1.5;
-  text-align: center;
-  width: 90%;
-}
-
-.qrcode-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-}
-
-.qrcode-imagem {
-  max-width: 200px;
-  border-radius: 4px;
-}
-
-h3 {
-  color: #ffffff;
-  margin-bottom: 15px;
-  text-align: center;
-  width: 100%;
-}
-
-@media (max-width: 600px) {
-  .form-container {
-    padding: 20px;
-  }
-
-  .navegacao-etapas {
-    flex-direction: column;
-  }
-
-  .navegacao-etapas button {
-    width: 100%;
-  }
-
-  .button-container {
-    flex-direction: column;
-  }
-
-  .button-container button {
-    width: 100%;
-  }
-}
-
-.error-message {
-  color: #ff6b6b;
-  font-size: 14px;
-  margin-top: 5px;
-  text-align: center;
-  width: 90%;
-}
-
-.success-message {
-  background-color: rgba(76, 175, 80, 0.1);
-  color: #4caf50;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-  text-align: center;
-  width: 90%;
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #3e3e3e;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  max-width: 500px;
-  width: 90%;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.modal-content {
-  color: #f5f5f5;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
 }
 
 select {
@@ -291,6 +292,64 @@ select {
 
 select:focus {
   background-color: #3e3e3e;
+}
+
+.navegacao-etapas {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.navegacao-etapas button {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.navegacao-etapas button:hover {
+  background-color: #45a049;
+}
+
+.navegacao-etapas button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.etapas h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #f5f5f5;
+}
+
+button[type="button"] {
+  background-color: #4caf50;
+  color: #f5f5f5;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: auto;
+  margin: 5px 0;
+}
+
+button[type="button"]:hover {
+  background-color: #45a049;
+}
+
+button[type="button"]:disabled {
+  background-color: #666;
+  cursor: not-allowed;
 }
 
 .campo select {
@@ -318,7 +377,7 @@ p {
 }
 
 p strong {
-  color: #1e90ff;
+  color: #4caf50;
   font-weight: bold;
 }
 
@@ -333,4 +392,85 @@ p span.highlight {
   padding: 2px 4px;
   border-radius: 4px;
   color: #f5f5f5;
+}
+
+.competicao-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.aviso {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+.etapa-container {
+  margin-top: 30px;
+}
+
+.categoria-section {
+  background-color: #333333;
+  padding: 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.info-text {
+  color: #ffffff;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.qrcode-container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.qrcode-imagem {
+  max-width: 200px;
+  border-radius: 4px;
+}
+
+h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 20px;
+  }
+
+  .navegacao-etapas {
+    flex-direction: column;
+  }
+
+  .navegacao-etapas button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .button-container button {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .categoria-container input,
+  .categoria-container textarea {
+    width: calc(100% - 20px);
+    max-width: calc(100% - 20px);
+  }
+
+  .categoria-container {
+    padding: 15px;
+  }
+
+  .categoria-container button[type="button"] {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+  }
 }

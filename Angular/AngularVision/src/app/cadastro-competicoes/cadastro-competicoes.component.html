@@ -121,6 +121,24 @@
             </li>
           </ul>
           <button (click)="abrirModalCompetidores(categoria.tempId)">Pré-registrar Competidores</button>
+          <!-- Modal de Competidores -->
+          <div *ngIf="categoriasMap[categoria.tempId]?.mostrarModal" class="modal-overlay">
+            <div class="modal-conteudo">
+              <h3>Selecionar Competidores para {{ categoria.nome }}</h3>
+
+              <li *ngFor="let competidor of competidoresUsuario">
+                <label>
+                  <input type="checkbox"
+                    [checked]="categoriasMap[categoria.tempId] && categoriasMap[categoria.tempId].competidores.includes(competidor)"
+                    (change)="atualizarSelecaoCompetidor($event, categoria.tempId, competidor)" />
+                  {{ competidor.nome }} - {{ competidor.email }}
+                </label>
+              </li>
+
+              <button (click)="fecharModalCompetidores(categoria.tempId)">Fechar</button>
+            </div>
+          </div>
+
         </div>
         <div class="button-container">
           <button (click)="mudarEtapa(1)">Voltar</button>
