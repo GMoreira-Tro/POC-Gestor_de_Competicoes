@@ -8,6 +8,6 @@ export class FiltrarPorCategoriaPipe implements PipeTransform {
     if (!items || !categoriaId) {
       return items;
     }
-    return items.filter(item => item.categoriaId === Number(categoriaId));
+    return items.filter(item => Number(item.categoriaId) === Number(categoriaId));
   }
 }
