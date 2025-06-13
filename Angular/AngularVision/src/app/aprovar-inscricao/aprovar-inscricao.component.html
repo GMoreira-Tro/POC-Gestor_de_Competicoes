@@ -3,34 +3,41 @@
 <div class="container">
     <h2>Inscrições na competição: {{ tituloCompeticao }}</h2>
     <tr *ngFor="let categoria of categorias | keyvalue">
-    <h2>{{ categoria.value.nome }}</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Competidor</th>
-                <th>E-mail</th>
-                <th>Status</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let infoInscricao of infoInscricoes | filtrarPorCategoria: categoria.key">
-                <td>{{ infoInscricao.nomeCompetidor }}</td>
-                <td>{{ infoInscricao.emailCompetidor }}</td>
-                <td>{{ infoInscricao.status === 0 ? "Pendente" : 
-                infoInscricao.status === 1 ? "Aguardando pagamento" :
-                infoInscricao.status === 2 ? "Paga" : "Recusada"}}</td>
-                <td>
-                    <button *ngIf="infoInscricao.status === 0" (click)="aprovarInscricao(infoInscricao);" class="btn btn-success">Aprovar</button>
-                    <button *ngIf="infoInscricao.status === 0" (click)="recusarInscricao(infoInscricao);" class="btn btn-danger">Recusar</button> 
-                    <span *ngIf="infoInscricao.status === 1" class="text-info">Aguardando pagamento</span>
-                    <span *ngIf="infoInscricao.status === 2" class="text-info">Paga</span>
-                    <span *ngIf="infoInscricao.status === 3" class="text-success">Recusada</span>
-                </td> 
-            </tr>
-        </tbody>
-    </table>
-</tr>
+        <h2>{{ categoria.value.nome }}</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Competidor</th>
+                    <th>E-mail</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="infoInscricoes && infoInscricoes.length > 0; else carregando">
+                <tr *ngFor="let infoInscricao of infoInscricoes | filtrarPorCategoria: categoria.key">
+                    <td>{{ infoInscricao.nomeCompetidor }}</td>
+                    <td>{{ infoInscricao.emailCompetidor }}</td>
+                    <td>{{ infoInscricao.status === 0 ? "Pendente" :
+                        infoInscricao.status === 1 ? "Aguardando pagamento" :
+                        infoInscricao.status === 2 ? "Paga" : "Recusada"}}</td>
+                    <td>
+                        <button *ngIf="infoInscricao.status === 0" (click)="aprovarInscricao(infoInscricao);"
+                            class="btn btn-success">Aprovar</button>
+                        <button *ngIf="infoInscricao.status === 0" (click)="recusarInscricao(infoInscricao);"
+                            class="btn btn-danger">Recusar</button>
+                        <span *ngIf="infoInscricao.status === 1" class="text-info">Aguardando pagamento</span>
+                        <span *ngIf="infoInscricao.status === 2" class="text-info">Paga</span>
+                        <span *ngIf="infoInscricao.status === 3" class="text-success">Recusada</span>
+                    </td>
+                </tr>
+            </tbody>
+            <ng-template #carregando>
+                <tr>
+                    <td colspan="4" class="text-center">⏳ Carregando inscrições...</td>
+                </tr>
+            </ng-template>
+        </table>
+    </tr>
 </div>
 
 <app-rodape></app-rodape>

@@ -32,19 +32,25 @@ namespace CRUDAPI.Controller
             return await _contexto.Usuarios.ToListAsync();
         }
 
-        // GET: api/Usuario/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(long id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Usuario>> GetUsuario(long id)
+    {
+        try
         {
             var usuario = await _contexto.Usuarios.FindAsync(id);
 
             if (usuario == null)
-            {
-                return NotFound();
-            }
+                return NotFound($"Usuário com ID {id} não encontrado.");
 
-            return usuario;
+            return Ok(usuario);
         }
+        catch (Exception ex)
+        {
+            // Loga o erro de alguma forma se tiver logger
+            return StatusCode(500, $"Erro ao buscar usuário: {ex.Message}");
+        }
+    }
+
 
         [HttpGet("email/{email}")]
         public async Task<ActionResult<Usuario?>> GetUsuarioByEmail(string email)
