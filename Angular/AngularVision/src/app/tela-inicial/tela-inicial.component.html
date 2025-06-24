@@ -10,7 +10,6 @@
 <div class="carrossel-container">
     <div class="carrossel-slide" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
         <div class="carrossel-item" *ngFor="let slide of slides">
-            <img [src]="slide.imagem" alt="Imagem do carrossel" class="carrossel-img">
             <p>{{ slide.texto }}</p>
         </div>
     </div>
