@@ -4,7 +4,6 @@ import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { GeoNamesService } from '../services/geonames.service';
-import { validarCpfCnpj } from '../utils/validarCpfCnpj';
 import { countriesDict } from '../utils/paisesDict';
 
 @Component({
@@ -118,12 +117,6 @@ export class UserRegistrationComponent implements AfterViewInit {
     if(this.userData.cidade === '')
     {
       alert("O campo cidade é obrigatório");
-      this.loading = false;
-      return;
-    }
-    if(validarCpfCnpj(this.userData.cpfCnpj) === false)
-    {
-      alert("CPF/CNPJ inválido");
       this.loading = false;
       return;
     }

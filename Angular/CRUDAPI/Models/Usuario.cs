@@ -64,7 +64,6 @@ namespace CRUDAPI.Models
         /// <summary>
         /// CPF ou CNPJ visto que o Usuário pode ser tanto uma pessoa física quanto jurídica.
         /// </summary>
-        [Required]
         public string CpfCnpj { get; set; } = "";
 
         /// <summary>

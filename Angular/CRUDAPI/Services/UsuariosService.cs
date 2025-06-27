@@ -56,11 +56,6 @@ namespace CRUDAPI.Services
                 throw new CampoObrigatorioException("Cidade");
             }
 
-            if (string.IsNullOrEmpty(usuario.CpfCnpj))
-            {
-                throw new CampoObrigatorioException("Cpf/Cnpf");
-            }
-
             if (string.IsNullOrEmpty(usuario.Email))
             {
                 throw new CampoObrigatorioException("Email");
@@ -95,7 +90,7 @@ namespace CRUDAPI.Services
             }
 
             // Valida o CPF/CNPJ
-            if (!ValidarCPFOuCNPJ(usuario.CpfCnpj))
+            if (usuario.CpfCnpj != string.Empty && !ValidarCPFOuCNPJ(usuario.CpfCnpj))
             {
                 throw new CpfCnpjInvalidoException(); // Indica que o CPF/CNPJ é inválido
             }

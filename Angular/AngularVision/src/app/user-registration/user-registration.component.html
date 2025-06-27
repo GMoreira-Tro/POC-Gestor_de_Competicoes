@@ -49,22 +49,6 @@
         />
       </div>
       <section class="same-row">
-        <div class="form-group">
-          <label for="cpfCnpj">CPF/CNPJ:</label>
-          <input
-            type="text"
-            id="cpfCnpj"
-            name="cpfCnpj"
-            [(ngModel)]="userData.cpfCnpj"
-            required
-            mask="000.000.000-00|00.000.000/0000-00"
-            [ngClass]="{
-              'error-border': form.controls['cpfCnpj'] &&
-                             form.controls['cpfCnpj'].errors?.['required'] &&
-                             (form.controls['cpfCnpj'].touched && signUpButtonPressed)
-            }"
-          />
-        </div>
         <div>
           <label for="pais">País:</label>
           <select
